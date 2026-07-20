@@ -1,0 +1,10 @@
+# Material interno de marca — no se publica
+Branding/
+
+# Versiones de trabajo del sitio
+web/
+
+# Sistema
+Thumbs.db
+desktop.ini
+.DS_Store
