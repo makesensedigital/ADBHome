@@ -3,8 +3,50 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ADB | Broker de Seguros</title>
-<meta name="description" content="ADB | Broker de Seguros — Más de 19 años protegiendo tu patrimonio. Asesoramiento integral en seguros para personas, pymes y empresas en toda la Argentina.">
+<title>ADB | Broker de Seguros — Seguros en toda la Argentina</title>
+<meta name="description" content="ADB | Broker de Seguros — Más de 19 años protegiendo tu patrimonio. Asesoramiento integral en seguros para personas, pymes y empresas, con 16 oficinas en toda la Argentina. Matrícula SSN nº 1877.">
+<link rel="canonical" href="https://adbseguros.com.ar/">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+<meta name="author" content="ADB | Broker de Seguros">
+<meta name="publisher" content="ADB | Broker de Seguros">
+<meta name="keywords" content="seguros, broker de seguros, productor asesor de seguros, seguros Argentina, seguro automotor, seguro de hogar, seguro de vida, seguros para empresas, seguros pymes, ART, seguro agropecuario, cotizar seguro, ADB seguros, Tres Arroyos, Necochea, Mar del Plata, Bahía Blanca, Viedma, Olavarría, San Rafael, Río Gallegos">
+<meta name="theme-color" content="#0f2444">
+<meta name="geo.region" content="AR">
+<meta name="geo.placename" content="Argentina">
+<meta name="language" content="es-AR">
+<link rel="alternate" hreflang="es-ar" href="https://adbseguros.com.ar/">
+<link rel="alternate" hreflang="x-default" href="https://adbseguros.com.ar/">
+
+<!-- Icons -->
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="mask-icon" href="/favicon.svg" color="#0f2444">
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="ADB | Broker de Seguros">
+<meta property="og:locale" content="es_AR">
+<meta property="og:title" content="ADB | Broker de Seguros — Seguros en toda la Argentina">
+<meta property="og:description" content="Más de 19 años de asesoramiento integral en seguros para personas, pymes y empresas. 16 oficinas en el país. Matrícula SSN nº 1877.">
+<meta property="og:url" content="https://adbseguros.com.ar/">
+<meta property="og:image" content="https://adbseguros.com.ar/og-image.png">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="ADB | Broker de Seguros — Cerca tuyo, en toda la Argentina">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="ADB | Broker de Seguros — Seguros en toda la Argentina">
+<meta name="twitter:description" content="Más de 19 años protegiendo tu patrimonio. 16 oficinas en toda la Argentina. Matrícula SSN nº 1877.">
+<meta name="twitter:image" content="https://adbseguros.com.ar/og-image.png">
+<meta name="twitter:image:alt" content="ADB | Broker de Seguros">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+<script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <style>
   /* ============ TOKENS ============ */
   :root {
@@ -357,22 +399,72 @@
   .presence-stats-row .ps .n span { color:#ff8f84; }
   .presence-stats-row .ps .l { color:#aebbd4; font-size:.85rem; margin-top:5px; }
 
-  .map-layout { display:grid; grid-template-columns:0.9fr 1.1fr; gap:46px; align-items:start; }
-  .map-col { position:relative; background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.1); border-radius:20px; padding:14px 10px; }
-  .map-col svg { width:100%; height:auto; display:block; overflow:visible; }
-  .ar-land { fill:rgba(255,255,255,.06); stroke:rgba(255,255,255,.3); stroke-width:1.2; stroke-linejoin:round; transition:fill .3s; }
-  .map-col:hover .ar-land { fill:rgba(255,255,255,.09); }
-  .pin { cursor:pointer; }
-  .pin .halo { fill:transparent; transition:fill .15s; }
-  .pin circle.core { stroke:#0f2444; stroke-width:1.1; transition:r .15s ease; }
-  .pin.propia circle.core { fill:#ff8f84; }
-  .pin.pas circle.core { fill:#8fb8ff; }
-  .pin.active circle.core, .pin:hover circle.core { r:7; }
-  .pin.active .halo, .pin:hover .halo { fill:rgba(255,255,255,.18); }
-  .pin .plabel { fill:#fff; font-size:9px; font-weight:700; font-family:var(--font-body);
-    paint-order:stroke; stroke:#0f2444; stroke-width:3px; stroke-linejoin:round;
-    opacity:0; transition:opacity .15s; pointer-events:none; }
-  .pin.active .plabel, .pin:hover .plabel { opacity:1; }
+  .map-layout { display:grid; grid-template-columns:1.15fr 0.85fr; gap:40px; align-items:start; }
+  .map-col { position:relative; }
+  .map-frame { position:relative; border:1px solid rgba(255,255,255,.14); border-radius:20px; overflow:hidden;
+    background:#0a1220; box-shadow:0 20px 50px rgba(0,0,0,.32); }
+  #arMap { position:relative; height:540px; width:100%; background:#0a1220; }
+  #arMap.is-loading::after { content:"Cargando mapa…"; position:absolute; inset:0; display:grid; place-items:center;
+    color:#8595b4; font-size:.88rem; z-index:401; }
+
+  /* leaflet chrome, ajustado a la paleta */
+  .leaflet-container { font:inherit; background:#0a1220; outline:none; }
+  /* contrast<1 levanta los negros del tile antes de escalarlos: sin esto el mapa queda plano */
+  .leaflet-tile-pane { filter:contrast(.78) brightness(1.7) saturate(.9); }
+  .leaflet-bar a, .leaflet-bar a:hover {
+    background:rgba(15,36,68,.92); color:#e4eaf5; border-bottom-color:rgba(255,255,255,.14);
+    backdrop-filter:blur(6px); }
+  .leaflet-bar a:hover { background:rgba(27,60,110,.95); }
+  .leaflet-bar { border:1px solid rgba(255,255,255,.16); box-shadow:0 6px 18px rgba(0,0,0,.4); }
+  .leaflet-control-attribution {
+    background:rgba(10,18,32,.78); color:#7f8ea9; font-size:.66rem; padding:2px 7px; }
+  .leaflet-control-attribution a { color:#9fb2d4; }
+
+  .mk { border-radius:50%; box-sizing:border-box; border:2px solid #0a1220;
+    transition:transform .18s ease, box-shadow .18s ease; }
+  .mk-wrap { background:none; border:0; }
+  .mk-wrap.propia .mk { background:#ff8f84; box-shadow:0 0 0 0 rgba(255,143,132,.5); }
+  .mk-wrap.pas .mk { background:#8fb8ff; box-shadow:0 0 0 0 rgba(143,184,255,.5); }
+  .mk-wrap.is-active .mk, .mk-wrap:hover .mk { transform:scale(1.45); }
+  .mk-wrap.propia.is-active .mk, .mk-wrap.propia:hover .mk { box-shadow:0 0 0 9px rgba(255,143,132,.22); }
+  .mk-wrap.pas.is-active .mk, .mk-wrap.pas:hover .mk { box-shadow:0 0 0 9px rgba(143,184,255,.22); }
+
+  .leaflet-tooltip.mk-tip { background:rgba(15,36,68,.96); border:1px solid rgba(255,255,255,.2);
+    color:#fff; font-weight:600; font-size:.8rem; border-radius:8px; padding:4px 9px; box-shadow:none; }
+  .leaflet-tooltip.mk-tip::before { display:none; }
+
+  .leaflet-popup-content-wrapper { background:#12294b; color:#e4eaf5; border:1px solid rgba(255,255,255,.18);
+    border-radius:14px; box-shadow:0 18px 40px rgba(0,0,0,.5); }
+  .leaflet-popup-content { margin:14px 16px; font-size:.9rem; line-height:1.45; }
+  .leaflet-popup-tip { background:#12294b; border:1px solid rgba(255,255,255,.18); }
+  .leaflet-popup-close-button { color:#8fa3c4 !important; }
+  .leaflet-popup-close-button:hover { color:#fff !important; }
+  .pop-name { font-family:var(--font-display); text-transform:uppercase; letter-spacing:.05em;
+    font-weight:700; font-size:1.02rem; color:#fff; }
+  .pop-kind { display:inline-flex; align-items:center; gap:7px; color:#aebbd4; font-size:.78rem; margin-top:3px; }
+  .pop-kind i { width:8px; height:8px; border-radius:50%; flex:none; }
+  .pop-kind.propia i { background:#ff8f84; } .pop-kind.pas i { background:#8fb8ff; }
+  .pop-prov { color:#8595b4; font-size:.78rem; margin-top:2px; }
+  .pop-row { display:flex; gap:8px; margin-top:7px; color:#c7d2e6; font-size:.8rem; line-height:1.4; }
+  .pop-row .pop-ico { flex:none; opacity:.85; font-size:.82rem; }
+  .pop-row a { color:#9fc0ff; text-decoration:none; word-break:break-word; }
+  .pop-row a:hover { text-decoration:underline; }
+  .pop-wa { display:inline-flex; align-items:center; gap:7px; margin-top:13px; text-decoration:none;
+    background:#25d366; color:#08301a; font-weight:700; font-size:.82rem;
+    padding:7px 13px; border-radius:9px; transition:filter .15s; }
+  .pop-wa:hover { filter:brightness(1.08); }
+
+  .map-veil { position:absolute; inset:0; z-index:500; display:grid; place-items:center; cursor:pointer;
+    background:rgba(10,18,32,.45); backdrop-filter:blur(1px); }
+  .map-veil span { background:rgba(15,36,68,.92); border:1px solid rgba(255,255,255,.2);
+    color:#fff; font-size:.85rem; font-weight:600; padding:10px 18px; border-radius:999px; }
+
+  .map-reset { position:absolute; left:12px; bottom:12px; z-index:402; cursor:pointer;
+    background:rgba(15,36,68,.92); border:1px solid rgba(255,255,255,.2); color:#e4eaf5;
+    font:inherit; font-size:.78rem; font-weight:600; padding:7px 13px; border-radius:999px;
+    backdrop-filter:blur(6px); transition:background .15s, opacity .2s; opacity:0; pointer-events:none; }
+  .map-reset.show { opacity:1; pointer-events:auto; }
+  .map-reset:hover { background:rgba(27,60,110,.95); }
 
   .legend { display:flex; gap:20px; margin-bottom:20px; }
   .legend .lg { display:inline-flex; align-items:center; gap:8px; font-size:.85rem; color:#cdd7ea; }
@@ -382,7 +474,7 @@
   .office-group + .office-group { margin-top:22px; }
   .office-group h4 { font-family:var(--font-display); text-transform:uppercase; letter-spacing:.08em;
     font-size:.82rem; color:#93a3c2; margin:0 0 12px; }
-  .office-list { display:grid; grid-template-columns:1fr 1fr; gap:9px; }
+  .office-list { display:grid; grid-template-columns:repeat(auto-fill,minmax(178px,1fr)); gap:9px; }
   .office-btn { display:flex; align-items:center; gap:10px; width:100%; text-align:left; cursor:pointer;
     background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.1); border-radius:11px;
     padding:10px 13px; color:#e4eaf5; font:inherit; font-size:.9rem;
@@ -395,7 +487,7 @@
   .office-btn::after { content:"›"; font-size:1.2rem; line-height:1; color:#8fb8ff; opacity:0; transform:translateX(-4px); transition:opacity .15s, transform .15s; }
   .office-btn:hover::after, .office-btn.active::after { opacity:1; transform:none; }
   .office-btn[data-t="propia"]::after { color:#ff8f84; }
-  .map-hint { color:#8595b4; font-size:.82rem; margin-top:14px; text-align:center; }
+  .map-hint { color:#8595b4; font-size:.82rem; margin-top:12px; text-align:center; }
 
   /* clientes */
   .clients-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 22px; }
@@ -502,7 +594,7 @@
     .hero-grid { grid-template-columns: 1fr; gap: 44px; padding: 60px 0 70px; }
     .hero-art { order: -1; }
     .about-grid, .presence-grid, .map-layout { grid-template-columns: 1fr; gap: 40px; }
-    .map-col svg { max-height: 440px; margin: 0 auto; }
+    #arMap { height: 400px; }
     .stats-inner { grid-template-columns: repeat(2, 1fr); }
     .stats-inner .stat:nth-child(2n){ border-right:0; }
     .cov-grid { grid-template-columns: repeat(2, 1fr); }
@@ -576,7 +668,7 @@
       </div>
       <div class="hero-trust">
         <div><div class="n">+90.000</div><div class="l">Vidas aseguradas</div></div>
-        <div><div class="n">14</div><div class="l">Provincias</div></div>
+        <div><div class="n">4</div><div class="l">Provincias</div></div>
         <div><div class="n">+27.000</div><div class="l">Pólizas emitidas</div></div>
       </div>
     </div>
@@ -640,9 +732,9 @@
   <div class="stats-inner">
     <div class="stat reveal"><div class="n"><span>+</span>90.000</div><div class="l">Vidas aseguradas</div></div>
     <div class="stat reveal"><div class="n"><span>+</span>30.000</div><div class="l">Riesgos patrimoniales</div></div>
-    <div class="stat reveal"><div class="n">25</div><div class="l">Sucursales en el país</div></div>
+    <div class="stat reveal"><div class="n">16</div><div class="l">Oficinas en el país</div></div>
     <div class="stat reveal"><div class="n">50</div><div class="l">Red de productores</div></div>
-    <div class="stat reveal"><div class="n">14</div><div class="l">Provincias con presencia</div></div>
+    <div class="stat reveal"><div class="n">4</div><div class="l">Provincias y CABA</div></div>
     <div class="stat reveal"><div class="n">30</div><div class="l">Empresas asociadas</div></div>
     <div class="stat reveal"><div class="n"><span>+</span>27.000</div><div class="l">Pólizas emitidas</div></div>
     <div class="stat reveal"><div class="n"><span>+</span>19</div><div class="l">Años de trayectoria</div></div>
@@ -816,49 +908,51 @@
     </div>
     <div class="presence-stats-row reveal">
       <div class="ps"><div class="n"><span>+</span>14.500 M</div><div class="l">De prima anual gestionada</div></div>
-      <div class="ps"><div class="n">25</div><div class="l">Sucursales en el país</div></div>
-      <div class="ps"><div class="n">14</div><div class="l">Provincias con presencia</div></div>
+      <div class="ps"><div class="n">16</div><div class="l">Oficinas en el país</div></div>
+      <div class="ps"><div class="n">4</div><div class="l">Provincias y CABA</div></div>
       <div class="ps"><div class="n">50</div><div class="l">Productores en la red</div></div>
     </div>
 
     <div class="map-layout reveal">
       <div class="map-col">
-        <svg id="arMap" viewBox="-6 6 250 512" role="img" aria-label="Mapa de la presencia de ADB en Argentina">
-          <path class="ar-land" d="M88.8,17.6 L122.4,16 L156,32 L174,56 L232.8,73.6 L232.2,104 L204,147.2 L186,216 L186,272 L171.6,281.6 L128.4,288 L128.4,318.4 L96,352 L90,384 L66,400 L78,427.2 L56.4,452.8 L48,473.6 L45.6,489.6 L54,502.4 L25.2,496 L12,464 L0,416 L6,368 L18,336 L21.6,304 L30,272 L36,240 L38.4,216 L55.2,176 L52.8,144 L55.2,112 L69.6,80 L78,48 L81.6,19.2 Z"/>
-          <g id="pinLayer"></g>
-        </svg>
-        <p class="map-hint">Pasá el cursor para ubicar cada oficina y hacé clic para consultar por WhatsApp.</p>
+        <div class="map-frame">
+          <div id="arMap" class="is-loading" role="application" aria-label="Mapa de la presencia de ADB en Argentina"></div>
+          <button type="button" class="map-reset" id="mapReset" hidden>Ver todo el país</button>
+        </div>
+        <p class="map-hint">Elegí una oficina de la lista o tocá un punto del mapa para consultar por WhatsApp.</p>
       </div>
 
       <div class="map-side">
         <div class="legend">
-          <span class="lg propia"><i></i>Oficinas ADB</span>
-          <span class="lg pas"><i></i>Productores asociados</span>
+          <span class="lg propia"><i></i>Oficinas propias ADB</span>
+          <span class="lg pas"><i></i>Oficinas ADB + PAS</span>
         </div>
 
         <div class="office-group">
-          <h4>Oficinas ADB</h4>
+          <h4>Oficinas propias ADB</h4>
           <div class="office-list">
-            <button class="office-btn" data-t="propia" data-x="150" data-y="279"><span class="odot"></span><span class="oname">Tres Arroyos</span></button>
-            <button class="office-btn" data-t="propia" data-x="187" data-y="270"><span class="odot"></span><span class="oname">Mar del Plata</span></button>
-            <button class="office-btn" data-t="propia" data-x="170" data-y="282"><span class="odot"></span><span class="oname">Necochea</span></button>
-            <button class="office-btn" data-t="propia" data-x="128" data-y="284"><span class="odot"></span><span class="oname">Bahía Blanca</span></button>
-            <button class="office-btn" data-t="propia" data-x="119" data-y="317"><span class="odot"></span><span class="oname">Viedma</span></button>
-            <button class="office-btn" data-t="propia" data-x="46" data-y="490"><span class="odot"></span><span class="oname">Río Gallegos</span></button>
+            <button class="office-btn" data-t="propia" data-lat="-38.3742" data-lng="-60.2792" data-prov="Buenos Aires" data-addr="Av. Moreno 336, Tres Arroyos" data-tel="+54 2983 50-0260" data-email="oficinatresarroyos@adbseguros.com"><span class="odot"></span><span class="oname">Tres Arroyos</span></button>
+            <button class="office-btn" data-t="propia" data-lat="-38.5545" data-lng="-58.7396" data-prov="Buenos Aires" data-addr="Diag. San Martín 1264, Necochea" data-tel="15541880" data-email="oficinanecochea@adbseguros.com"><span class="odot"></span><span class="oname">Necochea</span></button>
+            <button class="office-btn" data-t="propia" data-lat="-40.8135" data-lng="-62.9967" data-prov="Río Negro" data-addr="25 de Mayo 1055, Viedma" data-tel="+54 9 2920 58-8964" data-email="oficinaviedma@adbseguros.com"><span class="odot"></span><span class="oname">Viedma</span></button>
+            <button class="office-btn" data-t="propia" data-lat="-34.5921" data-lng="-58.3771" data-prov="CABA" data-addr="Av. del Libertador 602, piso 22, CABA" data-tel="+54 9 11 2880-0820"><span class="odot"></span><span class="oname">CABA</span></button>
           </div>
         </div>
 
         <div class="office-group">
-          <h4>Productores asociados</h4>
+          <h4>Oficinas ADB + PAS</h4>
           <div class="office-list">
-            <button class="office-btn" data-t="pas" data-x="151" data-y="253"><span class="odot"></span><span class="oname">Olavarría</span></button>
-            <button class="office-btn" data-t="pas" data-x="158" data-y="251"><span class="odot"></span><span class="oname">Azul</span></button>
-            <button class="office-btn" data-t="pas" data-x="176" data-y="286"><span class="odot"></span><span class="oname">Quequén</span></button>
-            <button class="office-btn" data-t="pas" data-x="193" data-y="261"><span class="odot"></span><span class="oname">Villa Gesell</span></button>
-            <button class="office-btn" data-t="pas" data-x="156" data-y="271"><span class="odot"></span><span class="oname">Gonzales Chaves</span></button>
-            <button class="office-btn" data-t="pas" data-x="140" data-y="260"><span class="odot"></span><span class="oname">Lamadrid</span></button>
-            <button class="office-btn" data-t="pas" data-x="165" data-y="276"><span class="odot"></span><span class="oname">La Dulce</span></button>
-            <button class="office-btn" data-t="pas" data-x="56" data-y="218"><span class="odot"></span><span class="oname">San Rafael</span></button>
+            <button class="office-btn" data-t="pas" data-lat="-38.3768" data-lng="-60.2735" data-prov="Buenos Aires" data-addr="Av. Moreno 336, Tres Arroyos" data-tel="+54 2983 69-5138"><span class="odot"></span><span class="oname">Tres Arroyos (PAS)</span></button>
+            <button class="office-btn" data-t="pas" data-lat="-38.0342" data-lng="-57.5330" data-prov="Buenos Aires" data-addr="Av. Edison 345, Mar del Plata" data-tel="+54 223 546-8293"><span class="odot"></span><span class="oname">Mar del Plata</span></button>
+            <button class="office-btn" data-t="pas" data-lat="-37.9628" data-lng="-57.5713" data-prov="Buenos Aires" data-addr="Av. Polonia 1636, Mar del Plata" data-tel="+54 9 2236 81-0580"><span class="odot"></span><span class="oname">Mar del Plata Norte</span></button>
+            <button class="office-btn" data-t="pas" data-lat="-38.7196" data-lng="-62.2724" data-prov="Buenos Aires" data-addr="Brown 698, Bahía Blanca" data-tel="+54 291 405-5039"><span class="odot"></span><span class="oname">Bahía Blanca</span></button>
+            <button class="office-btn" data-t="pas" data-lat="-36.8927" data-lng="-60.3225" data-prov="Buenos Aires" data-addr="Av. del Valle 3677, Olavarría" data-tel="+54 2284 65-6395"><span class="odot"></span><span class="oname">Olavarría</span></button>
+            <button class="office-btn" data-t="pas" data-lat="-36.7769" data-lng="-59.8587" data-prov="Buenos Aires" data-addr="Av. 25 de Mayo 257, Azul" data-tel="+54 9 2281 50-3117"><span class="odot"></span><span class="oname">Azul</span></button>
+            <button class="office-btn" data-t="pas" data-lat="-37.2639" data-lng="-56.9731" data-prov="Buenos Aires" data-addr="Villa Gesell" data-tel="+54 2255 41-9200"><span class="odot"></span><span class="oname">Villa Gesell</span></button>
+            <button class="office-btn" data-t="pas" data-lat="-37.2519" data-lng="-61.2622" data-prov="Buenos Aires" data-addr="Av. Uriburu 779, Gral. La Madrid" data-tel="+54 2284 61-6686"><span class="odot"></span><span class="oname">Gral. La Madrid</span></button>
+            <button class="office-btn" data-t="pas" data-lat="-38.3536" data-lng="-59.0264" data-prov="Buenos Aires" data-addr="Av. 33 137, Nicanor Olivera (La Dulce)" data-tel="+54 2262 36-5931"><span class="odot"></span><span class="oname">La Dulce</span></button>
+            <button class="office-btn" data-t="pas" data-lat="-34.6177" data-lng="-68.3301" data-prov="Mendoza" data-addr="Av. El Libertador 780, San Rafael" data-tel="+54 260 404-7890"><span class="odot"></span><span class="oname">San Rafael</span></button>
+            <button class="office-btn" data-t="pas" data-lat="-34.9765" data-lng="-67.6928" data-prov="Mendoza" data-addr="Zamenhoff 36, General Alvear" data-tel="+54 2625 43-3219"><span class="odot"></span><span class="oname">General Alvear</span></button>
+            <button class="office-btn" data-t="pas" data-lat="-51.6230" data-lng="-69.2168" data-prov="Santa Cruz" data-addr="Av. Jujuy 434, Río Gallegos" data-tel="+54 9 2966 46-9173"><span class="odot"></span><span class="oname">Río Gallegos</span></button>
           </div>
         </div>
       </div>
@@ -1017,72 +1111,156 @@
     });
   })();
 
-  // interactive presence map
-  (function () {
-    var layer = document.getElementById('pinLayer');
+  // interactive presence map (leaflet)
+  window.addEventListener('DOMContentLoaded', function () {
+    var el = document.getElementById('arMap');
     var btns = Array.prototype.slice.call(document.querySelectorAll('.office-btn'));
-    if (!layer || !btns.length) return;
-    var SVGNS = 'http://www.w3.org/2000/svg';
-    var WA = 'https://wa.me/5491128800820?text=';
-    var pins = {};
+    if (!el || !btns.length) return;
 
-    function openOffice(name) {
-      var msg = 'Hola ADB, quiero comunicarme con la oficina de ' + name + '. ¿Me asesoran?';
-      window.open(WA + encodeURIComponent(msg), '_blank', 'noopener');
+    var WA = 'https://wa.me/5491128800820?text=';
+    var HORARIO = 'Lun a vie 8–17 h · Sáb 9–12:30 h';
+    function nameOf(b) { return b.querySelector('.oname').textContent; }
+    function waHref(name) {
+      return WA + encodeURIComponent('Hola ADB, quiero comunicarme con la oficina de ' + name + '. ¿Me asesoran?');
+    }
+    function openWA(name) { window.open(waHref(name), '_blank', 'noopener'); }
+    function telHref(tel) { return 'tel:' + tel.replace(/[^\d+]/g, ''); }
+    function esc(s) { return s.replace(/[&<>"]/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+    function popRow(icon, inner) {
+      return '<div class="pop-row"><span class="pop-ico">' + icon + '</span><span>' + inner + '</span></div>';
     }
 
-    function labelAnchor(x) { return x > 205 ? 'end' : (x < 40 ? 'start' : 'middle'); }
-    function labelDx(x) { return x > 205 ? -9 : (x < 40 ? 9 : 0); }
+    // sin leaflet (offline / bloqueado) el listado sigue funcionando como fallback
+    if (typeof L === 'undefined') {
+      el.classList.remove('is-loading');
+      el.parentNode.style.display = 'none';
+      btns.forEach(function (b) {
+        b.addEventListener('click', function () { openWA(nameOf(b)); });
+      });
+      return;
+    }
 
-    btns.forEach(function (btn, i) {
-      var name = btn.querySelector('.oname').textContent;
-      var tipo = btn.getAttribute('data-t');
-      var x = parseFloat(btn.getAttribute('data-x'));
-      var y = parseFloat(btn.getAttribute('data-y'));
-      var key = 'p' + i;
-      btn.dataset.key = key;
-
-      var g = document.createElementNS(SVGNS, 'g');
-      g.setAttribute('class', 'pin ' + tipo);
-      g.setAttribute('tabindex', '0');
-      g.setAttribute('role', 'button');
-      g.setAttribute('aria-label', name);
-
-      var halo = document.createElementNS(SVGNS, 'circle');
-      halo.setAttribute('class', 'halo'); halo.setAttribute('cx', x); halo.setAttribute('cy', y); halo.setAttribute('r', 12);
-      var core = document.createElementNS(SVGNS, 'circle');
-      core.setAttribute('class', 'core'); core.setAttribute('cx', x); core.setAttribute('cy', y); core.setAttribute('r', 4.5);
-      var lbl = document.createElementNS(SVGNS, 'text');
-      lbl.setAttribute('class', 'plabel'); lbl.setAttribute('x', x); lbl.setAttribute('y', y - 10);
-      lbl.setAttribute('text-anchor', labelAnchor(x)); lbl.setAttribute('dx', labelDx(x));
-      lbl.textContent = name;
-
-      g.appendChild(halo); g.appendChild(core); g.appendChild(lbl);
-      layer.appendChild(g);
-      pins[key] = g;
-
-      function on() { activate(key); }
-      function off() { deactivate(key); }
-      function go() { openOffice(name); }
-      g.addEventListener('mouseenter', on); g.addEventListener('mouseleave', off);
-      g.addEventListener('focus', on); g.addEventListener('blur', off);
-      g.addEventListener('click', go);
-      g.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(); } });
-      btn.addEventListener('mouseenter', on); btn.addEventListener('mouseleave', off);
-      btn.addEventListener('focus', on); btn.addEventListener('blur', off);
-      btn.addEventListener('click', go);
+    var map = L.map(el, {
+      zoomControl: true,
+      scrollWheelZoom: false,
+      attributionControl: true
     });
 
-    function findBtn(key) { return document.querySelector('.office-btn[data-key="' + key + '"]'); }
-    function activate(key) {
-      if (pins[key]) { pins[key].classList.add('active'); layer.appendChild(pins[key]); }
-      var b = findBtn(key); if (b) b.classList.add('active');
+    // variante sin rótulos: mapa más limpio y evita la toponimia en inglés de OSM
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png', {
+      subdomains: 'abcd',
+      maxZoom: 18,
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>'
+    }).addTo(map);
+
+    var markers = [], pts = [];
+
+    btns.forEach(function (btn, i) {
+      var name = nameOf(btn);
+      var tipo = btn.getAttribute('data-t');
+      var prov = btn.getAttribute('data-prov') || '';
+      var addr = btn.getAttribute('data-addr') || '';
+      var tel = btn.getAttribute('data-tel') || '';
+      var email = btn.getAttribute('data-email') || '';
+      var ll = [parseFloat(btn.getAttribute('data-lat')), parseFloat(btn.getAttribute('data-lng'))];
+      if (isNaN(ll[0]) || isNaN(ll[1])) return;
+      pts.push(ll);
+
+      var m = L.marker(ll, {
+        icon: L.divIcon({
+          className: 'mk-wrap ' + tipo,
+          html: '<span class="mk" style="width:16px;height:16px;display:block"></span>',
+          iconSize: [16, 16], iconAnchor: [8, 8], popupAnchor: [0, -10]
+        }),
+        keyboard: false,
+        riseOnHover: true,
+        title: name
+      }).addTo(map);
+
+      m.bindTooltip(name, { direction: 'top', offset: [0, -10], className: 'mk-tip', opacity: 1 });
+      var loc = addr + (prov ? (addr ? ', ' : '') + prov : '');
+      m.bindPopup(
+        '<div class="pop-name">' + esc(name) + '</div>' +
+        '<div class="pop-kind ' + tipo + '"><i></i>' +
+          (tipo === 'propia' ? 'Oficina propia ADB' : 'Oficina ADB + productor asociado') + '</div>' +
+        (loc ? popRow('📍', esc(loc)) : '') +
+        popRow('🕐', HORARIO) +
+        (tel ? popRow('📞', '<a href="' + telHref(tel) + '">' + esc(tel) + '</a>') : '') +
+        (email ? popRow('✉️', '<a href="mailto:' + esc(email) + '">' + esc(email) + '</a>') : '') +
+        '<a class="pop-wa" href="' + waHref(name) + '" target="_blank" rel="noopener">Consultar por WhatsApp</a>',
+        { closeButton: true, offset: [0, 2], maxWidth: 268, minWidth: 220 }
+      );
+
+      m.on('popupopen', function () { setActive(i, true); m.closeTooltip(); });
+      m.on('popupclose', function () { setActive(i, false); });
+      markers.push(m);
+      btn.dataset.idx = i;
+    });
+
+    function setActive(i, on) {
+      var m = markers[i]; if (!m) return;
+      var node = m.getElement();
+      if (node) node.classList.toggle('is-active', on);
+      var b = document.querySelector('.office-btn[data-idx="' + i + '"]');
+      if (b) b.classList.toggle('active', on);
     }
-    function deactivate(key) {
-      if (pins[key]) pins[key].classList.remove('active');
-      var b = findBtn(key); if (b) b.classList.remove('active');
+
+    var home = L.latLngBounds(pts).pad(0.12);
+    map.fitBounds(home, { animate: false });
+    el.classList.remove('is-loading');
+
+    // el contenedor entra con una animación .reveal: recalcular tamaño al terminar
+    window.addEventListener('load', function () { map.invalidateSize(); });
+    var layout = el.closest('.map-layout');
+    if (layout) layout.addEventListener('transitionend', function () { map.invalidateSize(); });
+
+    // ir a una oficina desde el listado
+    btns.forEach(function (btn) {
+      var i = parseInt(btn.dataset.idx, 10);
+      if (isNaN(i)) return;
+      btn.addEventListener('mouseenter', function () { setActive(i, true); markers[i].openTooltip(); });
+      btn.addEventListener('mouseleave', function () {
+        if (!markers[i].isPopupOpen()) { setActive(i, false); markers[i].closeTooltip(); }
+      });
+      btn.addEventListener('focus', function () { setActive(i, true); });
+      btn.addEventListener('blur', function () { if (!markers[i].isPopupOpen()) setActive(i, false); });
+      btn.addEventListener('click', function () {
+        map.flyTo(markers[i].getLatLng(), 11, { duration: .7 });
+        map.once('moveend', function () { markers[i].openPopup(); });
+      });
+    });
+
+    // volver a la vista general
+    var reset = document.getElementById('mapReset');
+    if (reset) {
+      reset.hidden = false;
+      reset.addEventListener('click', function () {
+        map.closePopup();
+        map.flyToBounds(home, { duration: .7 });
+      });
+      map.on('zoomend moveend', function () {
+        reset.classList.toggle('show', map.getZoom() > map.getBoundsZoom(home) + 0.5);
+      });
     }
-  })();
+
+    // el scroll de la página manda hasta que el usuario entra al mapa
+    map.on('click', function () { map.scrollWheelZoom.enable(); });
+    map.on('mouseout', function () { map.scrollWheelZoom.disable(); });
+
+    // en touch, no secuestrar el scroll vertical hasta que lo pidan
+    if (L.Browser.mobile) {
+      map.dragging.disable();
+      var veil = document.createElement('div');
+      veil.className = 'map-veil';
+      veil.innerHTML = '<span>Tocá para explorar el mapa</span>';
+      el.parentNode.appendChild(veil);
+      veil.addEventListener('click', function () {
+        map.dragging.enable();
+        veil.parentNode.removeChild(veil);
+      });
+    }
+  });
 
   // scroll reveal
   (function () {
@@ -1100,4 +1278,996 @@
   })();
 </script>
 
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": [
+        "InsuranceAgency",
+        "Organization",
+        "LocalBusiness"
+      ],
+      "@id": "https://adbseguros.com.ar/#organization",
+      "name": "ADB | Broker de Seguros",
+      "alternateName": "ADB Seguros",
+      "url": "https://adbseguros.com.ar/",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://adbseguros.com.ar/apple-touch-icon.png",
+        "width": 180,
+        "height": 180
+      },
+      "image": "https://adbseguros.com.ar/og-image.png",
+      "description": "Broker de seguros con más de 19 años de trayectoria. Asesoramiento integral en seguros para personas, pymes y empresas, con una red de 16 oficinas en toda la Argentina. Inscripto en la Superintendencia de Seguros de la Nación bajo la Matrícula nº 1877.",
+      "slogan": "Protegé tu patrimonio",
+      "foundingDate": "2006",
+      "telephone": "+5491128800820",
+      "priceRange": "$",
+      "knowsAbout": [
+        "Seguro automotor",
+        "Seguro de hogar",
+        "Seguro de vida y salud",
+        "Seguros para empresas y pymes",
+        "Seguro agropecuario",
+        "ART - Riesgos del trabajo"
+      ],
+      "areaServed": {
+        "@type": "Country",
+        "name": "Argentina"
+      },
+      "sameAs": [
+        "https://www.instagram.com/adb.seguros/"
+      ],
+      "identifier": {
+        "@type": "PropertyValue",
+        "name": "Matrícula SSN",
+        "value": "1877"
+      },
+      "memberOf": {
+        "@type": "GovernmentOrganization",
+        "name": "Superintendencia de Seguros de la Nación",
+        "url": "https://www.argentina.gob.ar/ssn"
+      },
+      "contactPoint": [
+        {
+          "@type": "ContactPoint",
+          "telephone": "+5491128800820",
+          "contactType": "customer service",
+          "areaServed": "AR",
+          "availableLanguage": [
+            "Spanish"
+          ]
+        }
+      ],
+      "openingHoursSpecification": [
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": [
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday"
+          ],
+          "opens": "08:00",
+          "closes": "17:00"
+        },
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": "Saturday",
+          "opens": "09:00",
+          "closes": "12:30"
+        }
+      ],
+      "makesOffer": [
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Seguro automotor"
+          }
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Seguro de hogar"
+          }
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Seguro de vida y salud"
+          }
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Seguros para empresas y pymes"
+          }
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Seguro agropecuario"
+          }
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "ART - Riesgos del trabajo"
+          }
+        }
+      ],
+      "subOrganization": [
+        {
+          "@id": "https://adbseguros.com.ar/#office-tres-arroyos"
+        },
+        {
+          "@id": "https://adbseguros.com.ar/#office-necochea"
+        },
+        {
+          "@id": "https://adbseguros.com.ar/#office-viedma"
+        },
+        {
+          "@id": "https://adbseguros.com.ar/#office-caba"
+        },
+        {
+          "@id": "https://adbseguros.com.ar/#office-tres-arroyos-pas"
+        },
+        {
+          "@id": "https://adbseguros.com.ar/#office-mar-del-plata"
+        },
+        {
+          "@id": "https://adbseguros.com.ar/#office-mar-del-plata-norte"
+        },
+        {
+          "@id": "https://adbseguros.com.ar/#office-bahia-blanca"
+        },
+        {
+          "@id": "https://adbseguros.com.ar/#office-olavarria"
+        },
+        {
+          "@id": "https://adbseguros.com.ar/#office-azul"
+        },
+        {
+          "@id": "https://adbseguros.com.ar/#office-villa-gesell"
+        },
+        {
+          "@id": "https://adbseguros.com.ar/#office-la-madrid"
+        },
+        {
+          "@id": "https://adbseguros.com.ar/#office-la-dulce"
+        },
+        {
+          "@id": "https://adbseguros.com.ar/#office-san-rafael"
+        },
+        {
+          "@id": "https://adbseguros.com.ar/#office-general-alvear"
+        },
+        {
+          "@id": "https://adbseguros.com.ar/#office-rio-gallegos"
+        }
+      ]
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://adbseguros.com.ar/#website",
+      "url": "https://adbseguros.com.ar/",
+      "name": "ADB | Broker de Seguros",
+      "inLanguage": "es-AR",
+      "publisher": {
+        "@id": "https://adbseguros.com.ar/#organization"
+      }
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://adbseguros.com.ar/#webpage",
+      "url": "https://adbseguros.com.ar/",
+      "name": "ADB | Broker de Seguros — Seguros en toda la Argentina",
+      "isPartOf": {
+        "@id": "https://adbseguros.com.ar/#website"
+      },
+      "about": {
+        "@id": "https://adbseguros.com.ar/#organization"
+      },
+      "inLanguage": "es-AR",
+      "primaryImageOfPage": {
+        "@type": "ImageObject",
+        "url": "https://adbseguros.com.ar/og-image.png"
+      }
+    },
+    {
+      "@type": "InsuranceAgency",
+      "@id": "https://adbseguros.com.ar/#office-tres-arroyos",
+      "name": "ADB Seguros — Tres Arroyos",
+      "parentOrganization": {
+        "@id": "https://adbseguros.com.ar/#organization"
+      },
+      "url": "https://adbseguros.com.ar/#presencia",
+      "image": "https://adbseguros.com.ar/og-image.png",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Av. Moreno 336",
+        "addressLocality": "Tres Arroyos",
+        "addressRegion": "Buenos Aires",
+        "postalCode": "7500",
+        "addressCountry": "AR"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": -38.3742,
+        "longitude": -60.2792
+      },
+      "areaServed": {
+        "@type": "City",
+        "name": "Tres Arroyos"
+      },
+      "openingHoursSpecification": [
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": [
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday"
+          ],
+          "opens": "08:00",
+          "closes": "17:00"
+        },
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": "Saturday",
+          "opens": "09:00",
+          "closes": "12:30"
+        }
+      ],
+      "priceRange": "$",
+      "telephone": "+542983500260",
+      "email": "oficinatresarroyos@adbseguros.com"
+    },
+    {
+      "@type": "InsuranceAgency",
+      "@id": "https://adbseguros.com.ar/#office-necochea",
+      "name": "ADB Seguros — Necochea",
+      "parentOrganization": {
+        "@id": "https://adbseguros.com.ar/#organization"
+      },
+      "url": "https://adbseguros.com.ar/#presencia",
+      "image": "https://adbseguros.com.ar/og-image.png",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Diag. San Martín 1264",
+        "addressLocality": "Necochea",
+        "addressRegion": "Buenos Aires",
+        "postalCode": "7630",
+        "addressCountry": "AR"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": -38.5545,
+        "longitude": -58.7396
+      },
+      "areaServed": {
+        "@type": "City",
+        "name": "Necochea"
+      },
+      "openingHoursSpecification": [
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": [
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday"
+          ],
+          "opens": "08:00",
+          "closes": "17:00"
+        },
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": "Saturday",
+          "opens": "09:00",
+          "closes": "12:30"
+        }
+      ],
+      "priceRange": "$",
+      "email": "oficinanecochea@adbseguros.com"
+    },
+    {
+      "@type": "InsuranceAgency",
+      "@id": "https://adbseguros.com.ar/#office-viedma",
+      "name": "ADB Seguros — Viedma",
+      "parentOrganization": {
+        "@id": "https://adbseguros.com.ar/#organization"
+      },
+      "url": "https://adbseguros.com.ar/#presencia",
+      "image": "https://adbseguros.com.ar/og-image.png",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "25 de Mayo 1055",
+        "addressLocality": "Viedma",
+        "addressRegion": "Río Negro",
+        "postalCode": "8500",
+        "addressCountry": "AR"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": -40.8135,
+        "longitude": -62.9967
+      },
+      "areaServed": {
+        "@type": "City",
+        "name": "Viedma"
+      },
+      "openingHoursSpecification": [
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": [
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday"
+          ],
+          "opens": "08:00",
+          "closes": "17:00"
+        },
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": "Saturday",
+          "opens": "09:00",
+          "closes": "12:30"
+        }
+      ],
+      "priceRange": "$",
+      "telephone": "+542920588964",
+      "email": "oficinaviedma@adbseguros.com"
+    },
+    {
+      "@type": "InsuranceAgency",
+      "@id": "https://adbseguros.com.ar/#office-caba",
+      "name": "ADB Seguros — CABA",
+      "parentOrganization": {
+        "@id": "https://adbseguros.com.ar/#organization"
+      },
+      "url": "https://adbseguros.com.ar/#presencia",
+      "image": "https://adbseguros.com.ar/og-image.png",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Av. del Libertador 602, piso 22",
+        "addressLocality": "Ciudad Autónoma de Buenos Aires",
+        "addressRegion": "CABA",
+        "postalCode": "1001",
+        "addressCountry": "AR"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": -34.5921,
+        "longitude": -58.3771
+      },
+      "areaServed": {
+        "@type": "City",
+        "name": "Ciudad Autónoma de Buenos Aires"
+      },
+      "openingHoursSpecification": [
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": [
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday"
+          ],
+          "opens": "08:00",
+          "closes": "17:00"
+        },
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": "Saturday",
+          "opens": "09:00",
+          "closes": "12:30"
+        }
+      ],
+      "priceRange": "$",
+      "telephone": "+5491128800820"
+    },
+    {
+      "@type": "InsuranceAgency",
+      "@id": "https://adbseguros.com.ar/#office-tres-arroyos-pas",
+      "name": "ADB Seguros — Tres Arroyos (PAS)",
+      "parentOrganization": {
+        "@id": "https://adbseguros.com.ar/#organization"
+      },
+      "url": "https://adbseguros.com.ar/#presencia",
+      "image": "https://adbseguros.com.ar/og-image.png",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Av. Moreno 336",
+        "addressLocality": "Tres Arroyos",
+        "addressRegion": "Buenos Aires",
+        "postalCode": "7500",
+        "addressCountry": "AR"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": -38.3768,
+        "longitude": -60.2735
+      },
+      "areaServed": {
+        "@type": "City",
+        "name": "Tres Arroyos"
+      },
+      "openingHoursSpecification": [
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": [
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday"
+          ],
+          "opens": "08:00",
+          "closes": "17:00"
+        },
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": "Saturday",
+          "opens": "09:00",
+          "closes": "12:30"
+        }
+      ],
+      "priceRange": "$",
+      "telephone": "+542983695138"
+    },
+    {
+      "@type": "InsuranceAgency",
+      "@id": "https://adbseguros.com.ar/#office-mar-del-plata",
+      "name": "ADB Seguros — Mar del Plata",
+      "parentOrganization": {
+        "@id": "https://adbseguros.com.ar/#organization"
+      },
+      "url": "https://adbseguros.com.ar/#presencia",
+      "image": "https://adbseguros.com.ar/og-image.png",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Av. Edison 345",
+        "addressLocality": "Mar del Plata",
+        "addressRegion": "Buenos Aires",
+        "postalCode": "7603",
+        "addressCountry": "AR"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": -38.0342,
+        "longitude": -57.533
+      },
+      "areaServed": {
+        "@type": "City",
+        "name": "Mar del Plata"
+      },
+      "openingHoursSpecification": [
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": [
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday"
+          ],
+          "opens": "08:00",
+          "closes": "17:00"
+        },
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": "Saturday",
+          "opens": "09:00",
+          "closes": "12:30"
+        }
+      ],
+      "priceRange": "$",
+      "telephone": "+542235468293"
+    },
+    {
+      "@type": "InsuranceAgency",
+      "@id": "https://adbseguros.com.ar/#office-mar-del-plata-norte",
+      "name": "ADB Seguros — Mar del Plata Norte",
+      "parentOrganization": {
+        "@id": "https://adbseguros.com.ar/#organization"
+      },
+      "url": "https://adbseguros.com.ar/#presencia",
+      "image": "https://adbseguros.com.ar/og-image.png",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Av. Polonia 1636",
+        "addressLocality": "Mar del Plata",
+        "addressRegion": "Buenos Aires",
+        "postalCode": "7600",
+        "addressCountry": "AR"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": -37.9628,
+        "longitude": -57.5713
+      },
+      "areaServed": {
+        "@type": "City",
+        "name": "Mar del Plata"
+      },
+      "openingHoursSpecification": [
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": [
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday"
+          ],
+          "opens": "08:00",
+          "closes": "17:00"
+        },
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": "Saturday",
+          "opens": "09:00",
+          "closes": "12:30"
+        }
+      ],
+      "priceRange": "$",
+      "telephone": "+542236810580"
+    },
+    {
+      "@type": "InsuranceAgency",
+      "@id": "https://adbseguros.com.ar/#office-bahia-blanca",
+      "name": "ADB Seguros — Bahía Blanca",
+      "parentOrganization": {
+        "@id": "https://adbseguros.com.ar/#organization"
+      },
+      "url": "https://adbseguros.com.ar/#presencia",
+      "image": "https://adbseguros.com.ar/og-image.png",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Brown 698",
+        "addressLocality": "Bahía Blanca",
+        "addressRegion": "Buenos Aires",
+        "postalCode": "8000",
+        "addressCountry": "AR"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": -38.7196,
+        "longitude": -62.2724
+      },
+      "areaServed": {
+        "@type": "City",
+        "name": "Bahía Blanca"
+      },
+      "openingHoursSpecification": [
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": [
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday"
+          ],
+          "opens": "08:00",
+          "closes": "17:00"
+        },
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": "Saturday",
+          "opens": "09:00",
+          "closes": "12:30"
+        }
+      ],
+      "priceRange": "$",
+      "telephone": "+542914055039"
+    },
+    {
+      "@type": "InsuranceAgency",
+      "@id": "https://adbseguros.com.ar/#office-olavarria",
+      "name": "ADB Seguros — Olavarría",
+      "parentOrganization": {
+        "@id": "https://adbseguros.com.ar/#organization"
+      },
+      "url": "https://adbseguros.com.ar/#presencia",
+      "image": "https://adbseguros.com.ar/og-image.png",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Av. del Valle 3677",
+        "addressLocality": "Olavarría",
+        "addressRegion": "Buenos Aires",
+        "postalCode": "7400",
+        "addressCountry": "AR"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": -36.8927,
+        "longitude": -60.3225
+      },
+      "areaServed": {
+        "@type": "City",
+        "name": "Olavarría"
+      },
+      "openingHoursSpecification": [
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": [
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday"
+          ],
+          "opens": "08:00",
+          "closes": "17:00"
+        },
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": "Saturday",
+          "opens": "09:00",
+          "closes": "12:30"
+        }
+      ],
+      "priceRange": "$",
+      "telephone": "+542284656395"
+    },
+    {
+      "@type": "InsuranceAgency",
+      "@id": "https://adbseguros.com.ar/#office-azul",
+      "name": "ADB Seguros — Azul",
+      "parentOrganization": {
+        "@id": "https://adbseguros.com.ar/#organization"
+      },
+      "url": "https://adbseguros.com.ar/#presencia",
+      "image": "https://adbseguros.com.ar/og-image.png",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Av. 25 de Mayo 257",
+        "addressLocality": "Azul",
+        "addressRegion": "Buenos Aires",
+        "postalCode": "7300",
+        "addressCountry": "AR"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": -36.7769,
+        "longitude": -59.8587
+      },
+      "areaServed": {
+        "@type": "City",
+        "name": "Azul"
+      },
+      "openingHoursSpecification": [
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": [
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday"
+          ],
+          "opens": "08:00",
+          "closes": "17:00"
+        },
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": "Saturday",
+          "opens": "09:00",
+          "closes": "12:30"
+        }
+      ],
+      "priceRange": "$",
+      "telephone": "+542281503117"
+    },
+    {
+      "@type": "InsuranceAgency",
+      "@id": "https://adbseguros.com.ar/#office-villa-gesell",
+      "name": "ADB Seguros — Villa Gesell",
+      "parentOrganization": {
+        "@id": "https://adbseguros.com.ar/#organization"
+      },
+      "url": "https://adbseguros.com.ar/#presencia",
+      "image": "https://adbseguros.com.ar/og-image.png",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Villa Gesell",
+        "addressRegion": "Buenos Aires",
+        "postalCode": "7165",
+        "addressCountry": "AR"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": -37.2639,
+        "longitude": -56.9731
+      },
+      "areaServed": {
+        "@type": "City",
+        "name": "Villa Gesell"
+      },
+      "openingHoursSpecification": [
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": [
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday"
+          ],
+          "opens": "08:00",
+          "closes": "17:00"
+        },
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": "Saturday",
+          "opens": "09:00",
+          "closes": "12:30"
+        }
+      ],
+      "priceRange": "$",
+      "telephone": "+542255419200"
+    },
+    {
+      "@type": "InsuranceAgency",
+      "@id": "https://adbseguros.com.ar/#office-la-madrid",
+      "name": "ADB Seguros — Gral. La Madrid",
+      "parentOrganization": {
+        "@id": "https://adbseguros.com.ar/#organization"
+      },
+      "url": "https://adbseguros.com.ar/#presencia",
+      "image": "https://adbseguros.com.ar/og-image.png",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Av. Uriburu 779",
+        "addressLocality": "General La Madrid",
+        "addressRegion": "Buenos Aires",
+        "postalCode": "7406",
+        "addressCountry": "AR"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": -37.2519,
+        "longitude": -61.2622
+      },
+      "areaServed": {
+        "@type": "City",
+        "name": "General La Madrid"
+      },
+      "openingHoursSpecification": [
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": [
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday"
+          ],
+          "opens": "08:00",
+          "closes": "17:00"
+        },
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": "Saturday",
+          "opens": "09:00",
+          "closes": "12:30"
+        }
+      ],
+      "priceRange": "$",
+      "telephone": "+542284616686"
+    },
+    {
+      "@type": "InsuranceAgency",
+      "@id": "https://adbseguros.com.ar/#office-la-dulce",
+      "name": "ADB Seguros — La Dulce",
+      "parentOrganization": {
+        "@id": "https://adbseguros.com.ar/#organization"
+      },
+      "url": "https://adbseguros.com.ar/#presencia",
+      "image": "https://adbseguros.com.ar/og-image.png",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Av. 33 nº 137",
+        "addressLocality": "Nicanor Olivera (La Dulce)",
+        "addressRegion": "Buenos Aires",
+        "postalCode": "7637",
+        "addressCountry": "AR"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": -38.3536,
+        "longitude": -59.0264
+      },
+      "areaServed": {
+        "@type": "City",
+        "name": "Nicanor Olivera (La Dulce)"
+      },
+      "openingHoursSpecification": [
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": [
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday"
+          ],
+          "opens": "08:00",
+          "closes": "17:00"
+        },
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": "Saturday",
+          "opens": "09:00",
+          "closes": "12:30"
+        }
+      ],
+      "priceRange": "$",
+      "telephone": "+542262365931"
+    },
+    {
+      "@type": "InsuranceAgency",
+      "@id": "https://adbseguros.com.ar/#office-san-rafael",
+      "name": "ADB Seguros — San Rafael",
+      "parentOrganization": {
+        "@id": "https://adbseguros.com.ar/#organization"
+      },
+      "url": "https://adbseguros.com.ar/#presencia",
+      "image": "https://adbseguros.com.ar/og-image.png",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Av. El Libertador 780",
+        "addressLocality": "San Rafael",
+        "addressRegion": "Mendoza",
+        "postalCode": "5600",
+        "addressCountry": "AR"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": -34.6177,
+        "longitude": -68.3301
+      },
+      "areaServed": {
+        "@type": "City",
+        "name": "San Rafael"
+      },
+      "openingHoursSpecification": [
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": [
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday"
+          ],
+          "opens": "08:00",
+          "closes": "17:00"
+        },
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": "Saturday",
+          "opens": "09:00",
+          "closes": "12:30"
+        }
+      ],
+      "priceRange": "$",
+      "telephone": "+542604047890"
+    },
+    {
+      "@type": "InsuranceAgency",
+      "@id": "https://adbseguros.com.ar/#office-general-alvear",
+      "name": "ADB Seguros — General Alvear",
+      "parentOrganization": {
+        "@id": "https://adbseguros.com.ar/#organization"
+      },
+      "url": "https://adbseguros.com.ar/#presencia",
+      "image": "https://adbseguros.com.ar/og-image.png",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Zamenhoff 36",
+        "addressLocality": "General Alvear",
+        "addressRegion": "Mendoza",
+        "postalCode": "5620",
+        "addressCountry": "AR"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": -34.9765,
+        "longitude": -67.6928
+      },
+      "areaServed": {
+        "@type": "City",
+        "name": "General Alvear"
+      },
+      "openingHoursSpecification": [
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": [
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday"
+          ],
+          "opens": "08:00",
+          "closes": "17:00"
+        },
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": "Saturday",
+          "opens": "09:00",
+          "closes": "12:30"
+        }
+      ],
+      "priceRange": "$",
+      "telephone": "+542625433219"
+    },
+    {
+      "@type": "InsuranceAgency",
+      "@id": "https://adbseguros.com.ar/#office-rio-gallegos",
+      "name": "ADB Seguros — Río Gallegos",
+      "parentOrganization": {
+        "@id": "https://adbseguros.com.ar/#organization"
+      },
+      "url": "https://adbseguros.com.ar/#presencia",
+      "image": "https://adbseguros.com.ar/og-image.png",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Av. Jujuy 434",
+        "addressLocality": "Río Gallegos",
+        "addressRegion": "Santa Cruz",
+        "postalCode": "9400",
+        "addressCountry": "AR"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": -51.623,
+        "longitude": -69.2168
+      },
+      "areaServed": {
+        "@type": "City",
+        "name": "Río Gallegos"
+      },
+      "openingHoursSpecification": [
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": [
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday"
+          ],
+          "opens": "08:00",
+          "closes": "17:00"
+        },
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": "Saturday",
+          "opens": "09:00",
+          "closes": "12:30"
+        }
+      ],
+      "priceRange": "$",
+      "telephone": "+542966469173"
+    }
+  ]
+}
+</script>
 </html>
