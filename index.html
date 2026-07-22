@@ -261,7 +261,8 @@
   }
   .nest-card h3 { font-family: var(--font-display); text-transform: uppercase; font-size: 1.5rem; color:#fff; letter-spacing:.02em; }
   .nest-card p { color:#c3cee2; font-size:.95rem; margin-top:10px; }
-  .nest-emblem { width: 118px; height: 118px; margin: 6px auto 22px; }
+  .horacio { display:block; width:86%; max-width:290px; margin:2px auto 20px; }
+  .horacio img { width:100%; height:auto; display:block; filter: drop-shadow(0 20px 24px rgba(0,0,0,.38)); }
   .float { animation: float 6s ease-in-out infinite; }
   @keyframes float { 0%,100%{ transform: translateY(0);} 50%{ transform: translateY(-9px);} }
   @media (prefers-reduced-motion: reduce){ .float{ animation:none; } }
@@ -674,36 +675,16 @@
     </div>
 
     <div class="hero-art">
-      <div class="nest-card float">
+      <div class="nest-card">
         <span class="tag">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
           100% Argentino
         </span>
-        <svg class="nest-emblem" viewBox="0 0 120 120" role="img" aria-label="Nido del hornero, símbolo de protección del hogar">
-          <defs>
-            <linearGradient id="ng" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0" stop-color="#ffffff" stop-opacity=".22"/>
-              <stop offset="1" stop-color="#ffffff" stop-opacity=".05"/>
-            </linearGradient>
-          </defs>
-          <!-- branch -->
-          <line x1="12" y1="104" x2="108" y2="104" stroke="#ffb4a9" stroke-width="3" stroke-linecap="round"/>
-          <!-- hornero clay-oven nest (dome) -->
-          <path d="M30 104 A34 34 0 0 1 98 104 Z" fill="url(#ng)" stroke="#ffffff" stroke-width="2.4" stroke-opacity=".85"/>
-          <path d="M30 104 A34 34 0 0 1 98 104" fill="none" stroke="#ffffff" stroke-width="0"/>
-          <!-- entrance -->
-          <path d="M74 104 A16 16 0 0 1 90 104 Z" fill="#0f2444"/>
-          <path d="M74 104 A16 16 0 0 1 90 104" fill="none" stroke="#ffb4a9" stroke-width="2"/>
-          <!-- ridge lines of the nest -->
-          <path d="M40 92 A26 26 0 0 1 88 92" fill="none" stroke="#ffffff" stroke-width="1.4" stroke-opacity=".5"/>
-          <path d="M50 82 A18 18 0 0 1 82 84" fill="none" stroke="#ffffff" stroke-width="1.4" stroke-opacity=".4"/>
-          <!-- little bird -->
-          <circle cx="46" cy="70" r="10" fill="#ffb4a9"/>
-          <circle cx="52" cy="60" r="6.5" fill="#ff8f84"/>
-          <path d="M57 60 l7 -2 -5 5 Z" fill="#c21b18"/>
-          <circle cx="53.5" cy="59" r="1.3" fill="#0f2444"/>
-          <path d="M38 74 l-9 3 8 3 Z" fill="#ff8f84"/>
-        </svg>
+        <picture class="horacio float">
+          <source srcset="/horacio.webp" type="image/webp">
+          <img src="/horacio.png" width="760" height="895" decoding="async"
+               alt="Horacio, el hornero mascota de ADB Broker de Seguros, con la remera institucional, dando la bienvenida">
+        </picture>
         <h3>Horacio construye tranquilidad</h3>
         <p>Como el hornero levanta su hogar antes de la tormenta, en ADB construimos la protección que tu familia y tu negocio merecen.</p>
       </div>
