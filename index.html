@@ -22,7 +22,7 @@
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png">
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-<link rel="mask-icon" href="/favicon.svg" color="#0f2444">
+<link rel="mask-icon" href="/favicon.svg" color="#c21b18">
 
 <!-- Open Graph -->
 <meta property="og:type" content="website">
@@ -422,13 +422,10 @@
   .leaflet-control-attribution a { color:#9fb2d4; }
 
   .mk { border-radius:50%; box-sizing:border-box; border:2px solid #0a1220;
+    background:#ff8f84; box-shadow:0 0 0 0 rgba(255,143,132,.5);
     transition:transform .18s ease, box-shadow .18s ease; }
   .mk-wrap { background:none; border:0; }
-  .mk-wrap.propia .mk { background:#ff8f84; box-shadow:0 0 0 0 rgba(255,143,132,.5); }
-  .mk-wrap.pas .mk { background:#8fb8ff; box-shadow:0 0 0 0 rgba(143,184,255,.5); }
-  .mk-wrap.is-active .mk, .mk-wrap:hover .mk { transform:scale(1.45); }
-  .mk-wrap.propia.is-active .mk, .mk-wrap.propia:hover .mk { box-shadow:0 0 0 9px rgba(255,143,132,.22); }
-  .mk-wrap.pas.is-active .mk, .mk-wrap.pas:hover .mk { box-shadow:0 0 0 9px rgba(143,184,255,.22); }
+  .mk-wrap.is-active .mk, .mk-wrap:hover .mk { transform:scale(1.45); box-shadow:0 0 0 9px rgba(255,143,132,.22); }
 
   .leaflet-tooltip.mk-tip { background:rgba(15,36,68,.96); border:1px solid rgba(255,255,255,.2);
     color:#fff; font-weight:600; font-size:.8rem; border-radius:8px; padding:4px 9px; box-shadow:none; }
@@ -442,9 +439,6 @@
   .leaflet-popup-close-button:hover { color:#fff !important; }
   .pop-name { font-family:var(--font-display); text-transform:uppercase; letter-spacing:.05em;
     font-weight:700; font-size:1.02rem; color:#fff; }
-  .pop-kind { display:inline-flex; align-items:center; gap:7px; color:#aebbd4; font-size:.78rem; margin-top:3px; }
-  .pop-kind i { width:8px; height:8px; border-radius:50%; flex:none; }
-  .pop-kind.propia i { background:#ff8f84; } .pop-kind.pas i { background:#8fb8ff; }
   .pop-prov { color:#8595b4; font-size:.78rem; margin-top:2px; }
   .pop-row { display:flex; gap:8px; margin-top:7px; color:#c7d2e6; font-size:.8rem; line-height:1.4; }
   .pop-row .pop-ico { flex:none; opacity:.85; font-size:.82rem; }
@@ -467,11 +461,6 @@
   .map-reset.show { opacity:1; pointer-events:auto; }
   .map-reset:hover { background:rgba(27,60,110,.95); }
 
-  .legend { display:flex; gap:20px; margin-bottom:20px; }
-  .legend .lg { display:inline-flex; align-items:center; gap:8px; font-size:.85rem; color:#cdd7ea; }
-  .legend .lg i { width:11px; height:11px; border-radius:50%; flex:none; }
-  .legend .lg.propia i { background:#ff8f84; }
-  .legend .lg.pas i { background:#8fb8ff; }
   .office-group + .office-group { margin-top:22px; }
   .office-group h4 { font-family:var(--font-display); text-transform:uppercase; letter-spacing:.08em;
     font-size:.82rem; color:#93a3c2; margin:0 0 12px; }
@@ -481,13 +470,10 @@
     padding:10px 13px; color:#e4eaf5; font:inherit; font-size:.9rem;
     transition:background .15s, border-color .15s, transform .15s; }
   .office-btn:hover, .office-btn.active { background:rgba(255,255,255,.1); border-color:rgba(255,255,255,.4); transform:translateX(3px); }
-  .office-btn .odot { width:9px; height:9px; border-radius:50%; flex:none; }
-  .office-btn[data-t="propia"] .odot { background:#ff8f84; }
-  .office-btn[data-t="pas"] .odot { background:#8fb8ff; }
+  .office-btn .odot { width:9px; height:9px; border-radius:50%; flex:none; background:#ff8f84; }
   .office-btn .oname { font-weight:600; flex:1; }
-  .office-btn::after { content:"›"; font-size:1.2rem; line-height:1; color:#8fb8ff; opacity:0; transform:translateX(-4px); transition:opacity .15s, transform .15s; }
+  .office-btn::after { content:"›"; font-size:1.2rem; line-height:1; color:#ff8f84; opacity:0; transform:translateX(-4px); transition:opacity .15s, transform .15s; }
   .office-btn:hover::after, .office-btn.active::after { opacity:1; transform:none; }
-  .office-btn[data-t="propia"]::after { color:#ff8f84; }
   .map-hint { color:#8595b4; font-size:.82rem; margin-top:12px; text-align:center; }
 
   /* clientes */
@@ -617,13 +603,7 @@
 <header class="nav">
   <div class="wrap nav-inner">
     <a class="brand" href="#top" aria-label="ADB Broker de Seguros - inicio">
-      <svg class="badge" viewBox="0 0 100 100" role="img" aria-hidden="true">
-        <circle cx="50" cy="50" r="48" fill="#183565"/>
-        <text x="50" y="47" text-anchor="middle" font-family="Arial Narrow, sans-serif" font-weight="700" font-size="30" letter-spacing="1" fill="#fff">ADB</text>
-        <line x1="24" y1="58" x2="76" y2="58" stroke="#fff" stroke-width="1.4"/>
-        <rect x="48.4" y="55" width="3.2" height="6" fill="#fff"/>
-        <text x="50" y="72" text-anchor="middle" font-family="Arial Narrow, sans-serif" font-weight="700" font-size="8.4" letter-spacing="1.2" fill="#fff">BROKER DE SEGUROS</text>
-      </svg>
+      <img class="badge" src="/logo.svg" width="44" height="44" decoding="async" alt="">
       <span class="brand-txt">
         <span class="abbr">ADB</span>
         <span class="bar"></span>
@@ -669,8 +649,8 @@
       </div>
       <div class="hero-trust">
         <div><div class="n">+90.000</div><div class="l">Vidas aseguradas</div></div>
-        <div><div class="n">4</div><div class="l">Provincias</div></div>
         <div><div class="n">+27.000</div><div class="l">Pólizas emitidas</div></div>
+        <div><div class="n">16</div><div class="l">Oficinas en el país</div></div>
       </div>
     </div>
 
@@ -683,9 +663,9 @@
         <picture class="horacio float">
           <source srcset="/horacio.webp" type="image/webp">
           <img src="/horacio.png" width="760" height="895" decoding="async"
-               alt="Horacio, el hornero mascota de ADB Broker de Seguros, con la remera institucional, dando la bienvenida">
+               alt="Horne, el hornero mascota de ADB Broker de Seguros, con la remera institucional, dando la bienvenida">
         </picture>
-        <h3>Horacio construye tranquilidad</h3>
+        <h3>Horne construye tranquilidad</h3>
         <p>Como el hornero levanta su hogar antes de la tormenta, en ADB construimos la protección que tu familia y tu negocio merecen.</p>
       </div>
     </div>
@@ -715,7 +695,6 @@
     <div class="stat reveal"><div class="n"><span>+</span>30.000</div><div class="l">Riesgos patrimoniales</div></div>
     <div class="stat reveal"><div class="n">16</div><div class="l">Oficinas en el país</div></div>
     <div class="stat reveal"><div class="n">50</div><div class="l">Red de productores</div></div>
-    <div class="stat reveal"><div class="n">4</div><div class="l">Provincias y CABA</div></div>
     <div class="stat reveal"><div class="n">30</div><div class="l">Empresas asociadas</div></div>
     <div class="stat reveal"><div class="n"><span>+</span>27.000</div><div class="l">Pólizas emitidas</div></div>
     <div class="stat reveal"><div class="n"><span>+</span>19</div><div class="l">Años de trayectoria</div></div>
@@ -885,12 +864,11 @@
     <div class="sec-head reveal">
       <span class="eyebrow">Presencia territorial</span>
       <h2>Cerca tuyo, en toda la Argentina</h2>
-      <p>Red de oficinas propias y productores asesores asociados, con foco en el interior y la Patagonia.</p>
+      <p>Red de oficinas en todo el país, con foco en el interior y la Patagonia.</p>
     </div>
     <div class="presence-stats-row reveal">
       <div class="ps"><div class="n"><span>+</span>14.500 M</div><div class="l">De prima anual gestionada</div></div>
       <div class="ps"><div class="n">16</div><div class="l">Oficinas en el país</div></div>
-      <div class="ps"><div class="n">4</div><div class="l">Provincias y CABA</div></div>
       <div class="ps"><div class="n">50</div><div class="l">Productores en la red</div></div>
     </div>
 
@@ -904,36 +882,49 @@
       </div>
 
       <div class="map-side">
-        <div class="legend">
-          <span class="lg propia"><i></i>Oficinas propias ADB</span>
-          <span class="lg pas"><i></i>Oficinas ADB + PAS</span>
-        </div>
-
         <div class="office-group">
-          <h4>Oficinas propias ADB</h4>
+          <h4>Buenos Aires</h4>
           <div class="office-list">
-            <button class="office-btn" data-t="propia" data-lat="-38.3742" data-lng="-60.2792" data-prov="Buenos Aires" data-addr="Av. Moreno 336, Tres Arroyos" data-tel="+54 2983 50-0260" data-email="oficinatresarroyos@adbseguros.com"><span class="odot"></span><span class="oname">Tres Arroyos</span></button>
-            <button class="office-btn" data-t="propia" data-lat="-38.5545" data-lng="-58.7396" data-prov="Buenos Aires" data-addr="Diag. San Martín 1264, Necochea" data-tel="+54 9 2262 54-1880" data-email="oficinanecochea@adbseguros.com"><span class="odot"></span><span class="oname">Necochea</span></button>
-            <button class="office-btn" data-t="propia" data-lat="-40.8135" data-lng="-62.9967" data-prov="Río Negro" data-addr="25 de Mayo 1055, Viedma" data-tel="+54 9 2920 58-8964" data-email="oficinaviedma@adbseguros.com"><span class="odot"></span><span class="oname">Viedma</span></button>
-            <button class="office-btn" data-t="propia" data-lat="-34.5921" data-lng="-58.3771" data-prov="CABA" data-addr="Av. del Libertador 602, piso 22, CABA" data-tel="+54 9 11 2880-0820"><span class="odot"></span><span class="oname">CABA</span></button>
+            <button class="office-btn" data-t="adb" data-lat="-36.7769" data-lng="-59.8587" data-prov="Buenos Aires" data-addr="Av. 25 de Mayo 257, Azul" data-tel="+54 9 2281 50-3117"><span class="odot"></span><span class="oname">Azul</span></button>
+            <button class="office-btn" data-t="adb" data-lat="-38.7196" data-lng="-62.2724" data-prov="Buenos Aires" data-addr="Brown 698, Bahía Blanca" data-tel="+54 291 405-5039"><span class="odot"></span><span class="oname">Bahía Blanca</span></button>
+            <button class="office-btn" data-t="adb" data-lat="-37.2519" data-lng="-61.2622" data-prov="Buenos Aires" data-addr="Av. Uriburu 779, Gral. La Madrid" data-tel="+54 2284 61-6686"><span class="odot"></span><span class="oname">Gral. La Madrid</span></button>
+            <button class="office-btn" data-t="adb" data-lat="-38.3536" data-lng="-59.0264" data-prov="Buenos Aires" data-addr="Av. 33 137, Nicanor Olivera (La Dulce)" data-tel="+54 2262 36-5931"><span class="odot"></span><span class="oname">La Dulce</span></button>
+            <button class="office-btn" data-t="adb" data-lat="-38.0342" data-lng="-57.5330" data-prov="Buenos Aires" data-addr="Av. Edison 345, Mar del Plata" data-tel="+54 223 546-8293"><span class="odot"></span><span class="oname">Mar del Plata</span></button>
+            <button class="office-btn" data-t="adb" data-lat="-37.9628" data-lng="-57.5713" data-prov="Buenos Aires" data-addr="Av. Polonia 1636, Mar del Plata" data-tel="+54 9 2236 81-0580"><span class="odot"></span><span class="oname">Mar del Plata Norte</span></button>
+            <button class="office-btn" data-t="adb" data-lat="-38.5545" data-lng="-58.7396" data-prov="Buenos Aires" data-addr="Diag. San Martín 1264, Necochea" data-tel="+54 9 2262 54-1880" data-email="oficinanecochea@adbseguros.com"><span class="odot"></span><span class="oname">Necochea</span></button>
+            <button class="office-btn" data-t="adb" data-lat="-36.8927" data-lng="-60.3225" data-prov="Buenos Aires" data-addr="Av. del Valle 3677, Olavarría" data-tel="+54 2284 65-6395"><span class="odot"></span><span class="oname">Olavarría</span></button>
+            <button class="office-btn" data-t="adb" data-lat="-38.3742" data-lng="-60.2792" data-prov="Buenos Aires" data-addr="Av. Moreno 336, Tres Arroyos" data-tel="+54 2983 50-0260" data-email="oficinatresarroyos@adbseguros.com"><span class="odot"></span><span class="oname">Tres Arroyos</span></button>
+            <button class="office-btn" data-t="adb" data-lat="-38.3768" data-lng="-60.2735" data-prov="Buenos Aires" data-addr="Av. Moreno 336, Tres Arroyos" data-tel="+54 2983 69-5138"><span class="odot"></span><span class="oname">Tres Arroyos</span></button>
+            <button class="office-btn" data-t="adb" data-lat="-37.2639" data-lng="-56.9731" data-prov="Buenos Aires" data-addr="Villa Gesell" data-tel="+54 2255 41-9200"><span class="odot"></span><span class="oname">Villa Gesell</span></button>
           </div>
         </div>
 
         <div class="office-group">
-          <h4>Oficinas ADB + PAS</h4>
+          <h4>Ciudad de Buenos Aires</h4>
           <div class="office-list">
-            <button class="office-btn" data-t="pas" data-lat="-38.3768" data-lng="-60.2735" data-prov="Buenos Aires" data-addr="Av. Moreno 336, Tres Arroyos" data-tel="+54 2983 69-5138"><span class="odot"></span><span class="oname">Tres Arroyos (PAS)</span></button>
-            <button class="office-btn" data-t="pas" data-lat="-38.0342" data-lng="-57.5330" data-prov="Buenos Aires" data-addr="Av. Edison 345, Mar del Plata" data-tel="+54 223 546-8293"><span class="odot"></span><span class="oname">Mar del Plata</span></button>
-            <button class="office-btn" data-t="pas" data-lat="-37.9628" data-lng="-57.5713" data-prov="Buenos Aires" data-addr="Av. Polonia 1636, Mar del Plata" data-tel="+54 9 2236 81-0580"><span class="odot"></span><span class="oname">Mar del Plata Norte</span></button>
-            <button class="office-btn" data-t="pas" data-lat="-38.7196" data-lng="-62.2724" data-prov="Buenos Aires" data-addr="Brown 698, Bahía Blanca" data-tel="+54 291 405-5039"><span class="odot"></span><span class="oname">Bahía Blanca</span></button>
-            <button class="office-btn" data-t="pas" data-lat="-36.8927" data-lng="-60.3225" data-prov="Buenos Aires" data-addr="Av. del Valle 3677, Olavarría" data-tel="+54 2284 65-6395"><span class="odot"></span><span class="oname">Olavarría</span></button>
-            <button class="office-btn" data-t="pas" data-lat="-36.7769" data-lng="-59.8587" data-prov="Buenos Aires" data-addr="Av. 25 de Mayo 257, Azul" data-tel="+54 9 2281 50-3117"><span class="odot"></span><span class="oname">Azul</span></button>
-            <button class="office-btn" data-t="pas" data-lat="-37.2639" data-lng="-56.9731" data-prov="Buenos Aires" data-addr="Villa Gesell" data-tel="+54 2255 41-9200"><span class="odot"></span><span class="oname">Villa Gesell</span></button>
-            <button class="office-btn" data-t="pas" data-lat="-37.2519" data-lng="-61.2622" data-prov="Buenos Aires" data-addr="Av. Uriburu 779, Gral. La Madrid" data-tel="+54 2284 61-6686"><span class="odot"></span><span class="oname">Gral. La Madrid</span></button>
-            <button class="office-btn" data-t="pas" data-lat="-38.3536" data-lng="-59.0264" data-prov="Buenos Aires" data-addr="Av. 33 137, Nicanor Olivera (La Dulce)" data-tel="+54 2262 36-5931"><span class="odot"></span><span class="oname">La Dulce</span></button>
-            <button class="office-btn" data-t="pas" data-lat="-34.6177" data-lng="-68.3301" data-prov="Mendoza" data-addr="Av. El Libertador 780, San Rafael" data-tel="+54 260 404-7890"><span class="odot"></span><span class="oname">San Rafael</span></button>
-            <button class="office-btn" data-t="pas" data-lat="-34.9765" data-lng="-67.6928" data-prov="Mendoza" data-addr="Zamenhoff 36, General Alvear" data-tel="+54 2625 43-3219"><span class="odot"></span><span class="oname">General Alvear</span></button>
-            <button class="office-btn" data-t="pas" data-lat="-51.6230" data-lng="-69.2168" data-prov="Santa Cruz" data-addr="Av. Jujuy 434, Río Gallegos" data-tel="+54 9 2966 46-9173"><span class="odot"></span><span class="oname">Río Gallegos</span></button>
+            <button class="office-btn" data-t="adb" data-lat="-34.5921" data-lng="-58.3771" data-prov="CABA" data-addr="Av. del Libertador 602, piso 22, CABA" data-tel="+54 9 11 2880-0820"><span class="odot"></span><span class="oname">CABA</span></button>
+          </div>
+        </div>
+
+        <div class="office-group">
+          <h4>Mendoza</h4>
+          <div class="office-list">
+            <button class="office-btn" data-t="adb" data-lat="-34.9765" data-lng="-67.6928" data-prov="Mendoza" data-addr="Zamenhoff 36, General Alvear" data-tel="+54 2625 43-3219"><span class="odot"></span><span class="oname">General Alvear</span></button>
+            <button class="office-btn" data-t="adb" data-lat="-34.6177" data-lng="-68.3301" data-prov="Mendoza" data-addr="Av. El Libertador 780, San Rafael" data-tel="+54 260 404-7890"><span class="odot"></span><span class="oname">San Rafael</span></button>
+          </div>
+        </div>
+
+        <div class="office-group">
+          <h4>Río Negro</h4>
+          <div class="office-list">
+            <button class="office-btn" data-t="adb" data-lat="-40.8135" data-lng="-62.9967" data-prov="Río Negro" data-addr="25 de Mayo 1055, Viedma" data-tel="+54 9 2920 58-8964" data-email="oficinaviedma@adbseguros.com"><span class="odot"></span><span class="oname">Viedma</span></button>
+          </div>
+        </div>
+
+        <div class="office-group">
+          <h4>Santa Cruz</h4>
+          <div class="office-list">
+            <button class="office-btn" data-t="adb" data-lat="-51.6230" data-lng="-69.2168" data-prov="Santa Cruz" data-addr="Av. Jujuy 434, Río Gallegos" data-tel="+54 9 2966 46-9173"><span class="odot"></span><span class="oname">Río Gallegos</span></button>
           </div>
         </div>
       </div>
@@ -988,13 +979,7 @@
     <div class="foot-grid">
       <div class="foot-brand">
         <a class="brand" href="#top">
-          <svg class="badge" viewBox="0 0 100 100" aria-hidden="true">
-            <circle cx="50" cy="50" r="48" fill="#183565"/>
-            <text x="50" y="47" text-anchor="middle" font-family="Arial Narrow, sans-serif" font-weight="700" font-size="30" letter-spacing="1" fill="#fff">ADB</text>
-            <line x1="24" y1="58" x2="76" y2="58" stroke="#fff" stroke-width="1.4"/>
-            <rect x="48.4" y="55" width="3.2" height="6" fill="#fff"/>
-            <text x="50" y="72" text-anchor="middle" font-family="Arial Narrow, sans-serif" font-weight="700" font-size="8.4" letter-spacing="1.2" fill="#fff">BROKER DE SEGUROS</text>
-          </svg>
+          <img class="badge" src="/logo.svg" width="44" height="44" decoding="async" alt="ADB Broker de Seguros">
           <span class="brand-txt"><span class="abbr">ADB</span><span class="bar"></span><span class="full">Broker de Seguros</span></span>
         </a>
         <p>Más de 19 años protegiendo el patrimonio de personas, pymes y empresas en toda la Argentina.</p>
@@ -1163,8 +1148,6 @@
       var loc = addr + (prov ? (addr ? ', ' : '') + prov : '');
       m.bindPopup(
         '<div class="pop-name">' + esc(name) + '</div>' +
-        '<div class="pop-kind ' + tipo + '"><i></i>' +
-          (tipo === 'propia' ? 'Oficina propia ADB' : 'Oficina ADB + productor asociado') + '</div>' +
         (loc ? popRow('📍', esc(loc)) : '') +
         popRow('🕐', HORARIO) +
         (tel ? popRow('📞', '<a href="' + telHref(tel) + '">' + esc(tel) + '</a>') : '') +
@@ -1665,7 +1648,7 @@
     {
       "@type": "InsuranceAgency",
       "@id": "https://adbseguros.com.ar/#office-tres-arroyos-pas",
-      "name": "ADB Seguros — Tres Arroyos (PAS)",
+      "name": "ADB Seguros — Tres Arroyos",
       "parentOrganization": {
         "@id": "https://adbseguros.com.ar/#organization"
       },
