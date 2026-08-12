@@ -58,8 +58,17 @@ where the code is, and both are reported upstream as friction rather than kept a
    `<body>` is an optional tag and this document omits it, which is valid; upstream slices from
    `indexOf("<body")` without checking for `-1`. `scripts/check-markup.mjs`.
 
-Neither changes a threshold or what a rule requires. Both were found by running the gate, not by
-reading it — which is the same way the template's own defects were found.
+A third divergence is the removal of `scripts/test-gate.mjs` (bucket 3, N4), and a fourth is the
+URL list in `lighthouserc.json` — an inventory, not a threshold; every floor is byte-identical.
+
+Neither correction changes a threshold or what a rule requires. Both were found by running the gate,
+not by reading it — which is the same way the template's own defects were found.
+
+**All four are reported upstream** in [`handbook-friction.md`](handbook-friction.md), together with
+a fifth report that costs this repository nothing and matters more than any of them: the shipped
+`gate.yml` never switches to the ratchet, so an adopting site whose publication origin is the
+pipeline cannot publish at all until every carried finding is fixed. That is why open definition #5
+has the order it has.
 
 ---
 
