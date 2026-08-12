@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Página no encontrada — ADB | Broker de Seguros</title>
+<meta name="description" content="La página que buscabas no existe. Volvé al sitio de ADB | Broker de Seguros.">
+<!-- noindex: a not-found document is a response, not a page anybody should reach from a search
+     result. It stays out of the sitemap for the same reason (§26). -->
+<meta name="robots" content="noindex, follow">
+<meta name="theme-color" content="#0f2444">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+<!-- Inline styles for the same reason as privacy.html: there is no stylesheet to share yet (D2). -->
+<style>
+  :root {
+    --bg: #f7f5f1; --ink: #16181d; --ink-soft: #4a4f59;
+    --line: rgba(24,53,101,.14); --navy: #183565; --red: #c21b18;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0b1626; --ink: #eef2f8; --ink-soft: #b3bfd1;
+      --line: rgba(255,255,255,.14); --navy: #8fb0e8; --red: #ec7b76;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font-family: "Segoe UI", system-ui, -apple-system, Roboto, "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.7; -webkit-font-smoothing: antialiased;
+    display: flex; align-items: center; justify-content: center;
+    min-height: 100dvh; padding: 24px;
+  }
+  .skip-link {
+    position: absolute; left: -9999px; top: 0; z-index: 100;
+    background: var(--navy); color: #fff; padding: 12px 18px; border-radius: 0 0 8px 0;
+  }
+  .skip-link:focus { left: 0; }
+  main { max-width: 34rem; text-align: center; }
+  img { display: block; margin: 0 auto 20px; }
+  h1 { font-size: 1.8rem; line-height: 1.25; margin: 0 0 10px; }
+  p { color: var(--ink-soft); margin: 0 0 22px; }
+  .actions { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+  .actions a {
+    min-height: 44px; display: inline-flex; align-items: center; justify-content: center;
+    padding: 0 22px; border-radius: 999px; text-decoration: none; font-weight: 600;
+  }
+  .primary { background: var(--red); color: #fff; }
+  .secondary { border: 1px solid var(--line); color: var(--navy); }
+  .actions a:hover, .actions a:focus { text-decoration: underline; }
+</style>
+</head>
+
+<a class="skip-link" href="#contenido">Saltar al contenido</a>
+
+<main id="contenido">
+  <img src="/logo.svg" width="64" height="64" alt="ADB | Broker de Seguros" decoding="async">
+  <h1>Esta página no existe</h1>
+  <p>Puede que el enlace esté mal escrito o que la página haya cambiado de lugar.
+    Desde el inicio llegás a las coberturas, al mapa de oficinas y al contacto.</p>
+  <div class="actions">
+    <a class="primary" href="/">Ir al inicio</a>
+    <a class="secondary" href="/privacy.html">Política de privacidad</a>
+  </div>
+</main>
+</html>

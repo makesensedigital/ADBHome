@@ -35,12 +35,19 @@
     // different number.
     messagingNumber: "5491128800820",
 
-    // NO CANONICAL PUBLIC MAILBOX EXISTS. §26 asks for one domain, one mailbox, one brand: the
-    // domain and brand are settled, the mailbox is not. Three per-office addresses are published
-    // in the presence map (Necochea, Tres Arroyos, Viedma) and eleven offices publish none, so a
-    // visitor who does not use messaging has no address to write to and no way to guess one.
-    // Recorded as open definition #3; `null` here rather than a guess.
-    contactMailbox: null,
+    // The canonical public mailbox. DECIDED 2026-08-12 by Juan Torresel, closing open definition
+    // #3 — and note which domain it is on: the site is adbseguros.com.ar and this matches it. The
+    // three per-office addresses in the presence map are on adbseguros.com, a different domain,
+    // and that split is now a known discrepancy rather than an open question.
+    //
+    // This is the address a data-rights request goes to, so it is load-bearing rather than
+    // decorative: privacy.html names it, and a statement nobody can act on is not a statement.
+    contactMailbox: "info@adbseguros.com.ar",
+
+    // The registered entity behind the brand. Named here because privacy.html has to identify the
+    // data controller, and an identifier that appears on a published page belongs in the module.
+    legalName: "ADB Broker Sociedad de Productores Asesores de Seguros S.A.",
+    taxId: "30-71906098-2",
 
     // One template per conversion control. The key is the control's label, so the visible control,
     // the event it emits and the text it composes cannot drift apart. The composed text is the
@@ -117,10 +124,11 @@
         "the site introduces any tracking or advertising tag, a conversion control begins " +
         "collecting health or other special-category data through a form rather than through " +
         "messaging, or ADB advertises into a jurisdiction requiring prior consent",
-      // NO PRIVACY STATEMENT EXISTS ANYWHERE ON THIS SITE. §26 requires one in every case,
-      // regardless of what was decided about tracking, and it is required here twice over
-      // because the messaging templates above solicit personal data. Debt #1, fix-now bucket.
-      privacyUrl: null,
+      // Shipped 2026-08-12, closing fix-now F1. §26 requires a privacy statement in every case,
+      // regardless of what was decided about tracking, and it was required here twice over
+      // because the messaging templates above solicit personal data. It is linked from the
+      // footer of index.html, which is the half of the rule that says REACHABLE.
+      privacyUrl: "/privacy.html",
     },
 
     // -------------------------------------------------------------------- conversion receiver

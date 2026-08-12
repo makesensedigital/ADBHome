@@ -83,22 +83,30 @@ visible.
 
 | # | Finding | Why it is here |
 |---|---|---|
-| **F1** | **The site solicits personal data through messaging and discloses nothing.** Ten WhatsApp controls compose a message asking a stranger for name, DNI, CUIL, CUIT, date of birth, vehicle registration, home address, payroll figures — and, in the life-insurance template, **smoking status, which is health-related**. There is no privacy statement anywhere on the site, no link to one, and no page to link to. | §26 is explicit that the obligation to disclose does not change because the collection moved into a chat, and that a prompt asking for identity documents, dates of birth or health-related answers **is** data collection regardless of the absence of a form element. It also requires a privacy statement reachable from the site **in every case**. Both were missed, and this is the one finding on this site with a subject who is not us. |
+| **F1** | *(closed 2026-08-12)* **The site solicited personal data through messaging and disclosed nothing.** Ten WhatsApp controls compose a message asking a stranger for name, DNI, CUIL, CUIT, date of birth, vehicle registration, home address, payroll figures — and, in the life-insurance template, **smoking status, which is health-related**. There is no privacy statement anywhere on the site, no link to one, and no page to link to. | §26 is explicit that the obligation to disclose does not change because the collection moved into a chat, and that a prompt asking for identity documents, dates of birth or health-related answers **is** data collection regardless of the absence of a form element. It also requires a privacy statement reachable from the site **in every case**. Both were missed, and this is the one finding on this site with a subject who is not us. |
 
-**Status: half done, 2026-08-12.** The health field is out and the statement is not written.
+**Status: CLOSED 2026-08-12.** Both halves shipped, in two commits.
 
-**Done.** The life-insurance template asked *Sos fumador?*. It was removed from the markup and from
-`config.js` in one commit, and it is the half that mattered most: preformatting a health question
-is what made it **our** collection rather than something the producer asks in the conversation, and
-one field dragged the whole site into the strictest regime. What the site now solicits is identity
-and contact data. Deleting the question does not undo what was already sent to the business through
-it — that is a records question for whoever holds those conversations, not a markup question.
+**The health field is out.** The life-insurance template asked *Sos fumador?*; it was removed from
+the markup and from `config.js` together. That was the half that mattered most — preformatting a
+health question is what made it **our** collection rather than something the producer asks in the
+conversation, and one field dragged every other field beside it into the strictest regime. What the
+site now solicits is identity and contact data. It does **not** undo what was already sent through
+that control: that is a records question for whoever holds those conversations.
 
-**Not done.** The privacy statement, and the not-found page it ships with (D9). It is blocked on two
-facts in section 6, and it stays blocked rather than being written around them: a statement that
-invents a controller name or a rights mailbox is worse than none, on a published page, for a
-regulated broker. The retention answer is in — an enquiry lives only in WhatsApp, for the duration
-of the commercial relationship, and is copied to no other system.
+**The statement is written and reachable.** `privacy.html` names the controller (ADB Broker
+Sociedad de Productores Asesores de Seguros S.A., CUIT 30-71906098-2, matrícula SSN nº 1877), states
+that the site itself collects nothing, lists **field by field** what each messaging template asks
+for, discloses the two third-party origins the map contacts on first render, gives the retention
+answer, and carries the statutory access and control-authority clauses. It is linked from the footer
+of `index.html`, which is the half of the rule that says *reachable*. `404.html` shipped with it and
+pays D9.
+
+**What is deliberately still open, and belongs to a person rather than to this file:** the statutory
+wording should be read by whoever advises ADB legally. What is written is verifiable — what the site
+does, what each template asks, who the controller is — plus the standard Argentine clauses. That is
+the right division of labour and not a hedge: an agent can state what the software does, and cannot
+certify that a jurisdiction is satisfied.
 
 ### Bucket 2 — Debt
 
@@ -185,11 +193,25 @@ re-run `--init`: it would silently accept everything added since.
 
 **No blanket suppression exists in this repository, and none may be added.** A file-level or
 repository-level disable removes the rule instead of recording the debt, and removes it for the code
-written tomorrow too. Where a suppression is ever genuinely needed it names the specific rule, is
-scoped as narrowly as possible, and states why — §20 requires this and it is where adoption most
-often goes wrong. The two escape hatches that exist upstream (`check-config: allow`, and the
-first-render origin allowlist) are **both unused on purpose**: using either on day one would have
-converted a finding into a silence.
+written tomorrow too. Where a suppression is genuinely needed it names the specific rule, is scoped
+as narrowly as possible, and states why — §20 requires this and it is where adoption most often goes
+wrong.
+
+Two escape hatches exist upstream, and this repository now uses exactly one of them, twice.
+
+- **`check-config: allow` — used, on two lines, both in `privacy.html`.** Each is the rights mailbox,
+  written as a `mailto:` link. The rule wants the address in `config.js` with the markup carrying a
+  key, and that is right; the mechanism that builds the destination is D1 and is not wired. A privacy
+  statement whose contact address cannot be clicked is not a statement, so the exemption is taken
+  per line, with the reason and the debt entry named in the comment itself, and it leaves with D1.
+  **It was corrected before it was committed**: the comment first sat two lines below the anchor,
+  the exemption did not apply, and the ratchet failed the run with `privacy.html: 0 → 1`. The fix was
+  to move the comment, not to raise the baseline.
+- **The first-render origin allowlist — unused, and it stays unused.** Adding `unpkg.com` to it would
+  record a decision nobody has taken and convert a live finding into a silence. It is D4.
+
+The distinction between the two is the whole point: one is a named line-scoped exemption that carries
+its own reason and its own expiry, and the other would be a standing permission.
 
 ---
 
@@ -263,22 +285,22 @@ bootstrap and did not carry the same reasoning to the caller it mandates.
   substitute. Lighthouse's mobile emulation is not it either. D2 means the automated half is not
   covering the render rules at all, so this one carries more weight here than it would elsewhere.
 
-## 6. What F1 still needs
+## 6. F1, closed
 
-Four facts were needed. Two came back on 2026-08-12 and are recorded here so the answer is not
-asked for twice; two are outstanding, and no agent may invent either on a published page for a
-regulated broker.
+Four facts were needed, none of which an agent may invent on a published page for a regulated
+broker. All four came back on 2026-08-12, from Juan Torresel, and are recorded here so the reasoning
+survives the commit that used them:
 
-**Answered** — Juan Torresel, 2026-08-12:
+| Fact | Answer |
+|---|---|
+| The data controller | ADB Broker Sociedad de Productores Asesores de Seguros S.A., CUIT 30-71906098-2 |
+| The rights mailbox | `info@adbseguros.com.ar` — which also closed open definition #3 |
+| Retention | The enquiry lives only in WhatsApp, for the duration of the commercial relationship, copied to no other system |
+| The health question | Removed |
 
-- **Retention.** An enquiry lives only in WhatsApp, for the duration of the commercial
-  relationship, and is copied to no other system. That is what the statement will say.
-- **The health question goes.** Removed the same day. See the fix-now bucket.
-
-**Outstanding — F1 cannot be finished without both:**
-
-1. **Who the data controller is**, as it should appear — the registered name behind *ADB | Broker de
-   Seguros*, matrícula SSN nº 1877.
-2. **The mailbox that receives a rights request** — access, rectification, deletion. This is open
-   definition #3, and the two are the same decision: the three offices that publish an address are
-   on a different domain from the site, so answering this answers which domain is canonical.
+**The mailbox answer settled more than F1.** It is on `adbseguros.com.ar`, the site's own domain, so
+the canonical mailbox and the canonical domain now agree. The three per-office addresses in the
+presence map are on `adbseguros.com` — a different domain — and that is now a **known discrepancy**
+carried in the closed row of open definition #3, rather than an open question. Worth checking that
+the second domain is still ours and still points at something that exists: a record naming a
+resource nobody owns is the failure §26 singles out on client work.

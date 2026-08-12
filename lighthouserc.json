@@ -3,12 +3,12 @@
 
   "//accessibility": "The accessibility category IS axe-core, which is why there is no separate axe step: pinning a CLI without pinning the browser it drives breaks the moment the runner's Chrome moves, and a gate that goes red for reasons unrelated to the site is a gate people switch off. The aggregate floor is backed by explicit assertions on the load-bearing audits below, so a high score cannot hide a specific failure. What this does NOT cover is the half no tool covers — the keyboard walkthrough stays in the pull-request checklist.",
 
-  "//url": "ONE DIFFERENCE FROM THE TEMPLATE, AND IT IS AN INVENTORY, NOT A THRESHOLD. The template lists index.html and privacy.html because a site built from it has both. This site has no privacy statement — which is a FINDING (technical-debt #1), not a reason to relax anything, and Lighthouse cannot report a finding about a page it fails to load. So the URL list names the page that exists. Every floor below is byte-identical to the template's. When privacy.html ships, its URL comes back here in the same commit.",
+  "//url": "Back to the template's own list as of 2026-08-12. It was cut to index.html alone while this site had no privacy statement, on the grounds that Lighthouse cannot report a finding about a page it fails to load and that the missing page was a finding in its own right. The page shipped with fix-now F1, so its URL returned in the same commit, as that note promised. Every floor below has been byte-identical to the template's throughout — the inventory moved, never a threshold.",
 
   "ci": {
     "collect": {
       "staticDistDir": ".",
-      "url": ["http://localhost/index.html"],
+      "url": ["http://localhost/index.html", "http://localhost/privacy.html"],
       "numberOfRuns": 3,
       "settings": {
         "formFactor": "mobile",
