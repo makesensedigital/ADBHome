@@ -1,0 +1,49 @@
+<!-- Bucket 4 of the `adopt-an-existing-repository` triage. -->
+
+# Open definitions
+
+Decisions this site needs and nobody has taken.
+
+**An entry here means permitted, not blocked.** Per the Handbook Guidelines, what is not governed is
+permitted and reported: you decide, you proceed, and the decision lands here so the next person is
+not deciding it again from nothing. If an open row stopped work, this file would become a list of
+stop signs — and nobody writes those down, which loses the visibility that is the whole point.
+
+Every row carries **the default that holds while it is open**, because a row without one is not a
+decision deferred, it is a decision taken by accident.
+
+Distinct from [`technical-debt.md`](technical-debt.md): that records what is *wrong*, which is not
+permitted. This records what has not been *decided*, which is.
+
+---
+
+## Open
+
+| # | Open question | Governing rule | Default while open | Opened |
+|---|---|---|---|---|
+| **1** | **Whether this site is instrumented at all, and with what.** It has run since 2026-07-20 with no container, no analytics and no events. `config.tagContainerId` holds the container placeholder on purpose: the gate fails on that line so the absence is stated rather than implied, because a `null` there would look like a site that decided it did not need any. | §26 — instrumentation is a launch condition | **None.** And the part that is not a default but a fact: **the three weeks already published have no data and never will.** Measurement is the one artifact in this standard that cannot be reconstructed backwards, so this row records a gap in the history, not a plan to fill it. What is still open is only whether the gap stops growing. If it does, the contract is written **before** the code that emits it, and anything completing in WhatsApp is named an **intent**, never the primary conversion — the site can observe the departure and nothing after it. | 2026-08-11 |
+| **2** | **The consent decision — who takes it and when.** The jurisdiction is evident (Argentina) and the implemented behaviour is notice-only. Neither is a decision until a person's name and a date are on it. | §26 — consent is an explicit recorded decision | **Notice-only, no banner, no tracking** — which is what the page does today, and it is coherent only while open definition #1 stays at *none*. **It stops being coherent the moment any tag ships.** Revisit also if a conversion control starts collecting health or other special-category data through a form rather than through messaging. Architectural limit, stated rather than mitigated: this site **cannot** produce auditable proof of consent — the record would live in the visitor's browser, and that is state, not evidence. | 2026-08-11 |
+| **3** | **Which mailbox is canonical, and on which domain.** §26 asks for one domain, one mailbox, one brand. The domain and brand are settled; the mailbox is not. Three of sixteen offices publish an address and thirteen publish none — and the three that do are on **`adbseguros.com`**, while the site is **`adbseguros.com.ar`**. | §26 — identity, domains and DNS | **No canonical mailbox**, and `config.contactMailbox` is `null` rather than a guess. A visitor who does not use WhatsApp has no address to write to and no way to guess one. This row also **blocks fix-now F1**: a privacy statement has to name where a rights request is sent. Deciding it means confirming both domains are ours and that the second is not left pointing at something we no longer control. | 2026-08-11 |
+| **4** | **Who answers an enquiry, by name.** | §26 — every conversion path has a named owner | **Nobody named.** `config.receiver.owner` is unanswered. The site presents no form, which is correct when nothing persists a submission — but the other half of the same rule wants a person, and messaging with no named owner is how an enquiry goes unanswered with nothing recording that it did. | 2026-08-11 |
+| **5** | **Whether the publication origin moves from the branch to the pipeline.** `gate.yml` carries the `publish` job §26 requires, and it will not run while the repository's Pages source is *deploy from a branch*. | §26 — the delivery pipeline is the publication origin, mandatory | **The branch publishes, and nothing can refuse.** The push *is* the deploy, which is the structural reason this class of work tends to have no verification at all. **Flipping it is a repository setting, and it is the owner's to flip** — Settings → Pages → Source → GitHub Actions. Two things to know before doing so: the gate is currently red, so publication would stop until the buckets above are worked through; and `CNAME` must travel with the artifact or the custom domain unbinds **silently**, which the publish job asserts. | 2026-08-11 |
+| **6** | **Whether this site stays on a host that can express none of §26's edge controls.** GitHub Pages serves no custom response headers and issues no real redirect. | §26 — hosting is a security decision, taken first | **Stay, and the controls stay absent** — recorded rather than implied. Concretely: **no protection against framing at all**, because that control has no form expressible from inside a document; no enforceable content security policy; no permissions policy; and §26's canonical-identity rule is **unimplementable**, not merely unimplemented. `_headers` and `_redirects` do not exist here because they would do nothing. **This is the row that is not debt and never becomes debt** — nobody can fix it in the markup; it changes the hosting decision or it stays. It becomes urgent the first time a URL is retired, because a retired URL with no redirect is the failure that cannot be undone afterwards. | 2026-08-11 |
+| **7** | **What the two quoting controls should point at.** *Sitio de cotización* in the footer's social row and *Cotizá tu seguro online* in its contact list both resolve to this page's own canonical URL — a visitor who clicks either lands where they already were. Commit `b5c51e1` pointed them there deliberately, which makes this a known state rather than a slip. | §26 — no conversion control resolves to the page it sits on | **They stay, and they are known-broken.** §26 gives two remedies and neither is "point it at the home page": build the destination, or remove the control. Both are the owner's call — one is a project, the other removes something visible from a client's site. Note that the gate does **not** catch these: the check keys on a button class or an analytics attribute and these anchors carry neither, so this row is the only thing recording them. | 2026-08-11 |
+| **8** | **Whether this site gets an OpenSpec workspace.** §26 does not suspend §19, and `templates/landing` ships none. | §19 · §26 | **No workspace.** For a site whose whole change history is *add a section, fix the copy*, the brief and the gate may genuinely be enough — but that is a claim nobody has tested, and it is carried upstream as the handbook's own debt #13. Answer it from this site's real history, not from principle. If it turns out to be needed, the months before it have no archive and the reasoning cannot be reconstructed. | 2026-08-11 |
+| **9** | **Whether a one-person repository adopts the pull-request flow now.** Seven commits, all direct to `main`, no merge, no `CODEOWNERS`. §26 says the default branch is not committed to directly and work arrives by pull request. | §21 · §26 | **Direct commits continue.** A code-owner file with one name requests review from the author, which no host grants, so it would be a mechanism that cannot fire — and required review needs branch protection, which is a plan question. **This becomes real the moment a second person can merge**, and that is the trigger, not a date. Adopting the flow alone is still worth something before then: it is what makes the gate run *before* publication rather than after. | 2026-08-11 |
+| **10** | **Who owns this site after launch, and how it transfers.** No named owner, no review cadence, no scheduled check, and no ownership-and-exit inventory. | §26 — after launch, mandatory | **Nobody, and nothing is watched.** Nothing in this architecture announces a failure: no logs, no alerts, no health endpoint. A broken conversion control lives until somebody notices by chance. The inventory §26 asks for — registrar, DNS zone, domain verification, repository, hosting account, analytics property, tag container, form receiver, mailing platform, scheduling links — is the one that matters most on a client site: the unclaimed pieces are the ones that end up as **a DNS record pointing at a resource that no longer exists**, which is how a client's domain becomes claimable by a stranger. | 2026-08-11 |
+
+---
+
+## How to close a row
+
+1. Decide. Write what was decided, who decided it and the date **into the row**, then move it below.
+2. If the decision changes a value, change it in `config.js` in the same commit — a decision recorded
+   here and not reflected there is a decision that did not happen.
+3. If it removes a finding, run `node scripts/ratchet.mjs --update` in that same commit too. A
+   baseline left high keeps headroom, and the violation just removed can come back for free.
+
+## Closed
+
+| # | Was | Closed by | When |
+|---|---|---|---|
+| | | | |
