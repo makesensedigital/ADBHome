@@ -1,0 +1,22 @@
+# Copied from the Platform Engineering Handbook — templates/app/.github/workflows/standards.yml
+# Central Standards CI caller. This thin workflow invokes the reusable workflow published
+# by the handbook repository, so the gate logic lives in one place (Handbook §19).
+#
+# Pinned to the MAJOR tag, per Handbook §0 and §18 (never @main, never unpinned). The release
+# this repository's rule files were generated from is recorded in .github/handbook-version.md;
+# the `handbook-version` job below compares the two and warns when they drift.
+#
+# NOTE FOR THIS REPOSITORY: most of what this workflow checks does not exist here — there is no
+# backend, no ORM model, no OpenSpec workspace — and each of those jobs detects its own absence
+# and reports a notice rather than failing. What it does enforce here is the version manifest,
+# which is the one thing a static site can drift on as easily as an application.
+name: Central Standards
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  standards:
+    uses: makesensedigital/engineering-handbook/.github/workflows/central-standards.yml@v3
