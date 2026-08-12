@@ -43,9 +43,15 @@ material in the tree and none anywhere in the seven commits of history. `Brandin
 ignored before the first commit, which is §26's rule about the ignore file being an access-control
 decision, followed correctly and from the start.
 
-The consequence for the fix-now bucket is unusual and worth saying plainly: it held **one** entry,
-and it was about personal data rather than secrets. It closed on 2026-08-12 and the bucket is now
-empty — which is the only bucket that should ever be empty here.
+The consequence for the fix-now bucket is unusual and worth saying plainly: on adoption day it held
+**one** entry, and it was about personal data rather than secrets. That one closed on 2026-08-12.
+
+**Two more opened the same day, and where they came from matters.** Neither was found by the gate,
+by the baseline, or by reading §26. Both were found by **verifying a deploy that had already
+succeeded** — requesting the site over plaintext, and requesting it by the name most people would
+type. Every check in this repository had passed over both. The lesson is the section's own: on
+this architecture a missing control produces no error, no red build and no missing file, so the
+only thing that finds one is going and asking the live host what it does.
 
 ### Two corrections to the instrument, made before the number was recorded
 
@@ -88,7 +94,10 @@ visible.
 |---|---|---|
 | **F1** | *(closed 2026-08-12)* **The site solicited personal data through messaging and disclosed nothing.** Ten WhatsApp controls compose a message asking a stranger for name, DNI, CUIL, CUIT, date of birth, vehicle registration, home address, payroll figures — and, in the life-insurance template, **smoking status, which is health-related**. There is no privacy statement anywhere on the site, no link to one, and no page to link to. | §26 is explicit that the obligation to disclose does not change because the collection moved into a chat, and that a prompt asking for identity documents, dates of birth or health-related answers **is** data collection regardless of the absence of a form element. It also requires a privacy statement reachable from the site **in every case**. Both were missed, and this is the one finding on this site with a subject who is not us. |
 
-**Status: CLOSED 2026-08-12.** Both halves shipped, in two commits.
+| **F2** | **The site is served over plaintext HTTP.** `http://adbseguros.com.ar/` answers `200` with the full page rather than redirecting, and no HSTS header is sent on the HTTPS response. The certificate is provisioned and approved; `https_enforced` is simply `false`. | Contract-sensitive and a single toggle, which is the definition of this bucket. Every conversion path on this site is a **link** — fourteen of them — and a plaintext page is rewritable in transit by anyone on the path between the visitor and the host. The messaging number a visitor is sent to is not something they can verify. |
+| **F3** | **`www.adbseguros.com.ar` answers with a certificate error.** The name resolves to this host's addresses, but the certificate covers the apex only, so a browser shows a full-page security warning instead of the site. | A visitor who types the domain the way most people type a domain gets a security interstitial on an insurance broker's site. It is also the shape §26 singles out on client work: a DNS record naming a resource that does not answer for it. |
+
+**F1 status: CLOSED 2026-08-12.** Both halves shipped, in two commits.
 
 **The health field is out.** The life-insurance template asked *Sos fumador?*; it was removed from
 the markup and from `config.js` together. That was the half that mattered most — preformatting a

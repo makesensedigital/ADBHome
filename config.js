@@ -57,8 +57,9 @@
     // stranger for a national identity number, a date of birth, a vehicle registration and
     // payroll figures. They asked for a smoking status too, until 2026-08-12 — see `vida`.
     // §26: the obligation to disclose what is collected does not change because the collection
-    // moved into a chat, and the site still discloses nothing. That is fix-now F1, half done:
-    // the health field is out, the privacy statement is not written. See docs/adoption.md.
+    // moved into a chat. That obligation is met as of 2026-08-12 — privacy.html lists these
+    // templates field by field and is linked from the footer (fix-now F1, closed). Adding a
+    // field here without adding it there re-opens it.
     messages: {
       generic: "Hola ADB, quiero cotizar un seguro. ¿Me asesoran?",
       // personal_data: true
@@ -189,9 +190,10 @@
       redirectsFromRetiredUrls: {
         where: "absent",
         why:
-          "The host issues no real redirect status. No predecessor URL is known to be retired, " +
-          "so nothing is currently broken by this — but the capability is missing rather than " +
-          "unused, and the day a URL is retired it cannot be honoured. Open definition #6.",
+          "The host issues no redirect this repository can author. It issues exactly one of its " +
+          "own — http to https, when enforced — and nothing else, so a retired URL cannot be " +
+          "honoured. No predecessor URL is known to be retired, so nothing is broken by this " +
+          "today; the capability is missing rather than unused. Closed open definition #6.",
       },
       formSubmissions: {
         where: "absent",
@@ -227,6 +229,27 @@
           "policy, and — the one with no in-document equivalent — no framing protection at all: " +
           "frame-ancestors is ignored in a meta element and X-Frame-Options is header-only. " +
           "Open definition #6, accepted with the consequence named.",
+      },
+      transportSecurity: {
+        // Split out from securityHeaders on 2026-08-12, because lumping them together was hiding
+        // a live defect behind a true statement. "The host serves no custom headers" is correct
+        // and it made transport look equally out of reach. It is not: this host offers exactly
+        // one transport control, it is a toggle, and it was off.
+        where: "absent",
+        why:
+          "HTTPS is NOT enforced: http://adbseguros.com.ar/ answers 200 in plaintext rather than " +
+          "redirecting, and no HSTS header is sent. The certificate is provisioned and approved, " +
+          "so this is a setting rather than a capability — see fix-now F2. Until it is on, the " +
+          "conversion path is rewritable in transit by anyone between the visitor and the host, " +
+          "and the conversion path here is a set of links.",
+      },
+      canonicalHostname: {
+        where: "absent",
+        why:
+          "www.adbseguros.com.ar resolves to this host's addresses, but the certificate covers " +
+          "the apex only, so that name answers with a certificate error rather than the site. A " +
+          "DNS record naming a resource that does not answer for it is the shape §26 singles out " +
+          "on client work — see fix-now F3. Changing it is a DNS action and belongs to a human.",
       },
       environmentSeparation: {
         where: "absent",
