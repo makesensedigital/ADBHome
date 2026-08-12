@@ -233,23 +233,27 @@
       transportSecurity: {
         // Split out from securityHeaders on 2026-08-12, because lumping them together was hiding
         // a live defect behind a true statement. "The host serves no custom headers" is correct
-        // and it made transport look equally out of reach. It is not: this host offers exactly
-        // one transport control, it is a toggle, and it was off.
-        where: "absent",
+        // and it made transport look equally out of reach. It was not: this host offers exactly
+        // one transport control, it is a toggle, and it was off. It was turned on the same day.
+        where: "edge",
         why:
-          "HTTPS is NOT enforced: http://adbseguros.com.ar/ answers 200 in plaintext rather than " +
-          "redirecting, and no HSTS header is sent. The certificate is provisioned and approved, " +
-          "so this is a setting rather than a capability — see fix-now F2. Until it is on, the " +
-          "conversion path is rewritable in transit by anyone between the visitor and the host, " +
-          "and the conversion path here is a set of links.",
+          "HTTPS is enforced as of 2026-08-12 (fix-now F2, closed). Verified rather than assumed: " +
+          "http answers 301 to https, on the root and on deep paths, preserving the path. " +
+          "WHAT REMAINS ABSENT AND CANNOT BE FIXED HERE: no HSTS header, because this host sends " +
+          "none and a static document cannot. So the FIRST request of a session can still be made " +
+          "in plaintext and intercepted before the redirect answers. That residual belongs to the " +
+          "hosting decision (closed open definition #6), not to a task list.",
       },
       canonicalHostname: {
         where: "absent",
         why:
-          "www.adbseguros.com.ar resolves to this host's addresses, but the certificate covers " +
-          "the apex only, so that name answers with a certificate error rather than the site. A " +
-          "DNS record naming a resource that does not answer for it is the shape §26 singles out " +
-          "on client work — see fix-now F3. Changing it is a DNS action and belongs to a human.",
+          "www.adbseguros.com.ar is a CNAME to the apex, so it reaches this host with a name " +
+          "the certificate does not cover and answers with a TLS error. Diagnosed 2026-08-12: the " +
+          "host only provisions a certificate for www when that record is a CNAME to the pages " +
+          "host itself, not to the apex. Note http://www DOES redirect correctly to the apex, so " +
+          "this only bites over https — which is the direction browsers increasingly try FIRST, " +
+          "so it gets worse rather than better. Fix-now F3, open. It is a DNS action and §26 puts " +
+          "that on the ask-before-acting list: prepared and handed over, never done here.",
       },
       environmentSeparation: {
         where: "absent",
