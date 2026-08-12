@@ -13,8 +13,10 @@ green by exemption. It is a measurement, plus the assignment of every finding to
 
 > **Adopted does not mean zero violations.** That definition guarantees no repository is ever
 > adopted. Adopted means every violation is in exactly one bucket and the ratchet holds. This
-> repository has thirty-seven findings and a ratchet. It is adopted. **Its gate is red, and a green
-> one on day one would have been the thing to distrust.**
+> repository had thirty-seven findings on adoption day and a ratchet. It was adopted then, and the
+> count is a record rather than a running total — two have since closed (F1, D9) and the ratcheted
+> 26 are unchanged, because neither was visible to the gate. **Its gate is red, and a green one on
+> day one would have been the thing to distrust.**
 
 ---
 
@@ -41,8 +43,9 @@ material in the tree and none anywhere in the seven commits of history. `Brandin
 ignored before the first commit, which is §26's rule about the ignore file being an access-control
 decision, followed correctly and from the start.
 
-The consequence for the fix-now bucket is unusual and worth saying plainly: it holds **one** entry,
-and it is about personal data rather than secrets.
+The consequence for the fix-now bucket is unusual and worth saying plainly: it held **one** entry,
+and it was about personal data rather than secrets. It closed on 2026-08-12 and the bucket is now
+empty — which is the only bucket that should ever be empty here.
 
 ### Two corrections to the instrument, made before the number was recorded
 
@@ -218,13 +221,19 @@ its own reason and its own expiry, and the other would be a standing permission.
 ## 4. Fix order, when the work is funded
 
 §26's order, not a convenience order. Security first, because it is the bucket where *later* means
-something different: **F1**, then the decisions that unblock everything else — **O1** and **O2**,
-because measurement and consent are irreversible and the second constrains the first — then
-**O5/O6**, because hosting decides which rules the site is *able* to obey, then the rest at whatever
-rate is funded.
+something different — **F1 was that, and it is done.** What follows, updated 2026-08-12:
 
-D1 is the cheapest large number and it is deliberately **not** first: fourteen findings look like
-the biggest problem on the list and are the least consequential thing on it.
+1. **O1 and O2** — measurement and consent. Both irreversible, and the second constrains the first.
+   O1 is the only item on this list that is losing something every day it stays open.
+2. **O5 and O6** — the publication origin and the host, because hosting decides which rules this site
+   is *able* to obey. O6 is not fixable in place and never becomes debt.
+3. **D6 with D7** — the heading order and the skip link. One file, one commit, and it is the only
+   thing standing between the gate's external half and a pass. The cheapest real win on the list.
+4. **Everything else**, at whatever rate is funded.
+
+D1 is the cheapest large number and it is deliberately **not** near the top: fourteen findings look
+like the biggest problem here and are the least consequential thing on it. F1 proved the point — the
+one finding with a subject who was not us was invisible to the gate entirely.
 
 ---
 

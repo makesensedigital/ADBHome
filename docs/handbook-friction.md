@@ -12,6 +12,18 @@ quietly bypasses is worse than no rule, because it still claims to be enforced. 
 below are already worked around in this repository — three by changing the instrument, one by
 carrying a permanently red check. That is the reason to file them, not a reason not to.
 
+> **Filing status, checked 2026-08-12.** Two of the five were already filed upstream by someone
+> else, the same day, from what looks like a parallel adoption: **#53** is report 1 (*the landing
+> gate cannot ratchet as shipped*) and **#55** is report 4 (*test-gate.mjs cannot run in an
+> adopting repository*). Two independent adoptions hitting the same two rules within hours is
+> stronger evidence than either report alone, and it is worth saying so on those issues rather
+> than opening duplicates.
+>
+> **Reports 2, 3 and 5 are not filed and appear to be new** — `walk()` measuring unpublished
+> files, the served-text check reading zero on a document with no `<body>` tag, and §0's caller
+> being unreachable when the handbook is private. (#56 is adjacent to report 3 but is a different
+> defect: it is about `check-markup` not seeing inline styles, not about the `<body>` slice.)
+
 This is also the evidence `scripts/ratchet.mjs` asks for in its own header: *"it changes when a
 real adoption moves it, and the change carries what happened."* This is what happened.
 
