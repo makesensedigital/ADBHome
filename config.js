@@ -47,10 +47,11 @@
     // ENTIRE context the business receives (§26).
     //
     // READ THE FOUR MARKED `personal_data: true` TEMPLATES BEFORE EDITING ANY OF THEM. They ask a
-    // stranger for a national identity number, a date of birth, a vehicle registration, payroll
-    // figures — and, in `vida`, a smoking status, which is health-related. §26: the obligation to
-    // disclose what is collected does not change because the collection moved into a chat. The
-    // site currently discloses nothing. Recorded as debt #1 and being fixed, not carried.
+    // stranger for a national identity number, a date of birth, a vehicle registration and
+    // payroll figures. They asked for a smoking status too, until 2026-08-12 — see `vida`.
+    // §26: the obligation to disclose what is collected does not change because the collection
+    // moved into a chat, and the site still discloses nothing. That is fix-now F1, half done:
+    // the health field is out, the privacy statement is not written. See docs/adoption.md.
     messages: {
       generic: "Hola ADB, quiero cotizar un seguro. ¿Me asesoran?",
       // personal_data: true
@@ -62,10 +63,15 @@
         "Hola ADB, quiero cotizar mi Hogar. Te paso mis datos:\n- Nombre y apellido:\n- DNI:\n" +
         "- Direccion y codigo postal del inmueble:\n- Superficie aproximada:\n" +
         "- Tipo de vivienda (casa o departamento):\n- Uso (vivienda permanente o alquiler):",
-      // personal_data: true — includes a health-related question ("Sos fumador?")
+      // personal_data: true. NO LONGER HEALTH-RELATED. This template asked "Sos fumador?"
+      // until 2026-08-12; it was removed as the first half of fix-now F1. Preformatting a
+      // health question is what made it OUR collection rather than something the producer
+      // asks in the conversation, and it dragged the whole site into the strictest regime
+      // for one field. Minimisation: a field exists only when the value cannot be inferred
+      // from context and has a planned use.
       vida:
         "Hola ADB, quiero cotizar un Seguro de Vida. Te paso mis datos:\n- Nombre y apellido:\n" +
-        "- CUIL:\n- Fecha de nacimiento:\n- Actividad laboral:\n- Sos fumador?:\n- Email:",
+        "- CUIL:\n- Fecha de nacimiento:\n- Actividad laboral:\n- Email:",
       salud: "Hola ADB, quiero cotizar un seguro de Salud. ¿Me asesoran?",
       comercio: "Hola ADB, quiero cotizar un seguro de Comercio. ¿Me asesoran?",
       empresa: "Hola ADB, quiero cotizar seguros para mi Empresa o Pyme. ¿Me asesoran?",

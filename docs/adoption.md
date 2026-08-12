@@ -85,10 +85,20 @@ visible.
 |---|---|---|
 | **F1** | **The site solicits personal data through messaging and discloses nothing.** Ten WhatsApp controls compose a message asking a stranger for name, DNI, CUIL, CUIT, date of birth, vehicle registration, home address, payroll figures — and, in the life-insurance template, **smoking status, which is health-related**. There is no privacy statement anywhere on the site, no link to one, and no page to link to. | §26 is explicit that the obligation to disclose does not change because the collection moved into a chat, and that a prompt asking for identity documents, dates of birth or health-related answers **is** data collection regardless of the absence of a form element. It also requires a privacy statement reachable from the site **in every case**. Both were missed, and this is the one finding on this site with a subject who is not us. |
 
-**Status: open, blocked on four facts only the business can supply** — see the note at the end of
-this file. The remedy is drafted and not written, because a privacy statement invented by an agent
-is worse than none: it would state retention periods and a responsible mailbox that nobody agreed
-to, on a published page, for a regulated broker.
+**Status: half done, 2026-08-12.** The health field is out and the statement is not written.
+
+**Done.** The life-insurance template asked *Sos fumador?*. It was removed from the markup and from
+`config.js` in one commit, and it is the half that mattered most: preformatting a health question
+is what made it **our** collection rather than something the producer asks in the conversation, and
+one field dragged the whole site into the strictest regime. What the site now solicits is identity
+and contact data. Deleting the question does not undo what was already sent to the business through
+it — that is a records question for whoever holds those conversations, not a markup question.
+
+**Not done.** The privacy statement, and the not-found page it ships with (D9). It is blocked on two
+facts in section 6, and it stays blocked rather than being written around them: a statement that
+invents a controller name or a rights mailbox is worse than none, on a published page, for a
+regulated broker. The retention answer is in — an enquiry lives only in WhatsApp, for the duration
+of the commercial relationship, and is copied to no other system.
 
 ### Bucket 2 — Debt
 
@@ -253,14 +263,22 @@ bootstrap and did not carry the same reasoning to the caller it mandates.
   substitute. Lighthouse's mobile emulation is not it either. D2 means the automated half is not
   covering the render rules at all, so this one carries more weight here than it would elsewhere.
 
-## 6. What F1 needs before it can be written
+## 6. What F1 still needs
 
-Four facts, none of which an agent may invent on a published page for a regulated broker:
+Four facts were needed. Two came back on 2026-08-12 and are recorded here so the answer is not
+asked for twice; two are outstanding, and no agent may invent either on a published page for a
+regulated broker.
+
+**Answered** — Juan Torresel, 2026-08-12:
+
+- **Retention.** An enquiry lives only in WhatsApp, for the duration of the commercial
+  relationship, and is copied to no other system. That is what the statement will say.
+- **The health question goes.** Removed the same day. See the fix-now bucket.
+
+**Outstanding — F1 cannot be finished without both:**
 
 1. **Who the data controller is**, as it should appear — the registered name behind *ADB | Broker de
    Seguros*, matrícula SSN nº 1877.
 2. **The mailbox that receives a rights request** — access, rectification, deletion. This is open
-   definition #3 and F1 cannot be finished without it.
-3. **How long an enquiry is kept**, and where it lives once it leaves WhatsApp.
-4. **Whether the smoking question in the life-insurance template stays.** It is the only
-   health-related item, and removing it is cheaper than disclosing it correctly.
+   definition #3, and the two are the same decision: the three offices that publish an address are
+   on a different domain from the site, so answering this answers which domain is canonical.
