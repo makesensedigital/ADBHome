@@ -3,14 +3,14 @@
 **Filed from:** `makesensedigital/ADBHome` · adopted 2026-08-11 against handbook `v3.7.1`
 (`de0216f`) · procedure: skill `adopt-an-existing-repository`
 
-Four reports. `CONTRIBUTING.md` asks for these as issues rather than pull requests, and this file
+Five reports. `CONTRIBUTING.md` asks for these as issues rather than pull requests, and this file
 is the durable copy: it lives in the same clone as the divergences it explains, so the next person
 here can tell a reported problem from a private patch.
 
 **Unreported friction does not disappear; it becomes a silent workaround** — and a rule everyone
-quietly bypasses is worse than no rule, because it still claims to be enforced. Three of the four
-below are already worked around in this repository. That is the reason to file them, not a reason
-not to.
+quietly bypasses is worse than no rule, because it still claims to be enforced. Four of the five
+below are already worked around in this repository — three by changing the instrument, one by
+carrying a permanently red check. That is the reason to file them, not a reason not to.
 
 This is also the evidence `scripts/ratchet.mjs` asks for in its own header: *"it changes when a
 real adoption moves it, and the change carries what happened."* This is what happened.
@@ -189,6 +189,57 @@ As shipped, a site that adds a check has to write both, and the one it most need
 is the one it just deleted.
 
 ---
+
+## 5 — §0 mandates a CI caller that a private handbook cannot serve
+
+**Which rule:** §0, the file table — `.github/workflows/standards.yml`, the Central Standards CI
+caller · §19
+
+**Reading of the cause:** the rule is right but too broad — it should carve out this case.
+**Scope:** did not block · will recur · **every repository that adopts this handbook while it is
+private will hit it**, which today is all of them.
+
+### What happened
+
+§0 requires the caller and is precise about how to pin it: both placeholders written from the ref
+that was cloned, the major tag, never `@main`, and *stop and report rather than write an unpinned
+caller* if the ref resolved is a branch. We followed that exactly — `@v3`, owner filled in from the
+clone, release recorded in the version manifest.
+
+On its first execution it failed in **0 seconds**, before checking out anything:
+
+> This run likely failed because of a workflow file issue.
+
+The handbook repository is private. A reusable workflow in a private repository is only callable
+from another repository when that repository's Actions access setting permits it — an
+organization-level setting on the **handbook** side, which the adopting repository can neither read
+nor change, and which §0 never mentions.
+
+**The reason this is worth filing rather than shrugging at:** §0 already reasons about exactly this
+constraint, carefully and at length, in *Why the bootstrap is not a GitHub Action* — a workflow in a
+new application gets a token scoped to that application, so it cannot reach the handbook; making it
+work would need a cross-repository credential to create, scope, rotate and audit. That reasoning is
+correct and it is the same reasoning the caller needs. It simply was not carried across, and the
+result is a mandatory artifact whose failure mode is a permanently red check that says nothing about
+the repository it is in.
+
+### What we did
+
+Kept it, red, and recorded it as an open definition with both ways to close it. Removing it was
+rejected on purpose: it is the only artifact binding this repository to a released handbook version,
+which is the thing §0 exists to guarantee.
+
+### What would remove the friction
+
+Either §0 names the access setting as part of the bootstrap — one sentence, next to the reasoning
+that is already there — or it says what an adopter should do when the handbook is unreachable. The
+second matters more than it sounds: for a static site the caller enforces the version manifest and a
+set of backend greps that cannot match, so *"do not add it, and here is why"* is a defensible answer
+that §24's variation table has no row for.
+
+The general shape, which may be the more useful report: **§0's file table is written for an
+application in an organization that can read the handbook.** A landing site in an organization
+where it is private gets one artifact it does not need and cannot run.
 
 ## One thing that is not friction, recorded because it surprised us
 

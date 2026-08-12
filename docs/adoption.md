@@ -196,22 +196,62 @@ the biggest problem on the list and are the least consequential thing on it.
 
 ---
 
-## 5. What still has to be verified by a person
+## 5. The first runner execution — 2026-08-12, run `31555146819`
 
-Three things this record asserts on someone else's behalf, flagged rather than assumed:
+Three things were flagged as unverified when this record was written. Pushing resolved two of them
+within ninety seconds, and both answers changed something above rather than confirming it. They are
+recorded here **as they came back**, including where the prediction was wrong.
 
-- **The Central Standards caller may not resolve.** `.github/workflows/standards.yml` calls a
-  reusable workflow in `makesensedigital/engineering-handbook`, which is **private**. That works
-  only if the handbook repository allows Actions access from other repositories in the organization.
-  If the job fails with *workflow not found*, that setting is why — it is not a defect in this
-  repository.
-- **The gate has never run on a runner from here.** Every number above is from a local run on
-  Windows with Node 24. The external job — links, Lighthouse floors — has not executed at all, so
-  the performance and accessibility findings are **unknown, not absent**. Expect the byte-weight and
-  image assertions to fire on D5.
-- **The mobile experience has not been verified on a real device**, reached through the same kind of
+### The baseline reproduces exactly
+
+| | Local, Windows, Node 24 | Runner, ubuntu-latest |
+|---|---|---|
+| `check-config` | 18 | **18** |
+| `check-markup` | 3 | **3** |
+| `check-assets` | 5 | **5** |
+| ratchet | 26 vs 26, 0 increased | **26 vs 26, 0 increased** |
+
+This is the result the `walk()` correction was made for. Without it the runner — which materialises
+only tracked files — would have reported twenty fewer findings than the machine that recorded the
+baseline, and the first CI run would have opened with a spurious *findings went down*.
+
+### The external job ran for the first time, and almost all of it passed
+
+**One assertion failed: `heading-order`**, scoring 0 across all three runs. That is D6, and it is
+the only automated confirmation any of the debt entries received.
+
+Everything else cleared: links resolved; performance ≥ 0.9, accessibility ≥ 0.95, best practices
+≥ 0.9, SEO ≥ 0.95; layout shift, largest contentful paint and **total byte weight** all inside their
+ceilings; `modern-image-formats`, `unsized-images`, `color-contrast`, `image-alt`, `link-name`,
+`button-name`, `landmark-one-main`, `bypass`, the ARIA set, `meta-description`, `document-title`,
+`is-crawlable` and `canonical` all passing.
+
+**Two predictions in the debt register were wrong, and both are corrected there rather than
+quietly:** D5 was named as the finding most likely to fail first and it did not fail at all — the
+`<picture>` element keeps the heavy PNG off the page's critical path, and the social image is never
+fetched by the page that was measured. D7 was expected to fail `bypass`; it passed, because that
+audit accepts landmarks as a bypass mechanism and this page has them. **The skip link is still
+missing and §6c still requires it** — what changed is that no automated check will ever say so,
+which makes D7 more fragile than it looked, not less.
+
+The floors themselves are now calibrated by evidence on this site rather than inherited as guesses.
+That is worth more than the pass: a threshold nothing has ever run against is a number, not a floor.
+
+### The Central Standards caller does not resolve — confirmed
+
+Run `31555147024` failed in 0 seconds with *this run likely failed because of a workflow file
+issue*, which is what a reusable workflow in an unreachable repository looks like. The handbook is
+private, and calling across repositories needs an Actions access setting on **that** repository. It
+is not a defect here, it is not fixable here, and it is now open definition #12 — with a friction
+report upstream, because §0 reasoned carefully about the private-repository constraint for the
+bootstrap and did not carry the same reasoning to the caller it mandates.
+
+### Still unverified, and only a person can do it
+
+- **The mobile experience has not been seen on a real device**, reached through the same kind of
   link a visitor would follow. §26 requires that specifically and says a desktop emulator is not a
-  substitute — and D2 means the automated half is not covering it either.
+  substitute. Lighthouse's mobile emulation is not it either. D2 means the automated half is not
+  covering the render rules at all, so this one carries more weight here than it would elsewhere.
 
 ## 6. What F1 needs before it can be written
 
