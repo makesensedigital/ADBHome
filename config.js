@@ -162,6 +162,83 @@
     // only external assets are images the markup references by bare path. This value starts at 1
     // and becomes load-bearing the moment a stylesheet or script is extracted — which is debt #2.
     assetVersion: 1,
+
+    // -------------------------------------------------------------------- where each control lives
+    //
+    // §26 requires that every control be placed at the edge, placed at the gate, or DECLARED
+    // ABSENT, and says a control is never left implied. It gives the table and it gives the
+    // reason — "a row left unread is a control that silently does not exist" — and then leaves
+    // the declaration itself as prose, with no artifact and no check. That is the one Mandatory
+    // rule in the section whose carrier is a chapter rather than a file, which is the thing §26
+    // argues against everywhere else.
+    //
+    // So this is the table, answered. It is the only place on this site where "absent" is a
+    // statement rather than a silence, and it is the reason open definition #6 could be closed
+    // by deciding rather than by not noticing: §26 permits a host that puts controls out of
+    // reach — "choose against capability, record the choice, and record what the choice puts out
+    // of reach" — and this is that record.
+    //
+    // NOTHING CHECKS THIS BLOCK. Adding a check would trigger §26's rule that a check which has
+    // never failed on purpose is not known to work, and the harness for that is recorded as
+    // inapplicable here (docs/adoption.md, N4). Proposed upstream instead, where the check and
+    // its fixtures belong.
+    //
+    // Each row: where the control lives, and — when it is absent — why, in terms of capability
+    // rather than of intent. "We did not get to it" is not an answer this table accepts.
+    controls: {
+      redirectsFromRetiredUrls: {
+        where: "absent",
+        why:
+          "The host issues no real redirect status. No predecessor URL is known to be retired, " +
+          "so nothing is currently broken by this — but the capability is missing rather than " +
+          "unused, and the day a URL is retired it cannot be honoured. Open definition #6.",
+      },
+      formSubmissions: {
+        where: "absent",
+        why: "The site presents no form. §26 prescribes exactly this where nothing persists a submission.",
+      },
+      serverSideValidation: {
+        where: "absent",
+        why: "Nothing is submitted to us. There is no input to validate.",
+      },
+      rateLimiting: {
+        where: "third-party",
+        why: "The messaging platform's. A static page cannot limit anything.",
+      },
+      runtimeSecrets: {
+        where: "absent",
+        why: "None exist. Every identifier here is public by construction and restricted at its provider.",
+      },
+      requestLogs: {
+        where: "absent",
+        why:
+          "The host exposes no access logs to us, and there is no client-side telemetry either " +
+          "(open definition #1). So there is no traffic record of any kind — which is a stronger " +
+          "statement than 'we have no analytics' and is the one worth writing down.",
+      },
+      notFoundHandling: {
+        where: "published document",
+        why: "404.html, shipped 2026-08-12. Declares noindex and stays out of the sitemap.",
+      },
+      securityHeaders: {
+        where: "absent",
+        why:
+          "The host serves no custom response headers. No content security policy, no permissions " +
+          "policy, and — the one with no in-document equivalent — no framing protection at all: " +
+          "frame-ancestors is ignored in a meta element and X-Frame-Options is header-only. " +
+          "Open definition #6, accepted with the consequence named.",
+      },
+      environmentSeparation: {
+        where: "absent",
+        why:
+          "No per-change previews. The default branch is production, and the push is the deploy. " +
+          "Open definition #5.",
+      },
+      credentialRotation: {
+        where: "provider",
+        why: "The messaging number is public from the moment it ships; rotation is a business decision, not a technical one.",
+      },
+    },
   };
 
   root.SITE_CONFIG = CONFIG;

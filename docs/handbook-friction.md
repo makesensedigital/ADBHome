@@ -3,7 +3,7 @@
 **Filed from:** `makesensedigital/ADBHome` · adopted 2026-08-11 against handbook `v3.7.1`
 (`de0216f`) · procedure: skill `adopt-an-existing-repository`
 
-Five reports. `CONTRIBUTING.md` asks for these as issues rather than pull requests, and this file
+Six reports. `CONTRIBUTING.md` asks for these as issues rather than pull requests, and this file
 is the durable copy: it lives in the same clone as the divergences it explains, so the next person
 here can tell a reported problem from a private patch.
 
@@ -12,14 +12,16 @@ quietly bypasses is worse than no rule, because it still claims to be enforced. 
 below are already worked around in this repository — three by changing the instrument, one by
 carrying a permanently red check. That is the reason to file them, not a reason not to.
 
-> **Filing status, checked 2026-08-12.** Two of the five were already filed upstream by someone
-> else, the same day, from what looks like a parallel adoption: **#53** is report 1 (*the landing
-> gate cannot ratchet as shipped*) and **#55** is report 4 (*test-gate.mjs cannot run in an
-> adopting repository*). Two independent adoptions hitting the same two rules within hours is
-> stronger evidence than either report alone, and it is worth saying so on those issues rather
-> than opening duplicates.
+> **Filing status, 2026-08-12.** Report 6 is filed as **issue #60** (practice candidate). Two of
+> the others were already filed the same day by someone else, from what looks like a parallel
+> adoption: **#53** is report 1 (*the landing gate cannot ratchet as shipped*) and **#55** is
+> report 4 (*test-gate.mjs cannot run in an adopting repository*). Two independent adoptions
+> hitting the same two rules within hours is stronger evidence than either report alone, so
+> **both carry a corroboration comment from this repository** — the reproduction, the runner
+> output, and in each case the consequence this adoption found that the original report did
+> not — rather than a duplicate issue.
 >
-> **Reports 2, 3 and 5 are not filed and appear to be new** — `walk()` measuring unpublished
+> **Reports 2, 3 and 5 are still unfiled and appear to be new** — `walk()` measuring unpublished
 > files, the served-text check reading zero on a document with no `<body>` tag, and §0's caller
 > being unreachable when the handbook is private. (#56 is adjacent to report 3 but is a different
 > defect: it is about `check-markup` not seeing inline styles, not about the `<body>` slice.)
@@ -252,6 +254,67 @@ that §24's variation table has no row for.
 The general shape, which may be the more useful report: **§0's file table is written for an
 application in an organization that can read the handbook.** A landing site in an organization
 where it is private gets one artifact it does not need and cannot run.
+
+---
+
+## 6 — The control-placement table is Mandatory and has no carrier
+
+**Which rule:** §26, *Where each control goes when there is no server* — Mandatory
+
+**Filed as:** practice candidate. **Reading:** the rule is right; it is missing the mechanism it
+asks every other rule to have. **Scope:** did not block · will recur · every site in this class.
+
+### What happened
+
+The section states the requirement about as strongly as it states anything:
+
+> Every row is placed at the edge, placed at the gate, or declared absent. **A control is never
+> left implied.** … A row left unread is a control that silently does not exist.
+
+It then leaves the declaration itself as prose. There is no field in `config.js`, no file in the
+template, and no check in the gate. **Declaring a control absent and never considering it produce
+byte-identical repositories** — which is precisely the failure the sentence above describes, and
+the sentence is the only thing standing against it.
+
+This is the one Mandatory rule in §26 whose carrier is a chapter. The section's own thesis is that
+a chapter nobody rereads is not a mechanism and that the carriers are the template and the gate.
+
+It surfaced on a live site whose host can express almost none of the table. Deciding to stay on
+that host is explicitly permitted — *choose against capability, record the choice, and record what
+the choice puts out of reach* — but there was **nowhere the record was supposed to go**, so the
+decision looked identical to never having thought about it. That is also why the question reached
+us as *"can we just make this rule optional?"*: the rule already permits the answer, and reads as
+an unimplementable mandate because the permitted answer has no artifact.
+
+The template makes it sharper. It ships `_headers` and `_redirects`, and its own publish job
+targets a host that serves neither — documented in the README, in prose. **Two files whose presence
+implies a control that is not in force**, on the default path, in the carrier for the section that
+forbids exactly that.
+
+### What we did
+
+Added `config.controls` — the ten rows of the table, each with `where` and, when absent, a `why`
+stated in terms of capability rather than intent. It is what let the hosting question close as a
+recorded decision instead of an open row nobody could answer.
+
+We did **not** add a check. §26 says a check that has never failed on purpose is not known to work,
+and the harness for that is `test-gate.mjs`, which cannot run in an adopted repository (report 4 /
+issue #55). So the declaration is unchecked here, and the block says so.
+
+### The proposal
+
+1. **Put the table in `config.js`** as `controls`, one key per row, `where` plus a `why` that is
+   required whenever `where` is `absent`. The template ships it filled in for its own defaults.
+2. **`check-config` fails on a missing row, an unknown row, or an `absent` with no reason.** That
+   makes the Mandatory rule enforceable for the first time, and it costs one object in a file the
+   check already loads.
+3. **Do not ship `_headers` and `_redirects` by default.** Generate them when a row says `edge`,
+   or fail when they exist and the rows say the host cannot serve them. A file that does nothing
+   is worse than an absent one here, because it reads as a control.
+
+The rule does not need weakening. It needs the artifact it already demands — and with the artifact,
+*"this host cannot do it and we accept that"* becomes a legible, reviewable, greppable answer
+instead of looking like an omission.
 
 ## One thing that is not friction, recorded because it surprised us
 

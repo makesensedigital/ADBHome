@@ -158,19 +158,37 @@ that holds while it is open**. An entry there means permitted-and-registered, no
 | O3 | No canonical public mailbox, and the office addresses are on a different domain from the site | Which mailbox is canonical. |
 | O4 | Nobody is named as the person who answers an enquiry | Who. |
 | O5 | Publication is straight from the branch | Whether to move the origin to the pipeline — a repository setting only the owner can change. |
-| O6 | **The host cannot serve response headers or issue redirects** | Whether to stay on it. Not fixable in place. |
+| O6 | *(closed 2026-08-12)* **The host cannot serve response headers or issue redirects** | Decided: stay, and declare the absent controls. |
 | O7 | Two conversion controls resolve to the page they sit on | Build the destination, or remove the controls. |
 | O8 | No OpenSpec workspace, and §26 does not suspend §19 | Whether this site's change history warrants one. |
 | O9 | Seven direct commits to `main`, no pull request, no code owner | Whether a one-person repository adopts the flow now or later. |
 | O10 | No named owner, no review cadence, no scheduled check, no ownership-and-exit inventory | Who owns it, and how it transfers. |
 
-**O6 is the one that is not debt and never becomes debt.** GitHub Pages serves no custom response
-headers and issues no real redirect, so on this host there is **no protection against framing at
-all** — that control has no equivalent expressible from inside a document — no enforceable content
-security policy, and no way to implement §26's canonical-identity rule. `_headers` and `_redirects`
-would do nothing here, which is why neither exists. This is a finding that changes the hosting
-decision rather than one anybody can fix in the markup, and §26 is explicit that hosting is a
-security decision taken before the first line of markup.
+**O6 closed on 2026-08-12, and how it closed is the point.** GitHub Pages serves no custom
+response headers and issues no real redirect, so on this host there is **no protection against
+framing at all** — that control has no equivalent expressible from inside a document — no
+enforceable content security policy, and no way to implement §26's canonical-identity rule.
+
+The decision was to stay, and §26 permits that in its own words: *choose against capability, record
+the choice, and record what the choice puts out of reach.* So this is a decision taken **inside**
+the rule rather than an exception to it, and the difference is entirely in whether the record
+exists. It does: `config.controls` answers all ten rows of §26's control table, each with a
+placement and — where absent — a reason stated in terms of capability rather than intent.
+
+That block exists because the section that demands it does not provide it. §26 makes the table
+Mandatory, says *a control is never left implied*, and then leaves the declaration as prose with no
+artifact and no check — the one Mandatory rule in the section whose carrier is a chapter rather
+than a file, which is what §26 argues against everywhere else. Proposed upstream as a practice
+candidate; see [`handbook-friction.md`](handbook-friction.md).
+
+**Nothing checks that block here**, and that is deliberate rather than an omission: adding a check
+would trigger §26's rule that a check which has never failed on purpose is not known to work, and
+the harness for that is recorded as inapplicable (N4). The check belongs upstream with its
+fixtures.
+
+**Revisit when a URL has to be retired.** That is the day the missing redirect stops being
+theoretical, and it cannot be fixed after the fact — a change of host is the only remedy and it is
+cheaper before the URLs exist than after.
 
 **O1 is the one that cannot be recovered.** Measurement is the single artifact in this standard that
 cannot be reconstructed backwards. The three weeks already published have no events, and no decision
