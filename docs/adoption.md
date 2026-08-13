@@ -415,8 +415,18 @@ an attestation cannot survive. The gate stays red on exactly those six until the
 
 ### The numeric floors
 
-`lighthouserc.json` is untouched and every floor stands. `.gate-measures.json` now carries the four
-measurements this site has not reached: performance and best-practices on both pages. Two things
-about that record are worth knowing before it is trusted — the gate was run three times with nothing
-changed between runs, and **one of the three would have failed the measurement ratchet**. See
-friction 10.
+`lighthouserc.json` is untouched and every floor stands.
+
+`.gate-measures.json` carries **two** measurements: best practices on both pages, at 0.79. It carried
+four at first and that was wrong. `--init` was run locally, and a laptop is not the environment this
+gate runs in: locally this site measures performance at 0.74/0.72, and on `ubuntu-latest` it measures
+0.95–0.97 and 0.99–1.00 across three attempts — above the floor, so performance is not ratcheted at
+all. The record was corrected from the runner before this merged, and the environment is written into
+the file so the next person does not repeat it.
+
+Best practices is 0.79 on all nine runner samples and all nine local ones. It is a real finding, and
+it is the only measurement this site has not reached.
+
+Dispersion, since it was the point of running the gate three times: on the runner, performance drifts
+0.020 between attempt medians — **exactly the ratchet's tolerance, not inside it**. On the laptop it
+drifts 0.060, three times the tolerance. Everything else moved by zero. See friction 10.

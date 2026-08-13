@@ -1,10 +1,15 @@
 {
   "//": "Measurements this repository had not reached the floor for when it adopted the standard. The floors stay published in lighthouserc.json; these are carried, and the gate fails when one gets worse. Never raise an entry to make a run green.",
   "//how": "Measured values a site has NOT yet reached the floor for. The floor in lighthouserc.json is the published target and is never edited to match this file. A value is compared against what is recorded here, within the tolerance beside it; a value that reaches its floor is held to the floor instead and leaves this file on the next --update.",
+
+  "//environment": "MEASURED ON THE RUNNER, NOT ON A LAPTOP, and the distinction is the whole reason this comment exists. `--init` was first run locally and recorded performance at 0.74 and 0.72 — genuinely measured, and wrong about this site. The same commit on ubuntu-latest measures performance at 0.95-0.97 and 0.99-1.00 across three attempts, comfortably above the 0.90 floor. A record initialised on a developer machine describes that machine.",
+
+  "//corrected": "So this file is what `--update` produces on the runner: performance REACHED ITS FLOOR and left the record permanently, and best practices is the only thing this site has not reached. Three CI attempts, nine samples per metric per page, gave 0.79 every single time on both pages — it is a stable, real finding, not variance.",
+
+  "//consequence": "Read this before adding an entry back. A metric that is not recorded here is not compared by `ratchet-measures.mjs` at all, and the Lighthouse floors themselves are `continue-on-error` while this file exists. Performance is therefore currently ungated in both directions. That is the mechanism's own design — a metric that reaches its floor never comes back to the ratchet — and it stops being a gap the moment this file is empty and deleted, which is the point of it.",
+
   "recorded": {
-    "/index.html|categories:performance": 0.74,
     "/index.html|categories:best-practices": 0.79,
-    "/privacy.html|categories:performance": 0.72,
     "/privacy.html|categories:best-practices": 0.79
   }
 }

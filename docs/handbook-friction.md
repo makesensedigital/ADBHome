@@ -554,7 +554,8 @@ that every row was answered. An extension point does not weaken that.
 **Which rule:** §26, a floor this site has not reached is carried, never lowered ·
 `templates/landing/scripts/ratchet-measures.mjs` · new at `v4.0.0`
 
-**Reading of the cause:** the rule is right, the mechanism is right, and one constant is wrong.
+**Reading of the cause:** the rule is right, the mechanism is right, and two things are thin — one
+constant, and the absence of any instruction about where to run `--init`.
 **Scope:** will block · will recur · every adopting site, on the one metric most likely to be below
 its floor.
 
@@ -601,9 +602,37 @@ Two smaller observations from the same data, offered as calibration rather than 
   median-of-three is doing nearly all of the work; a `numberOfRuns` of 1 would make that tolerance
   useless.
 
+### The correction that arrived from the runner, and it changes the conclusion
+
+Everything above was measured on a Windows laptop. The same commit was then run **three times on
+`ubuntu-latest`**, which is where this gate actually runs — nine more samples per metric per page:
+
+| metric | laptop, per-invocation medians | drift | runner, per-attempt medians | drift |
+|---|---|---|---|---|
+| performance `/index.html` | 0.770 / 0.710 / 0.740 | **0.060** | 0.96 / 0.95 / 0.97 | 0.020 |
+| performance `/privacy.html` | 0.730 / 0.740 / 0.720 | 0.020 | 0.99 / 1.00 / 1.00 | 0.010 |
+| best practices, both pages | 0.790 × 9 | 0.000 | 0.790 × 9 | 0.000 |
+
+**So the strong claim above is a claim about a laptop, and it is withdrawn for CI.** On the runner
+this site's performance is 0.95–0.97, not 0.74 — it is *above* its floor, and the tolerance never
+applies to it, because a metric meeting its floor is not ratcheted at all.
+
+What survives is weaker and still worth filing: **the observed runner drift is 0.020, which is
+exactly the tolerance, not comfortably inside it.** A fourth attempt landing 0.01 lower than the
+lowest of these three would exceed it. For a site whose performance sits *below* its floor — the
+population this mechanism exists for, and the population the header describes measuring — the margin
+is zero.
+
+The laptop numbers are left above rather than deleted, because they are the more useful half of the
+lesson: **`--init` run in the wrong environment records the wrong site.** This repository committed a
+record claiming performance of 0.74 and had to correct it from the runner's 0.96 before the PR
+merged. Nothing in the tool says where to run it, and a laptop is the obvious place to try first.
+
 ### What we did
 
-Nothing to the script. It is machinery, this repository already carries three divergences in it, and
+Corrected `.gate-measures.json` to what `--update` produces on the runner — performance reached its
+floor and left the record, best practices is carried at 0.79 — with the environment written into the
+file. Nothing to the script. It is machinery, this repository already carries three divergences in it, and
 a tolerance is exactly the kind of constant that should not be tuned privately per site — a locally
 widened tolerance reads identically to a considered one, which is the argument §26 makes about
 floors one level down. The record is committed as measured, and the PR carries the warning that a
@@ -611,7 +640,8 @@ performance regression reported by this gate may be noise until the constant cha
 
 ### What would remove the friction
 
-A performance tolerance around `0.08`–`0.10`, which is what this data supports. Better still, since
+A margin over the observed CI drift rather than one equal to it — `0.05` for performance would be
+defensible from this data; the laptop numbers would want `0.08`–`0.10`. Better still, since
 the value is per-metric and empirical: write the tolerance into `.gate-measures.json` next to each
 number, which `AGENTS.md` already describes as the design — *"a tolerance recorded beside the
 number"* — but which `--init` does not currently emit. Then a site with evidence can widen one with
