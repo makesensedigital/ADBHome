@@ -110,30 +110,53 @@
     tagContainerId: "GTM-M67M4S9B",
 
     // -------------------------------------------------------------------- analytics
-    // THE EVENT CONTRACT. §26 asks that it be written BEFORE the code that emits it.
+    // THE OWNERSHIP BOUNDARY, which is the load-bearing part of this block.
     //
-    // WHAT IS DIFFERENT FROM EVERY OTHER BLOCK IN THIS FILE: the contract is not enforced here.
-    // These identifiers describe what the container was configured to fire on 2026-08-13; the
-    // container can be changed tomorrow by somebody who never opens this repository, and this
-    // block would not know. It is a record of intent, not a source of truth. Verify against the
-    // Tag Manager UI before trusting it.
+    // THIS REPOSITORY OWNS two things: the container snippet in the three documents, and the
+    // privacy statement that tells visitors what the container does. ANOTHER TEAM OWNS the
+    // container configuration — which tags exist, what they fire on, and every downstream
+    // identifier.
+    //
+    // SO THE DOWNSTREAM IDENTIFIERS ARE DELIBERATELY NOT RECORDED HERE. A value copied out of a
+    // system this repository cannot read is a value that goes stale in silence and then gets
+    // believed, and no check on either side would catch the drift. An earlier version of this
+    // block carried the GA4 and Clarity ids; they were removed on purpose, and their absence is
+    // the statement.
+    //
+    // WHAT THIS BLOCK HOLDS INSTEAD — and the inversion is the point. It does not describe the
+    // container. It records WHAT THE PUBLISHED PRIVACY STATEMENT COMMITS TO, which is a
+    // CONSTRAINT the container must stay inside. Read in that direction the block cannot go
+    // stale when the container changes: it becomes the thing the change has to be checked
+    // against.
+    //
+    // THE COUPLING THAT CANNOT BE REMOVED, stated rather than wished away. This repository can be
+    // independent of the container's configuration. It CANNOT be independent of what the
+    // container collects, because privacy.html is published from here and describes exactly that.
+    // The day a tag lands that exceeds the commitments below, this site's legal document is false
+    // and nothing here will report it. That is debt D10 and open definition #13.
     analytics: {
       vendor: "Google Tag Manager",
-      // Fired from the container. Neither appears in the markup.
-      measurementId: "G-BCLCT06GR7",      // Google Analytics 4
-      sessionRecordingId: "y1pc2ezdsk",   // Microsoft Clarity
-      // NO explicit event of this site's own. Autocapture — GA4 enhanced measurement — covers page
-      // views, scroll and outbound clicks, which is the whole of what a brochure site does. A
-      // taxonomy invented up front is the one nobody ends up maintaining.
-      explicitEvents: [],
-      // SESSION RECORDING IS ON. Clarity replays the screen and builds heatmaps. This is a reversal
-      // of the decision taken earlier the same day and it is deliberate — see `consent` below,
-      // and privacy.html §2, which had to be rewritten before the tag was allowed to load.
-      sessionRecording: true,
+      configuredBy: "another team — not this repository",
+
+      // What privacy.html §2 and §5 tell visitors, as of 2026-08-13. Changing any line here means
+      // changing that document in the same commit, and the reverse: a container change that
+      // breaks one of these is not a configuration change, it is a change to a published legal
+      // statement.
+      publishedCommitments: {
+        productAnalytics: true,       // §2 — GA4
+        sessionRecording: true,       // §2 — Clarity replays the screen and builds heatmaps
+        firstPartyCookies: true,      // §2 — named there: _ga, _clck, _clsk
+        advertisingOrRemarketing: false, // §2 — "ni publicidad, ni remarketing, ni perfilado".
+                                         // GOOGLE SIGNALS COUNTS. Enabling it makes §2 false.
+        crossSiteAudienceSharing: false,
+        collectsFormInput: false,     // §2 leans on this: the site presents no form at all, so a
+                                      // recording cannot capture anything a visitor typed.
+      },
+
       // WHAT THIS SITE CANNOT MEASURE, stated rather than left implied: every conversion ends in
-      // WhatsApp, off this domain. The site observes THE DEPARTURE and nothing after it. That is
-      // why a WhatsApp click is an INTENT and never a primary conversion, and why nobody can tell
-      // from here whether that enquiry was ever answered.
+      // WhatsApp, off this domain. The site observes THE DEPARTURE and nothing after it. Whatever
+      // the other team names that click, it is an INTENT and never a primary conversion — nobody
+      // can tell from here whether the enquiry was ever answered.
       conversionsAreObservable: false,
     },
 
