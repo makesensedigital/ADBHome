@@ -3,7 +3,7 @@
 **Filed from:** `makesensedigital/ADBHome` · adopted 2026-08-11 against handbook `v3.7.1`
 (`de0216f`) · procedure: skill `adopt-an-existing-repository`
 
-Ten reports — seven from adopting `v3.7.1`, three more from syncing to `v4.0.0` on 2026-08-13.
+Eleven reports — seven from adopting `v3.7.1`, four more from syncing to `v4.0.0` on 2026-08-13.
 `CONTRIBUTING.md` asks for these as issues rather than pull requests, and this file
 is the durable copy: it lives in the same clone as the divergences it explains, so the next person
 here can tell a reported problem from a private patch.
@@ -37,7 +37,9 @@ carrying a permanently red check. That is the reason to file them, not a reason 
 > not — rather than a duplicate issue.
 >
 > **Filing status, 2026-08-13.** Report 7 is filed as **issue #65** (practice candidate) — the
-> tag-container assumption, and the module-import hole in the third-party origin scan.
+> tag-container assumption, and the module-import hole in the third-party origin scan. **Report 11 is
+> filed as issue #68** (practice candidate) — the shape of the business information v4 asks for.
+> Reports 8, 9 and 10 are recorded here and not yet filed.
 >
 > **Reports 2, 3 and 5 are still unfiled and appear to be new** — `walk()` measuring unpublished
 > files, the served-text check reading zero on a document with no `<body>` tag, and §0's caller
@@ -646,6 +648,108 @@ the value is per-metric and empirical: write the tolerance into `.gate-measures.
 number, which `AGENTS.md` already describes as the design — *"a tolerance recorded beside the
 number"* — but which `--init` does not currently emit. Then a site with evidence can widen one with
 a diff and a reason, and a site without evidence inherits the default.
+
+---
+
+## 11 — The business information v4 asks for is three different kinds of thing, and two of them are machine-answerable
+
+**Which rule:** §26, the control-placement table, the measurement attestations and the
+discoverability block · `templates/landing/config.js` · `check-config.mjs` · new at `v4.0.0`
+**Filed as issue #68 (practice candidate), 2026-08-13.**
+
+**Reading of the cause:** the rules are right; the strictness is spread evenly across questions that
+deserve very different amounts of it.
+**Scope:** did not block the sync · will recur · every site, and more sharply on client work.
+
+### What happened
+
+Completing a v4 `config.js` means answering roughly twenty fields that are not derivable from the
+code, presented as one homogeneous act of declaration. Working through them on this site, they sort
+into three groups:
+
+1. **Host and pipeline capabilities** — `securityHeaders`, `retiredUrlRedirects`, `requestLogs`,
+   `environmentSeparation`, `notFoundHandling`, `formSubmissionReceiver`, `serverSideValidation`.
+   Testable. Asked as prose.
+2. **Facts held in a third-party console** — `measurementDestination`, `discoverability.searchProperty`,
+   `verifiedBy`, `sitemapSubmitted`. Partly fetchable. Asked as prose.
+3. **Genuine business decisions** — `consent.*`, `discoverability.indexed` / `reason` / `owner`,
+   `receiver.owner`, and the business facts themselves. Not derivable by anything, and the section
+   says the least about how to obtain them.
+
+Groups 1 and 2 are about two thirds of the burden, and most of it can be removed.
+
+### Measured, not argued
+
+Four control rows fall out of one request to the published site:
+
+```
+$ curl -sSI https://adbseguros.com.ar/
+HTTP/1.1 200 OK
+Server: GitHub.com
+...
+```
+
+No `Content-Security-Policy`, no `X-Frame-Options`, no `Strict-Transport-Security`, no
+`Permissions-Policy` — so `securityHeaders: "absent"` is the response rather than an opinion, and
+`Server` identifies a host whose redirect and logging capabilities are a lookup.
+
+And `measurementDestination`, the field that is still red on this repository's sync PR, is a public
+fetch — the container is a document every visitor already downloads:
+
+```
+$ curl -s "https://www.googletagmanager.com/gtm.js?id=GTM-M67M4S9B"   | grep -oE '"G-[A-Z0-9]{6,}"|"AW-[0-9]+"|"UA-[0-9]+-[0-9]+"'
+"G-BCLCT06GR7"
+```
+
+It does **not** answer `eventsObserved`, and it should not: delivery configuration is not receipt.
+What it does is leave a human with one thing to attest instead of two, and that one is the thing only
+a human can do.
+
+**Checked while reading the container, and recorded because a negative result is worth as much as a
+positive one here:** the container declares one `googtag` and one custom HTML tag. The
+`doubleclick`, `googlesyndication` and `adservice` strings in `gtm.js` are in the runtime library's
+own schema vocabulary (`__module_gtagSchema`), outside the container's resource block, and are not
+configured tags. `analytics.publishedCommitments.advertisingOrRemarketing: false` and
+`privacy.html` §2 remain true. This is the check D10 and D11 say nobody performs; it was performed
+once, by hand, on 2026-08-13, and it will go stale.
+
+### The observation that matters most here
+
+A capability asked as prose **goes stale silently**, and this repository has already paid for it. The
+`securityHeaders` row said "the host serves no custom response headers" — true — and
+`transportSecurity` sat inside it looking equally out of reach. It was not: the host offered exactly
+one transport control, it was a toggle, and it was off. A person found it by hand three weeks after
+the row was written. A check would have found it on the first run.
+
+The second: the gate is binary and this information has latency. There is no state for *asked,
+waiting, owner named, asked on this date* — so the developer either produces a value or ships a red
+gate that blocks a sync unrelated to the missing value. The pressure points one way, toward writing
+something plausible, which is the one thing an attestation cannot survive. `check-config`'s
+unanswered-placeholder remediation already names the right shape — a pending item with an owner — but the attestation fields
+have no such path, and a site that adopted rather than scaffolded has no `brief.md` to put it in.
+
+### What we did
+
+Nothing in the instrument. The gaps this describes are real gaps on this site and they stay red: the
+six attestations on the sync PR are not carried in the baseline and will not be until the values
+arrive. The proposal is filed rather than patched, because a per-site workaround for this one would
+mean deriving values locally and presenting them as declarations — which is the failure the fields
+exist to prevent, arriving from the side that looks like diligence.
+
+### The proposal, as filed
+
+- **Verify the capability rows rather than accept them** — one `HEAD` on `canonicalOrigin`, and fail
+  when the declaration and the response disagree. Strictly stronger than "every row was answered".
+- **Derive `measurementDestination` from the container**, keep `eventsObserved` human.
+- **Add a declared-pending state** — `pending: { owner, askedOn, question }` — that still fails the
+  gate but distinguishes negligence from latency. Today those two produce byte-identical
+  repositories, which is the section's own argument about absent controls applied one level up.
+- **Make discoverability vendor-agnostic** — ask for the capability and the property providing it,
+  not for one vendor's workflow.
+- **Ship the question, not only the field.** For every field that genuinely needs a business answer,
+  one line on who typically holds it, what a good answer looks like, and what "no" or "nobody" means.
+  `consent.revisitWhen` is the model — it is the only field in the file that says what makes its own
+  answer wrong later.
 
 ---
 
