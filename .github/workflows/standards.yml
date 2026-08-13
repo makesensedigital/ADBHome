@@ -19,4 +19,4 @@ on:
 
 jobs:
   standards:
-    uses: makesensedigital/engineering-handbook/.github/workflows/central-standards.yml@v3
+    uses: makesensedigital/engineering-handbook/.github/workflows/central-standards.yml@v4

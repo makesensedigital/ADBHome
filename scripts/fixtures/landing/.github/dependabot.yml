@@ -1,0 +1,57 @@
+# Update proposals for the delivery pipeline — Handbook §26 (Static Conversion Sites), §20
+# (Toolchain, Code Quality and Dependency Management).
+#
+# WHY A SITE WITH NO DEPENDENCIES HAS THIS FILE
+#
+# §26 suspends §20's five build-and-test stages, and the stated reason is that there is no build, no
+# type system and no unit suite. All true. What the reason does NOT reach is the dependency and
+# update policy — because this repository does have a dependency tree, just not the kind §20 was
+# picturing: the actions the gate runs, two of which hold `pages: write` and `id-token: write` on the
+# publication origin, and the tools it fetches by pinned version.
+#
+# That gap was measured rather than imagined. A site built from this template was inspected three
+# days after it was created and every pipeline action was at least one major behind — and none of
+# them had aged into it. Every current major was already published on the day the repository was
+# created, some of them months before. The pins were stale on arrival, copied from a scaffold nobody
+# had compared against the registry, and the same scaffold ships to every site of this class.
+#
+# What surfaced it was a deprecation warning at the foot of a successful deploy. That is the worst
+# place a signal can appear: it costs nothing to scroll past, it says nothing about how far behind
+# anything is, and it only appears once something is already end-of-life.
+#
+# WHY THIS AND NOT A GATE CHECK
+#
+# A check asserting the pins are current fails the build for something outside the change under
+# review, on somebody else's release schedule — which is how gates get switched off, and this class
+# has paid for that lesson once already with a pinned accessibility tool whose bundled driver stopped
+# matching the runner's browser. A proposal has none of that property: it arrives on its own branch,
+# the gate runs on it, and it merges when a person decides.
+#
+# IT PROPOSES AND NEVER MERGES. Pipeline configuration is privileged surface (§22 (Agent Execution
+# and Governance)) — auto-merge is not enabled here and should not be.
+#
+# READ A MAJOR BEFORE TAKING IT. See the note on `upload-pages-artifact` in gate.yml: one of these
+# actions changed dotfile handling at a major boundary, and taking that upgrade at face value removes
+# a published file with a green build.
+
+version: 2
+
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+    # ONE PULL REQUEST, NOT FIVE. A five-line change split across five branches is how an open
+    # queue becomes background noise, which returns the repository to the state this file exists to
+    # prevent.
+    groups:
+      pipeline:
+        patterns:
+          - "*"
+    open-pull-requests-limit: 2
+    commit-message:
+      prefix: chore
+      include: scope
+    labels:
+      - dependencies
+      - pipeline

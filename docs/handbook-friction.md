@@ -3,7 +3,8 @@
 **Filed from:** `makesensedigital/ADBHome` · adopted 2026-08-11 against handbook `v3.7.1`
 (`de0216f`) · procedure: skill `adopt-an-existing-repository`
 
-Seven reports. `CONTRIBUTING.md` asks for these as issues rather than pull requests, and this file
+Eleven reports — seven from adopting `v3.7.1`, four more from syncing to `v4.0.0` on 2026-08-13.
+`CONTRIBUTING.md` asks for these as issues rather than pull requests, and this file
 is the durable copy: it lives in the same clone as the divergences it explains, so the next person
 here can tell a reported problem from a private patch.
 
@@ -36,12 +37,32 @@ carrying a permanently red check. That is the reason to file them, not a reason 
 > not — rather than a duplicate issue.
 >
 > **Filing status, 2026-08-13.** Report 7 is filed as **issue #65** (practice candidate) — the
-> tag-container assumption, and the module-import hole in the third-party origin scan.
+> tag-container assumption, and the module-import hole in the third-party origin scan. **Report 11 is
+> filed as issue #68** (practice candidate) — the shape of the business information v4 asks for.
+> Reports 8, 9 and 10 are recorded here and not yet filed.
 >
 > **Reports 2, 3 and 5 are still unfiled and appear to be new** — `walk()` measuring unpublished
 > files, the served-text check reading zero on a document with no `<body>` tag, and §0's caller
 > being unreachable when the handbook is private. (#56 is adjacent to report 3 but is a different
 > defect: it is about `check-markup` not seeing inline styles, not about the `<body>` slice.)
+
+> **Outcome at `v4.0.0`, 2026-08-13.** The release answers four of the seven, and the answers are
+> better than what was asked for in three of them.
+>
+> - **Report 1 is closed.** `gate.yml` detects `.gate-baseline.json` and moves gating authority to
+>   the ratchet, so the three ratcheted checks report and the ratchet decides. The local divergence
+>   this repository carried is deleted, not adapted.
+> - **Report 6 is closed, and adopted almost verbatim.** The control-placement table is
+>   `config.controls`, ten keys, read by `check-config.mjs`. One cost landed on this repository and
+>   is recorded as friction report 9 below: the table is a CLOSED set, and two rows this site had
+>   answered are not in it.
+> - **Report 4 is closed in intent and open in fact.** The vendored-fixture path exists and does not
+>   work — see **report 8**, which is new at v4 and is a defect in the fix.
+> - **#56 is closed:** `check-markup` reads inline `<style>`, which removed a false finding here.
+> - **Reports 2 and 3 survive untouched at v4.0.0** and their local divergences are re-applied
+>   rather than dropped, each carrying the release condition that retires it.
+> - **Report 5 is unchanged**, and **report 7's surviving gap is unchanged**: the container still
+>   injects two origins with `createElement`, and `check-assets` still sees one.
 
 This is also the evidence `scripts/ratchet.mjs` asks for in its own header: *"it changes when a
 real adoption moves it, and the change carries what happened."* This is what happened.
@@ -218,6 +239,15 @@ for, so no coverage was lost — only relocated to where it was already happenin
 Separating the harness from the fixture, so a site can point the same runner at its own fixtures.
 As shipped, a site that adds a check has to write both, and the one it most needs — the harness —
 is the one it just deleted.
+
+### What v4.0.0 did — 2026-08-13
+
+Close to what was asked. `test-gate.mjs` now resolves `scripts/fixtures/landing/` before falling
+back to the repository root, and the adoption skill instructs vendoring the pristine template there
+at adoption. The harness and the fixture are separated exactly as this report suggested.
+
+**So the step is back in `gate.yml` here and the local divergence is gone** — the workflow is taken
+byte-for-byte at v4. What the release did not do is make the copy work; see report 8.
 
 ---
 
@@ -418,6 +448,310 @@ Worth deciding rather than leaving implicit: **whether §26 permits unpinned thi
 at all.** Today it is neither permitted nor forbidden, so it arrives as a judgement call taken by
 whoever installs the tag, on a site whose whole architecture assumes there is no server to catch
 anything.
+
+## 8 — The vendored fixture is excluded from itself, so `test-gate.mjs` copies nothing
+
+**Which rule:** §20, a check that has never failed on purpose is not known to work ·
+`templates/landing/scripts/test-gate.mjs` · new at `v4.0.0`
+
+**Reading of the cause:** the rule is right and the fix for report 4 has a defect.
+**Scope:** blocked work · will recur · every adopting site that follows the v4 skill.
+
+### What happened
+
+v4 resolves the known-good site as `scripts/fixtures/landing` when it exists, which is what report 4
+asked for. The copy that follows is unchanged from v3.7.1:
+
+```js
+await cp(TEMPLATE, dir, {
+  recursive: true,
+  filter: (src) => !/[\/]scripts[\/]fixtures/.test(src),
+});
+```
+
+That filter exists to stop a **repository-root** copy from recursing into its own fixture directory,
+and it is applied to the **source** path. When the source *is* the vendored fixture, every path
+under it contains `scripts/fixtures` — starting with the root itself, which is the first thing `cp`
+offers the filter. The filter says no, `cp` copies **zero entries**, and `makeSite()` dies on the
+first `edit()`:
+
+```
+Error: ENOENT: no such file or directory, open '...\landing-gate-NFiqXh\config.js'
+    at async edit (scripts/test-gate.mjs:45:16)
+    at async makeSite (scripts/test-gate.mjs:70:3)
+```
+
+Measured, not read: instrumenting the filter shows one decision taken and one entry dropped — the
+fixture root — before the copy ends.
+
+The shape is worth naming because it is the same shape as report 4. A guard written for one caller
+became wrong when a second caller was added, and the failure is not a wrong answer but an empty one:
+`cp` succeeds, the directory exists, and the error surfaces four frames later as a missing file.
+
+### What we did
+
+A three-line local divergence: `const fixtureIsSource = TEMPLATE === VENDORED;` and
+`filter: (src) => fixtureIsSource || !/…/.test(src)`. Fallback behaviour is byte-identical; the only
+change is that the filter no longer excludes the fixture from itself. `test-gate.mjs` then passes
+here — 26 fixtures, 7 clean-run assertions, 7 ratchet states, 8 measurement states, 0 failures.
+
+### What would remove the friction
+
+Deriving the exclusion from the copy root rather than from the absolute path — the guard is only
+ever about *nesting*, and `relative(TEMPLATE, src)` answers that question without asking where
+`TEMPLATE` happens to live.
+
+---
+
+## 9 — The control-placement table is closed, and a site can have answered more rows than it has
+
+**Which rule:** §26, every control placed or declared absent · `config.controls` ·
+`templates/landing/scripts/check-config.mjs` · new at `v4.0.0`
+
+**Reading of the cause:** the rule is right; the schema is one notch tighter than the rule.
+**Scope:** did not block · will recur · any site whose host differs from the template's assumptions.
+
+### What happened
+
+This is a cost of report 6 being adopted, and we would take the trade again. `check-config.mjs`
+fails on `config.controls.<key>` where `<key>` is not one of its ten, and the reason given is sound:
+a misspelled key declares nothing while looking exactly like a declaration.
+
+This repository had answered **twelve** rows, and the two extra ones are not misspellings:
+
+- `transportSecurity: "edge"` — HTTPS enforcement, verified 2026-08-12 (`http` answers 301 on the
+  root and on deep paths), with the residual named: no HSTS, so a session's first request can still
+  be plaintext.
+- `canonicalHostname: "absent"` — `www` is a CNAME to the apex, reaches this host under a name the
+  certificate does not cover, and answers with a TLS error. **This row records a defect that is
+  still open** (F3), and it only bites over `https`, which is the direction browsers try first.
+
+Both were split out deliberately. The `transportSecurity` split has its own note in `config.js`
+explaining that lumping it into `securityHeaders` *was hiding a live defect behind a true statement*
+— "the host serves no custom response headers" is correct, and it made transport look equally out of
+reach when in fact the host offered exactly one transport control, it was a toggle, and it was off.
+
+So the closed set forces a choice between two things §26 wants: a machine-readable table, and a
+record of every control this site actually reasoned about.
+
+### What we did
+
+Demoted both to prose immediately above the table, verbatim, with the reason for the demotion and
+the trigger to promote them back. Folding them into neighbouring rows was considered and rejected —
+merging a live `edge` control into an `absent` one would re-create precisely the error `config.js`
+records correcting on 2026-08-12. Nothing machine-readable was lost, because nothing read the block
+before v4.
+
+### What would remove the friction
+
+Either two more rows, or a declared extension point — a sibling key the check ignores by name, so a
+site can record a control the table does not have without it looking like a typo. The check's own
+reasoning supports the second: it says it cannot tell whether "absent" is the right answer, only
+that every row was answered. An extension point does not weaken that.
+
+---
+
+## 10 — The measurement ratchet's performance tolerance is smaller than the noise it exists to absorb
+
+**Which rule:** §26, a floor this site has not reached is carried, never lowered ·
+`templates/landing/scripts/ratchet-measures.mjs` · new at `v4.0.0`
+
+**Reading of the cause:** the rule is right, the mechanism is right, and two things are thin — one
+constant, and the absence of any instruction about where to run `--init`.
+**Scope:** will block · will recur · every adopting site, on the one metric most likely to be below
+its floor.
+
+### What happened
+
+The mechanism is exactly what was needed and its header argues the case correctly — *"a strict 'must
+not move the wrong way' comparison on a timing metric produces a red gate from runner variance
+alone."* It then sets `tolerance: 0.02` for `categories:performance`.
+
+This sync ran the gate **three times with nothing changed between runs**, on one machine, against a
+static server, with the same browser process. Nine samples per metric per URL. `index.html`:
+
+| metric | min | median | max | spread | per-invocation medians | drift | tolerance |
+|---|---|---|---|---|---|---|---|
+| performance | 0.610 | 0.740 | 0.820 | **0.210** | 0.770 / 0.710 / 0.740 | **0.060** | 0.02 |
+| accessibility | 0.980 | 0.980 | 0.980 | 0.000 | 0.980 / 0.980 / 0.980 | 0.000 | 0.02 |
+| best practices | 0.790 | 0.790 | 0.790 | 0.000 | 0.790 / 0.790 / 0.790 | 0.000 | 0.02 |
+| SEO | 1.000 | 1.000 | 1.000 | 0.000 | 1.000 / 1.000 / 1.000 | 0.000 | 0.02 |
+| LCP (ms) | 2185 | 2268 | 3351 | 1166 | 2243 / 2296 / 2264 | 53 (2.3%) | 10% |
+| CLS | 0 | 0 | 0 | 0 | 0 / 0 / 0 | 0 | 0.02 |
+| total bytes | 523853 | 524223 | 527640 | 3787 | 524243 / 524164 / 524148 | 95 (0.02%) | 5% |
+
+**The median-of-three drifts by 0.06 between invocations — three times the tolerance.** So the
+defect is not theoretical, and it did not need to be reasoned about. Initialising the record from
+invocation 3 and replaying the other two through the unmodified ratchet:
+
+```
+record vs run1 →  ↑ /index.html performance: 0.740 → 0.770        (0 worse, 2 better)
+record vs run2 →  FAIL /index.html performance: 0.740 → 0.710     (1 worse)
+                  worst acceptable 0.720
+record vs run3 →  0 worse, 0 better
+```
+
+**One of the three identical runs fails the gate.** That is the failure mode the file's own header
+was written to prevent, arriving through the constant rather than through the design.
+
+Two smaller observations from the same data, offered as calibration rather than as complaints:
+
+- **The four category scores split cleanly in two.** Accessibility, best practices, SEO and CLS did
+  not move at all across nine samples — `0.02` is generous for them and could be `0`. Performance is
+  the outlier and it is the one sharing their constant.
+- **LCP's 10% holds, but with less headroom than it looks.** The per-invocation drift was 2.3% on
+  `index.html` and 6.8% on `privacy.html`, against a raw sample spread of 51% and 61%. The
+  median-of-three is doing nearly all of the work; a `numberOfRuns` of 1 would make that tolerance
+  useless.
+
+### The correction that arrived from the runner, and it changes the conclusion
+
+Everything above was measured on a Windows laptop. The same commit was then run **three times on
+`ubuntu-latest`**, which is where this gate actually runs — nine more samples per metric per page:
+
+| metric | laptop, per-invocation medians | drift | runner, per-attempt medians | drift |
+|---|---|---|---|---|
+| performance `/index.html` | 0.770 / 0.710 / 0.740 | **0.060** | 0.96 / 0.95 / 0.97 | 0.020 |
+| performance `/privacy.html` | 0.730 / 0.740 / 0.720 | 0.020 | 0.99 / 1.00 / 1.00 | 0.010 |
+| best practices, both pages | 0.790 × 9 | 0.000 | 0.790 × 9 | 0.000 |
+
+**So the strong claim above is a claim about a laptop, and it is withdrawn for CI.** On the runner
+this site's performance is 0.95–0.97, not 0.74 — it is *above* its floor, and the tolerance never
+applies to it, because a metric meeting its floor is not ratcheted at all.
+
+What survives is weaker and still worth filing: **the observed runner drift is 0.020, which is
+exactly the tolerance, not comfortably inside it.** A fourth attempt landing 0.01 lower than the
+lowest of these three would exceed it. For a site whose performance sits *below* its floor — the
+population this mechanism exists for, and the population the header describes measuring — the margin
+is zero.
+
+The laptop numbers are left above rather than deleted, because they are the more useful half of the
+lesson: **`--init` run in the wrong environment records the wrong site.** This repository committed a
+record claiming performance of 0.74 and had to correct it from the runner's 0.96 before the PR
+merged. Nothing in the tool says where to run it, and a laptop is the obvious place to try first.
+
+### What we did
+
+Corrected `.gate-measures.json` to what `--update` produces on the runner — performance reached its
+floor and left the record, best practices is carried at 0.79 — with the environment written into the
+file. Nothing to the script. It is machinery, this repository already carries three divergences in it, and
+a tolerance is exactly the kind of constant that should not be tuned privately per site — a locally
+widened tolerance reads identically to a considered one, which is the argument §26 makes about
+floors one level down. The record is committed as measured, and the PR carries the warning that a
+performance regression reported by this gate may be noise until the constant changes.
+
+### What would remove the friction
+
+A margin over the observed CI drift rather than one equal to it — `0.05` for performance would be
+defensible from this data; the laptop numbers would want `0.08`–`0.10`. Better still, since
+the value is per-metric and empirical: write the tolerance into `.gate-measures.json` next to each
+number, which `AGENTS.md` already describes as the design — *"a tolerance recorded beside the
+number"* — but which `--init` does not currently emit. Then a site with evidence can widen one with
+a diff and a reason, and a site without evidence inherits the default.
+
+---
+
+## 11 — The business information v4 asks for is three different kinds of thing, and two of them are machine-answerable
+
+**Which rule:** §26, the control-placement table, the measurement attestations and the
+discoverability block · `templates/landing/config.js` · `check-config.mjs` · new at `v4.0.0`
+**Filed as issue #68 (practice candidate), 2026-08-13.**
+
+**Reading of the cause:** the rules are right; the strictness is spread evenly across questions that
+deserve very different amounts of it.
+**Scope:** did not block the sync · will recur · every site, and more sharply on client work.
+
+### What happened
+
+Completing a v4 `config.js` means answering roughly twenty fields that are not derivable from the
+code, presented as one homogeneous act of declaration. Working through them on this site, they sort
+into three groups:
+
+1. **Host and pipeline capabilities** — `securityHeaders`, `retiredUrlRedirects`, `requestLogs`,
+   `environmentSeparation`, `notFoundHandling`, `formSubmissionReceiver`, `serverSideValidation`.
+   Testable. Asked as prose.
+2. **Facts held in a third-party console** — `measurementDestination`, `discoverability.searchProperty`,
+   `verifiedBy`, `sitemapSubmitted`. Partly fetchable. Asked as prose.
+3. **Genuine business decisions** — `consent.*`, `discoverability.indexed` / `reason` / `owner`,
+   `receiver.owner`, and the business facts themselves. Not derivable by anything, and the section
+   says the least about how to obtain them.
+
+Groups 1 and 2 are about two thirds of the burden, and most of it can be removed.
+
+### Measured, not argued
+
+Four control rows fall out of one request to the published site:
+
+```
+$ curl -sSI https://adbseguros.com.ar/
+HTTP/1.1 200 OK
+Server: GitHub.com
+...
+```
+
+No `Content-Security-Policy`, no `X-Frame-Options`, no `Strict-Transport-Security`, no
+`Permissions-Policy` — so `securityHeaders: "absent"` is the response rather than an opinion, and
+`Server` identifies a host whose redirect and logging capabilities are a lookup.
+
+And `measurementDestination`, the field that is still red on this repository's sync PR, is a public
+fetch — the container is a document every visitor already downloads:
+
+```
+$ curl -s "https://www.googletagmanager.com/gtm.js?id=GTM-M67M4S9B"   | grep -oE '"G-[A-Z0-9]{6,}"|"AW-[0-9]+"|"UA-[0-9]+-[0-9]+"'
+"G-BCLCT06GR7"
+```
+
+It does **not** answer `eventsObserved`, and it should not: delivery configuration is not receipt.
+What it does is leave a human with one thing to attest instead of two, and that one is the thing only
+a human can do.
+
+**Checked while reading the container, and recorded because a negative result is worth as much as a
+positive one here:** the container declares one `googtag` and one custom HTML tag. The
+`doubleclick`, `googlesyndication` and `adservice` strings in `gtm.js` are in the runtime library's
+own schema vocabulary (`__module_gtagSchema`), outside the container's resource block, and are not
+configured tags. `analytics.publishedCommitments.advertisingOrRemarketing: false` and
+`privacy.html` §2 remain true. This is the check D10 and D11 say nobody performs; it was performed
+once, by hand, on 2026-08-13, and it will go stale.
+
+### The observation that matters most here
+
+A capability asked as prose **goes stale silently**, and this repository has already paid for it. The
+`securityHeaders` row said "the host serves no custom response headers" — true — and
+`transportSecurity` sat inside it looking equally out of reach. It was not: the host offered exactly
+one transport control, it was a toggle, and it was off. A person found it by hand three weeks after
+the row was written. A check would have found it on the first run.
+
+The second: the gate is binary and this information has latency. There is no state for *asked,
+waiting, owner named, asked on this date* — so the developer either produces a value or ships a red
+gate that blocks a sync unrelated to the missing value. The pressure points one way, toward writing
+something plausible, which is the one thing an attestation cannot survive. `check-config`'s
+unanswered-placeholder remediation already names the right shape — a pending item with an owner — but the attestation fields
+have no such path, and a site that adopted rather than scaffolded has no `brief.md` to put it in.
+
+### What we did
+
+Nothing in the instrument. The gaps this describes are real gaps on this site and they stay red: the
+six attestations on the sync PR are not carried in the baseline and will not be until the values
+arrive. The proposal is filed rather than patched, because a per-site workaround for this one would
+mean deriving values locally and presenting them as declarations — which is the failure the fields
+exist to prevent, arriving from the side that looks like diligence.
+
+### The proposal, as filed
+
+- **Verify the capability rows rather than accept them** — one `HEAD` on `canonicalOrigin`, and fail
+  when the declaration and the response disagree. Strictly stronger than "every row was answered".
+- **Derive `measurementDestination` from the container**, keep `eventsObserved` human.
+- **Add a declared-pending state** — `pending: { owner, askedOn, question }` — that still fails the
+  gate but distinguishes negligence from latency. Today those two produce byte-identical
+  repositories, which is the section's own argument about absent controls applied one level up.
+- **Make discoverability vendor-agnostic** — ask for the capability and the property providing it,
+  not for one vendor's workflow.
+- **Ship the question, not only the field.** For every field that genuinely needs a business answer,
+  one line on who typically holds it, what a good answer looks like, and what "no" or "nobody" means.
+  `consent.revisitWhen` is the model — it is the only field in the file that says what makes its own
+  answer wrong later.
+
+---
 
 ## One thing that is not friction, recorded because it surprised us
 

@@ -343,3 +343,90 @@ presence map are on `adbseguros.com` — a different domain — and that is now 
 carried in the closed row of open definition #3, rather than an open question. Worth checking that
 the second domain is still ours and still points at something that exists: a record naming a
 resource nobody owns is the failure §26 singles out on client work.
+
+---
+
+## 7. The sync to v4.0.0 — 2026-08-13
+
+Adoption brought in `v3.7.1`. This section records what changed on the way to `v4.0.0`, because the
+release answers four of this repository's own friction reports and the answers change what several
+rows above mean.
+
+### What the release closed here
+
+| Was | Now |
+|---|---|
+| The gate was red on everything, so the ratchet decided nothing (friction 1, issue #53) | `gate.yml` detects `.gate-baseline.json` and moves gating authority to the ratchet. The local `gate.yml` divergence is **deleted**, and the workflow is byte-identical to the release |
+| The control-placement table was prose with no carrier (friction 6, issue #60) | `config.controls`, ten keys, read by `check-config.mjs`. This repository had already answered every row; the sync renamed two keys and remapped two placements to the closed vocabulary. **No value was invented and none was changed** |
+| `check-markup` read only `.css` files, and this site has none (issue #56) | It reads inline `<style>`. One finding disappeared — the minimum interactive target size was declared all along. Baseline entry removed rather than zeroed |
+| `test-gate.mjs` could not run in an adopted repository (friction 4, issue #55) | It resolves a vendored fixture first. **Closed in intent, open in fact** — see friction 8 |
+
+### What the release did not close
+
+Friction 2 and 3 — `walk()` measuring unpublished files, and the served-text check on a document
+with no `<body>` — are untouched at `v4.0.0`. Both local fixes are **re-applied on top of the new
+files** rather than dropped, and `.github/handbook-version.md` names the release that retires each.
+
+Measured, so the cost of dropping them is not a matter of opinion: with upstream's `walk`,
+`check-config` reports **43 findings instead of 29**, `check-markup` 6 instead of 2 and
+`check-assets` 7 instead of 5. All 20 extra findings are in `web/`, which is gitignored and
+therefore not served, not indexed and not reachable.
+
+### What the improved checks found, which is nothing
+
+The release improves three checks in ways that were expected to surface violations that already
+existed and had merely been invisible. On this site they surfaced none:
+
+| Improvement | Effect here |
+|---|---|
+| `check-config` stops reading binaries | **No change.** The placeholder sentinels do not appear in this site's PNGs |
+| `check-assets` reads stylesheets and `url(...)` | **No change.** Every style here is inline; there are no `.css` files (debt D2) |
+| `check-markup` reads inline `<style>` | **One finding fewer**, not more |
+
+So no baseline entry was raised for a check that improved, and the procedure for doing so was not
+needed. It is recorded because an absence of findings is only evidence if somebody looked.
+
+### The three baseline movements, and why each is a different kind of claim
+
+`.gate-baseline.json` was edited by hand, because `--update` refuses to write while anything has
+risen and one thing has. Each movement is named in the file itself:
+
+1. **Raised by 3** — `404.html`, `index.html`, `privacy.html`. The tag container id became a literal
+   in the three documents at `4b499ff`/`b137ac9` and the baseline was never raised, so `main` has
+   been red since. **Not introduced by this sync.** Raised deliberately, which is what the ratchet's
+   own message asks for: the GTM snippet cannot carry its container id anywhere but the markup, and
+   the other escape is an edit to content files this sync does not touch.
+2. **Lowered by 1** — a check that improved, not a fix.
+3. **Not recorded at all** — the six new attestations. See below.
+
+### What is still red, and only one person can close it
+
+`v4.0.0` adds two attestations that no check in this repository can verify, and this sync will not
+invent either of them:
+
+| Field | Why it is empty |
+|---|---|
+| `measurementDestination`, `eventsObserved` | The container is configured by another team (`analytics.configuredBy`). This repository cannot read which property receives the events, and `eventsObserved` is a claim that a human watched one arrive |
+| `discoverability.searchProperty`, `verifiedBy`, `owner`, `sitemapSubmitted` | Facts about a search property this repository cannot see. `indexed` is set to `true` because robots.txt, sitemap.xml and llms.txt already declare that intent — recording it only makes the existing declaration legible |
+
+Six findings, bucketed as `check-config|(repository)`, deliberately **absent from the baseline**.
+Recording them would be writing down that somebody checked when nobody did, which is the one thing
+an attestation cannot survive. The gate stays red on exactly those six until the values arrive.
+
+### The numeric floors
+
+`lighthouserc.json` is untouched and every floor stands.
+
+`.gate-measures.json` carries **two** measurements: best practices on both pages, at 0.79. It carried
+four at first and that was wrong. `--init` was run locally, and a laptop is not the environment this
+gate runs in: locally this site measures performance at 0.74/0.72, and on `ubuntu-latest` it measures
+0.95–0.97 and 0.99–1.00 across three attempts — above the floor, so performance is not ratcheted at
+all. The record was corrected from the runner before this merged, and the environment is written into
+the file so the next person does not repeat it.
+
+Best practices is 0.79 on all nine runner samples and all nine local ones. It is a real finding, and
+it is the only measurement this site has not reached.
+
+Dispersion, since it was the point of running the gate three times: on the runner, performance drifts
+0.020 between attempt medians — **exactly the ratchet's tolerance, not inside it**. On the laptop it
+drifts 0.060, three times the tolerance. Everything else moved by zero. See friction 10.
