@@ -8,3 +8,22 @@ web/
 Thumbs.db
 desktop.ini
 .DS_Store
+
+# Archives. An archive is the most likely shape of internal material — "send me the logos" produces
+# a zip — and nothing can read inside one from here, so the extension is the whole signal. A file
+# that is MEANT to be downloadable goes in downloads/, which is not ignored: putting it there is how
+# the decision to publish it gets written down. Added with handbook v4.0.0, which added the same
+# extensions to the gate's tracked-material scan.
+*.zip
+*.rar
+*.7z
+*.tar
+*.tgz
+*.gz
+!downloads/**
+
+# Lighthouse run output. The repository is the web root, so a committed report is a PUBLISHED
+# report — with the site's full audit trail and every URL it walked. The gate reads it from the
+# runner's working directory and never needs it committed; `.gate-measures.json` is the part that
+# is meant to be kept, and that one is tracked.
+.lighthouseci/

@@ -84,37 +84,8 @@ for (const file of html) {
     // The text a visitor needs in order to convert must be SERVED. Generated in the browser it
     // costs deferred rendering for search and everything for generative retrieval, whose crawlers
     // largely do not execute script.
-    // LOCAL DIVERGENCE FROM THE TEMPLATE - ADB, 2026-08-11, carried forward to v4.0.0 on
-    // 2026-08-13. Reported upstream as friction; still not upstream at v4.0.0, so it is re-applied
-    // rather than dropped. Note that v4's own change to this file is elsewhere - it taught the four
-    // render rules below to read inline <style>, which is a different measurement from this one.
-    //
-    // Two corrections, both found by running this against a real page rather than by reading it.
-    //
-    // 1. `<body>` IS AN OPTIONAL TAG in HTML, and a document may omit it - which is valid, and
-    //    which every browser and crawler handles by inserting the element itself. Upstream slices
-    //    from `indexOf("<body")` without checking for -1, so on a document with no literal tag the
-    //    slice becomes `text.slice(-1)`: one character, which strips to zero. The check then
-    //    reported "only 0 characters of served text" about a page serving roughly forty thousand,
-    //    and told the author to move copy into markup that already holds all of it. A check that
-    //    fires on correct input teaches people to route around the gate (§20), and this one fires
-    //    on the single most confident possible input.
-    //
-    // 2. `<style>` CONTENT IS NOT PROSE. Once the fallback measures the whole document, an inline
-    //    stylesheet would be counted as served text and would pass the floor on its own - turning
-    //    a real check into one that cannot fail. Scripts were already stripped for exactly this
-    //    reason; styles were not, because the template keeps its CSS in a separate file.
-    //
-    // Neither changes the threshold or what the rule requires. Both make the number mean what the
-    // message says it means.
-    //
-    // THE TRIGGER TO DROP THIS: an upstream release that handles the optional tag and strips
-    // <style> here. At that point delete this block and take the template's file byte-for-byte.
-    const bodyAt = text.indexOf("<body");
-    const body = bodyAt === -1 ? text : text.slice(bodyAt);
-    const withoutScripts = body
-      .replace(/<script[\s\S]*?<\/script>/gi, "")
-      .replace(/<style[\s\S]*?<\/style>/gi, "");
+    const body = text.slice(text.indexOf("<body"));
+    const withoutScripts = body.replace(/<script[\s\S]*?<\/script>/gi, "");
     const visible = withoutScripts
       .replace(/<!--[\s\S]*?-->/g, "")
       .replace(/<[^>]+>/g, " ")

@@ -109,6 +109,68 @@
     // debt D10, and it is the price of the convenience rather than an argument against it.
     tagContainerId: "GTM-M67M4S9B",
 
+    // A CONTAINER IS NOT A MEASUREMENT. The container delivers events; something else has to
+    // receive them, and nothing in this repository can see whether anything does. A container
+    // wired to no destination passes every check here and records nothing — the exact failure the
+    // launch condition exists to prevent, arriving by the one path a check cannot watch.
+    //
+    // So name the destination, and set `eventsObserved` only once an event has been SEEN arriving
+    // there in that tool's live view. It is the same kind of attestation as
+    // `receiver.originRestricted` below: a fact somebody checked, recorded where the gate can read
+    // it (§26).
+    //
+    // EMPTY RATHER THAN GUESSED, and the two are not the same declaration. The container is
+    // configured by another team (see `analytics.configuredBy`), and this repository cannot read
+    // which property it dispatches to. Writing a plausible identifier here would produce exactly
+    // the stale copy the analytics block above refuses to keep — and it would be an attestation
+    // nobody made. Left empty, `check-config.mjs` fails with the specific remediation, which is the
+    // correct state for a launch condition that has not been met. Whoever holds container access
+    // supplies both values.
+    measurementDestination: "",
+    eventsObserved: false,
+
+    // -------------------------------------------------------------------- discoverability
+    // INDEXABLE IS NOT INDEXED. Everything the gate checks is here — one h1, ordered headings,
+    // conversion text in the served markup — and none of it says the site was ever found. That
+    // evidence lives in a verified search property, which is also the only place a page that was
+    // published and then deleted can be requested out of the index.
+    //
+    // `indexed: true` requires the property to exist BEFORE publication. Coverage history starts at
+    // verification and, like measurement, cannot be reconstructed backwards.
+    //
+    // `indexed: false` is a legitimate answer — a page reached only from a paid link or a printed
+    // code. It is a DECISION with an owner and a reason, and `build-derived.mjs` writes it into
+    // robots.txt rather than leaving it here as a comment: an unregistered site and a deliberately
+    // unlisted one are indistinguishable from inside this repository, which is the whole reason
+    // this block exists (§26).
+    //
+    // WHY `indexed` IS true AND THE REST IS EMPTY. `true` is not a guess: the served robots.txt
+    // invites crawling, sitemap.xml is generated and published, and the commit history carries
+    // deliberate SEO and AI-discovery work. The intent to be found is already declared in the files
+    // a crawler reads, so recording it here only makes the existing declaration legible.
+    //
+    // The three fields below are a different kind of claim — they assert that a verified property
+    // EXISTS and that a sitemap was SUBMITTED in it, which are facts about a Google account this
+    // repository cannot see. They are left empty on purpose. Note what `indexed: false` would cost
+    // if it were used as a placeholder: `build-derived.mjs` writes `Disallow: /` into robots.txt,
+    // which would de-index a site that has been in production since 2026-07-20. A guess in this
+    // field is not a smaller error than a guess anywhere else on this page.
+    discoverability: {
+      indexed: true,
+      reason:
+        "Organic search and AI-assisted discovery are the intended channels — the site publishes a " +
+        "sitemap, invites crawling in robots.txt and ships a machine-readable summary in llms.txt. " +
+        "This states the intent that those files already declare; it does not assert that the site " +
+        "is in fact indexed, which is what the verified property below is for.",
+      searchProperty: "",
+      verifiedBy: "",
+      owner: "",
+      // True once the sitemap has been submitted in that property — the submission, not the file
+      // being generated. Verifying the property is a domain operation, so it is a human's to do
+      // (§22); what belongs here is the record that it was done.
+      sitemapSubmitted: false,
+    },
+
     // -------------------------------------------------------------------- analytics
     // THE OWNERSHIP BOUNDARY, which is the load-bearing part of this block.
     //
@@ -279,8 +341,52 @@
     //
     // Each row: where the control lives, and — when it is absent — why, in terms of capability
     // rather than of intent. "We did not get to it" is not an answer this table accepts.
+    // TWO ROWS THIS SITE ANSWERED THAT §26'S TABLE DOES NOT HAVE, kept verbatim below.
+    //
+    // Until v4.0.0 nothing read this block, so it could carry any row worth recording. v4 makes it
+    // machine-readable and the table is CLOSED: `check-config.mjs` fails on a key that is not one
+    // of its ten, on the reasoning that a misspelled key declares nothing while looking exactly
+    // like a declaration. That is the right rule and it has a cost here — these two are not
+    // misspellings, they are decisions this site took and verified, and one of them records a
+    // DEFECT THAT IS STILL OPEN.
+    //
+    // They are therefore demoted to prose rather than deleted or folded into a neighbouring row.
+    // Folding was considered and rejected: `transportSecurity` is "edge" and `securityHeaders` is
+    // "absent", and merging a live control into an absent one is precisely the error this file
+    // recorded correcting on 2026-08-12 — "lumping them together was hiding a live defect behind a
+    // true statement". Nothing machine-readable is lost, because nothing read this block before.
+    //
+    // Reported upstream as friction. THE TRIGGER TO PROMOTE THEM BACK: a release whose table has
+    // rows for transport security and canonical hostname.
+    //
+    // transportSecurity: {
+    //   // Split out from securityHeaders on 2026-08-12, because lumping them together was hiding
+    //   // a live defect behind a true statement. "The host serves no custom headers" is correct
+    //   // and it made transport look equally out of reach. It was not: this host offers exactly
+    //   // one transport control, it is a toggle, and it was off. It was turned on the same day.
+    //   where: "edge",
+    //   why:
+    //     "HTTPS is enforced as of 2026-08-12 (fix-now F2, closed). Verified rather than assumed: " +
+    //     "http answers 301 to https, on the root and on deep paths, preserving the path. " +
+    //     "WHAT REMAINS ABSENT AND CANNOT BE FIXED HERE: no HSTS header, because this host sends " +
+    //     "none and a static document cannot. So the FIRST request of a session can still be made " +
+    //     "in plaintext and intercepted before the redirect answers. That residual belongs to the " +
+    //     "hosting decision (closed open definition #6), not to a task list.",
+    // },
+    // canonicalHostname: {
+    //   where: "absent",
+    //   why:
+    //     "www.adbseguros.com.ar is a CNAME to the apex, so it reaches this host with a name " +
+    //     "the certificate does not cover and answers with a TLS error. Diagnosed 2026-08-12: the " +
+    //     "host only provisions a certificate for www when that record is a CNAME to the pages " +
+    //     "host itself, not to the apex. Note http://www DOES redirect correctly to the apex, so " +
+    //     "this only bites over https — which is the direction browsers increasingly try FIRST, " +
+    //     "so it gets worse rather than better. Fix-now F3, open. It is a DNS action and §26 puts " +
+    //     "that on the ask-before-acting list: prepared and handed over, never done here.",
+    // },
+
     controls: {
-      redirectsFromRetiredUrls: {
+      retiredUrlRedirects: {
         where: "absent",
         why:
           "The host issues no redirect this repository can author. It issues exactly one of its " +
@@ -288,7 +394,7 @@
           "honoured. No predecessor URL is known to be retired, so nothing is broken by this " +
           "today; the capability is missing rather than unused. Closed open definition #6.",
       },
-      formSubmissions: {
+      formSubmissionReceiver: {
         where: "absent",
         why: "The site presents no form. §26 prescribes exactly this where nothing persists a submission.",
       },
@@ -297,7 +403,7 @@
         why: "Nothing is submitted to us. There is no input to validate.",
       },
       rateLimiting: {
-        where: "third-party",
+        where: "provider",
         why: "The messaging platform's. A static page cannot limit anything.",
       },
       runtimeSecrets: {
@@ -316,7 +422,7 @@
           "what was lost is the stronger sentence that used to accompany it.",
       },
       notFoundHandling: {
-        where: "published document",
+        where: "document",
         why: "404.html, shipped 2026-08-12. Declares noindex and stays out of the sitemap.",
       },
       securityHeaders: {
@@ -326,31 +432,6 @@
           "policy, and — the one with no in-document equivalent — no framing protection at all: " +
           "frame-ancestors is ignored in a meta element and X-Frame-Options is header-only. " +
           "Open definition #6, accepted with the consequence named.",
-      },
-      transportSecurity: {
-        // Split out from securityHeaders on 2026-08-12, because lumping them together was hiding
-        // a live defect behind a true statement. "The host serves no custom headers" is correct
-        // and it made transport look equally out of reach. It was not: this host offers exactly
-        // one transport control, it is a toggle, and it was off. It was turned on the same day.
-        where: "edge",
-        why:
-          "HTTPS is enforced as of 2026-08-12 (fix-now F2, closed). Verified rather than assumed: " +
-          "http answers 301 to https, on the root and on deep paths, preserving the path. " +
-          "WHAT REMAINS ABSENT AND CANNOT BE FIXED HERE: no HSTS header, because this host sends " +
-          "none and a static document cannot. So the FIRST request of a session can still be made " +
-          "in plaintext and intercepted before the redirect answers. That residual belongs to the " +
-          "hosting decision (closed open definition #6), not to a task list.",
-      },
-      canonicalHostname: {
-        where: "absent",
-        why:
-          "www.adbseguros.com.ar is a CNAME to the apex, so it reaches this host with a name " +
-          "the certificate does not cover and answers with a TLS error. Diagnosed 2026-08-12: the " +
-          "host only provisions a certificate for www when that record is a CNAME to the pages " +
-          "host itself, not to the apex. Note http://www DOES redirect correctly to the apex, so " +
-          "this only bites over https — which is the direction browsers increasingly try FIRST, " +
-          "so it gets worse rather than better. Fix-now F3, open. It is a DNS action and §26 puts " +
-          "that on the ask-before-acting list: prepared and handed over, never done here.",
       },
       environmentSeparation: {
         where: "absent",
