@@ -3,9 +3,23 @@
 **Filed from:** `makesensedigital/ADBHome` · adopted 2026-08-11 against handbook `v3.7.1`
 (`de0216f`) · procedure: skill `adopt-an-existing-repository`
 
-Six reports. `CONTRIBUTING.md` asks for these as issues rather than pull requests, and this file
+Seven reports. `CONTRIBUTING.md` asks for these as issues rather than pull requests, and this file
 is the durable copy: it lives in the same clone as the divergences it explains, so the next person
 here can tell a reported problem from a private patch.
+
+Report 7 is the only one filed from *doing the work rather than adopting the rules*: it came out of
+installing analytics on 2026-08-13, months after adoption.
+
+> **Correction, same day, and it matters for how report 7 should be read.** The Amplitude install
+> that produced it was reverted before it ever shipped; this site now measures through a Google Tag
+> Manager container. **So the repository that filed the complaint went on to choose the exact shape
+> the complaint said §26 over-assumed** — which weakens the first of the three gaps and moots the
+> third, and both retractions are posted on issue #65 rather than quietly left standing.
+> **The second gap survives intact and is now demonstrated more strongly than the original report
+> managed:** the container injects `google-analytics.com` and `clarity.ms` with `createElement` at
+> runtime, so of the three Google/Microsoft origins this page contacts, `check-assets` sees exactly
+> one — the `noscript` iframe. The other two are invisible to the gate, and `privacy.html` is the
+> only artifact that records them.
 
 **Unreported friction does not disappear; it becomes a silent workaround** — and a rule everyone
 quietly bypasses is worse than no rule, because it still claims to be enforced. Four of the five
@@ -20,6 +34,9 @@ carrying a permanently red check. That is the reason to file them, not a reason 
 > **both carry a corroboration comment from this repository** — the reproduction, the runner
 > output, and in each case the consequence this adoption found that the original report did
 > not — rather than a duplicate issue.
+>
+> **Filing status, 2026-08-13.** Report 7 is filed as **issue #65** (practice candidate) — the
+> tag-container assumption, and the module-import hole in the third-party origin scan.
 >
 > **Reports 2, 3 and 5 are still unfiled and appear to be new** — `walk()` measuring unpublished
 > files, the served-text check reading zero on a document with no `<body>` tag, and §0's caller
@@ -315,6 +332,92 @@ issue #55). So the declaration is unchecked here, and the block says so.
 The rule does not need weakening. It needs the artifact it already demands — and with the artifact,
 *"this host cannot do it and we accept that"* becomes a legible, reviewable, greppable answer
 instead of looking like an omission.
+
+---
+
+## 7 — §26 assumes measurement arrives through a tag container, and most vendors ship a `<script>`
+
+**Which rule:** §26, instrumentation is a launch condition · `config.tagContainerId` ·
+`templates/landing/scripts/check-config.mjs` · `templates/landing/scripts/check-assets.mjs`
+
+**Reading of the cause:** the rule is right; the artifacts around it encode one vendor's delivery
+model as if it were the only one.
+**Scope:** did not block · will recur · every site whose analytics vendor is not Google.
+
+### What happened
+
+This site was instrumented on 2026-08-13 with Amplitude, closing open definition #1. The rule
+itself held up well — writing the event contract before the code, naming the WhatsApp handoff an
+intent, refusing session replay because the privacy statement could not carry it. **The friction is
+entirely in the carriers.**
+
+`config.js` offers exactly one field for measurement, `tagContainerId`, seeded with `GTM-XXXXXXX`. <!-- check-config: allow — a report ABOUT the placeholder has to name it; the check documents this exact case. -->
+`check-config` detects two placeholder shapes, `GTM-XXXXXXX` and `G-XXXXXXXX`. Both are Google. A <!-- check-config: allow — a report ABOUT the placeholder has to name it; the check documents this exact case. -->
+site that measures with Amplitude, Plausible, PostHog, Fathom, Matomo or Umami has **no field to
+fill and no placeholder to clear** — the honest answer becomes `tagContainerId: null`, which is
+indistinguishable in the module and to the gate from a site that decided it needed no measurement
+at all. That is the precise failure §26 names everywhere else: an absent control looking identical
+to one nobody considered.
+
+Three consequences, and the second is the one worth acting on:
+
+1. **The install path does not exist here.** Amplitude's own installer prescribes
+   `npm install @amplitude/unified` and a bare-specifier import. This repository has no
+   `package.json`, no bundler and no build — by design, and §26 is the reason. So the SDK is
+   imported from a CDN by URL. Every vendor in this class ships a `<script>` snippet for exactly
+   this case, which means **the static-site path is the vendor's supported path and the handbook
+   has no shape for it.**
+
+2. **`check-assets` cannot see a module import, so the third-party origin scan silently misses the
+   most common modern snippet.** `FETCHING` matches `src=` and `href=` attributes. An inline
+   `<script type="module">` that does `import * as x from 'https://cdn…'` fetches a third party on
+   first render and matches none of them. We only kept the origin visible by adding a
+   `<link rel="modulepreload">` beside it — which the scan *does* match — and saying so in a comment
+   that explains removing the link blinds the gate. **That is a workaround holding up a control, and
+   the next person will delete it as a redundant preload.** The same blind spot covers the vendor's
+   ingestion endpoints, which are called by `fetch` at runtime and can never be seen at all; today
+   the privacy statement is the only artifact that records them.
+
+3. **No vendor key can be checked, so key duplication is invisible.** `PATTERNS` has entries for
+   `wa.me`, GTM, GA, `mailto:` and scheduling links. An Amplitude key is 32 hex characters and
+   matches nothing, so the same key living in both `config.js` and the markup — which is the
+   template's own recorded debt for every *other* identifier — produces no finding here. Recorded
+   locally as debt D11.
+
+There is also a security regression with no available mitigation. The template's pattern for
+third-party JavaScript is a pinned version with a subresource integrity hash, which `index.html`
+follows for Leaflet. **A CDN-built ESM bundle cannot carry one** — jsDelivr generates `+esm` on
+demand and its own response header advises against pinning a hash to it. So the analytics SDK on a
+licensed insurance broker's site loads unpinned, three lines below a map library that is pinned.
+Self-hosting the bundle is the only fix available, and it breaches the 60 KB per-script budget in
+`check-assets`. Recorded locally as debt D10.
+
+### What we did
+
+Shipped it, with each gap named where the code is rather than smoothed over: `tagContainerId: null`
+with a comment saying null is the answer and not an unanswered question, a new `config.analytics`
+block carrying the event contract, the `modulepreload` documented as a gate mechanism rather than a
+performance tweak, and D10 and D11 opened. The gate moved from 26 findings to 23 and **nothing new
+was added** — but two of the three reasons it stayed flat are blind spots rather than compliance.
+
+### The shape of the fix, offered as data rather than as a proposal
+
+The narrow version: rename `tagContainerId` to something vendor-neutral, or add a sibling
+`analytics: { vendor, key }`, and make `check-config` fail when **both** are empty rather than when
+one specific Google placeholder survives. That restores the property the rule actually wants — a
+site cannot publish while it is silent about measurement — for vendors that are not Google.
+
+The one that matters more: **`check-assets` should treat an `import` from an absolute URL inside a
+module script as a first-render fetch.** It is a regex over markup either way, and without it the
+third-party origin control has a hole shaped exactly like the delivery mechanism the modern
+ecosystem standardised on. As it stands, the correct way to pass that check is to write the snippet
+in the style the check happens to recognise, which is §20's failure mode with the sign flipped —
+not a check that fires on correct input, but one that stays silent on incorrect input.
+
+Worth deciding rather than leaving implicit: **whether §26 permits unpinned third-party JavaScript
+at all.** Today it is neither permitted nor forbidden, so it arrives as a judgement call taken by
+whoever installs the tag, on a site whose whole architecture assumes there is no server to catch
+anything.
 
 ## One thing that is not friction, recorded because it surprised us
 

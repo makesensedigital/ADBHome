@@ -3,6 +3,33 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- ============================ MEASUREMENT — Google Tag Manager ============================
+     The container fires Google Analytics 4 and Microsoft Clarity; neither has a snippet of its
+     own here, both are dispatched from it. EVERY IDENTIFIER LIVES IN config.js, under `analytics`
+     — naming them again here would be a second copy and three more gate findings, for nothing.
+     Declared in privacy.html §2 and §5. Decided 2026-08-13 by Juan Torresel.
+
+     THIS CONTAINER IS A SURFACE THE GATE CANNOT SEE, and that is the cost of the decision rather
+     than an argument against it. A tag added in the Tag Manager UI reaches every visitor of this
+     site with no commit, no diff, no review and no gate run. Everything else that executes here
+     arrives through a pull request; this does not. Whoever holds container access holds publish
+     rights over this domain. Debt D10.
+
+     THE CONTAINER ID IS IN FOUR PLACES — config.js and the three documents — because the markup
+     still does not read from the module (debt D2). Four copies, and check-config reports three of
+     them, which is correct and is the finding rather than a defect in the check.
+
+     WHY THE noscript IS AT THE START OF THE CONTENT AND NOT AFTER <body>: this document has no
+     <body> tag. The markup is hand-written and goes straight from the head into the page, so the
+     tag Google's instructions anchor to does not exist. The parser opens the element implicitly
+     at the first content node, which is where the fragment below sits. -->
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-M67M4S9B');</script>
+<!-- End Google Tag Manager -->
 <title>Política de Privacidad — ADB | Broker de Seguros</title>
 <meta name="description" content="Qué datos personales recoge este sitio, qué ocurre cuando usás un botón de WhatsApp, cuánto se conservan y cómo ejercer tus derechos. ADB Broker S.A., Matrícula SSN nº 1877.">
 <link rel="canonical" href="https://adbseguros.com.ar/privacy.html">
@@ -66,6 +93,11 @@
 </style>
 </head>
 
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-M67M4S9B"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+
 <a class="skip-link" href="#contenido">Saltar al contenido</a>
 
 <div class="wrap">
@@ -80,7 +112,7 @@
     <h1>Política de Privacidad</h1>
     <p class="lede">Qué datos personales recoge este sitio, qué pasa cuando usás un botón de WhatsApp,
       cuánto se conservan y cómo ejercer tus derechos.</p>
-    <p class="updated">Última actualización: 12 de agosto de 2026.</p>
+    <p class="updated">Última actualización: 13 de agosto de 2026.</p>
 
     <h2>1. Quién es responsable</h2>
     <div class="card">
@@ -94,16 +126,61 @@
     </div>
 
     <h2>2. Qué recoge este sitio</h2>
-    <p><b>Nada.</b> Y conviene ser preciso sobre qué significa eso aquí, porque es inusual:</p>
+    <p><b>Medición de uso y grabación de sesiones, desde el 13 de agosto de 2026.</b> Antes de esa
+      fecha este sitio no recogía absolutamente nada. Conviene ser preciso, porque el cambio es
+      grande.</p>
+
+    <h3>Cómo llega</h3>
+    <p>El sitio carga <b>Google Tag Manager</b>, un contenedor que dispara las dos herramientas de
+      abajo. No hay ningún otro código de medición en la página.</p>
+
+    <h3>Google Analytics 4</h3>
     <ul>
-      <li>No hay formularios. No existe ningún campo donde escribir tus datos.</li>
-      <li>No usamos cookies propias ni almacenamos nada en tu navegador.</li>
-      <li><b>No hay analítica ni medición de ningún tipo.</b> No sabemos cuántas personas visitan
-        el sitio, ni de dónde llegan, ni qué miran.</li>
-      <li>No hay publicidad, ni perfilado, ni píxeles de seguimiento.</li>
+      <li>Las páginas que abrís, cuánto tiempo permanecés, hasta dónde bajás y los clics en enlaces
+        que llevan fuera del sitio.</li>
+      <li>Datos técnicos: tipo de dispositivo, sistema operativo, navegador, idioma, resolución de
+        pantalla y el sitio desde el que llegaste.</li>
+      <li>Tu dirección IP, con la que se deduce el país y la ciudad aproximada.</li>
+      <li><b>Cookies propias</b> (<code>_ga</code>), que permiten reconocer que dos visitas vienen
+        del mismo navegador.</li>
     </ul>
-    <p>Este sitio es un conjunto de archivos servidos tal cual. No tiene servidor propio ni base de
-      datos, así que no hay ningún lugar donde pudiera guardar algo sobre vos.</p>
+
+    <h3>Microsoft Clarity</h3>
+    <p><b>Clarity graba tu sesión</b>, y no tiene sentido decirlo de otra manera:</p>
+    <ul>
+      <li>Se registran los movimientos del mouse, los clics, el desplazamiento y lo que aparece en
+        tu pantalla. Después eso se reproduce como si fuera un video de tu visita.</li>
+      <li>Se construyen <b>mapas de calor</b>: dónde hace clic la gente y hasta dónde lee.</li>
+      <li><b>Cookies propias</b> (<code>_clck</code>, <code>_clsk</code>).</li>
+      <li>Clarity aplica un enmascarado que oculta el contenido de los campos de texto. En este
+        sitio eso casi no tiene efecto práctico, <b>porque no hay ningún campo donde escribir</b>
+        — ver el punto siguiente.</li>
+    </ul>
+
+    <h3>Lo que sigue sin ocurrir</h3>
+    <ul>
+      <li><b>No hay formularios.</b> No existe ningún campo donde escribir tus datos, así que la
+        grabación no puede capturar nada que hayas tecleado: no hay nada que teclear. Lo que se ve
+        en una grabación es navegación, no información tuya.</li>
+      <li>No hay publicidad, ni remarketing, ni píxeles de redes sociales, ni perfilado para
+        venderte nada.</li>
+      <li>Estos datos no se venden, no se ceden y no se usan para tomar ninguna decisión
+        automatizada sobre vos.</li>
+    </ul>
+
+    <p>Este sitio sigue siendo un conjunto de archivos servidos tal cual: no tiene servidor propio
+      ni base de datos, así que nada de lo anterior se guarda acá. Va de tu navegador a Google y a
+      Microsoft directamente.</p>
+
+    <h3>Si preferís que no ocurra</h3>
+    <p>Este sitio no muestra un cartel de cookies: te informamos qué se recoge en vez de
+      interrumpirte con una elección. Si preferís no ser medido ni grabado, cualquier bloqueador de
+      contenido o la protección de rastreo que ya traen Firefox, Safari y Brave alcanzan para
+      impedirlo, y también podés borrar las cookies desde tu navegador. Para Google Analytics existe
+      además el
+      <a href="https://tools.google.com/dlpage/gaoptout" target="_blank" rel="noopener">complemento
+      oficial de inhabilitación</a>. <b>El sitio funciona exactamente igual</b>: no hay ninguna
+      función que dependa de la medición.</p>
 
     <h2>3. Qué pasa cuando usás un botón de WhatsApp</h2>
     <p>Ahí sí hay datos personales, y no deja de haberlos porque no exista un formulario. Los botones
@@ -155,16 +232,27 @@
     </div>
 
     <h2>5. Terceros que el sitio contacta al cargar</h2>
-    <p>El mapa de oficinas usa componentes alojados fuera de este sitio. Al abrir la página, tu
-      navegador los pide directamente a esos proveedores, que por ese solo hecho conocen tu dirección
-      IP y datos técnicos básicos de tu navegador:</p>
+    <p>Al abrir la página, tu navegador pide componentes directamente a estos proveedores, que por
+      ese solo hecho conocen tu dirección IP y datos técnicos básicos de tu navegador:</p>
     <ul>
       <li><b>unpkg.com</b> — entrega la biblioteca de mapas.</li>
       <li><b>basemaps.cartocdn.com</b> — entrega las imágenes del mapa.</li>
+      <li><b>www.googletagmanager.com</b> — entrega el contenedor de etiquetas.</li>
+      <li><b>www.google-analytics.com</b> (Google) — <b>recibe</b> la medición de la sección 2.</li>
+      <li><b>clarity.ms</b> (Microsoft) — <b>recibe</b> las grabaciones de sesión de la sección 2.</li>
     </ul>
-    <p>Ninguno de los dos instala cookies por cuenta de ADB ni recibe datos que vos hayas escrito.
-      El sitio funciona igual si esos recursos no cargan: el listado de oficinas sigue siendo
+    <p>La diferencia entre los tres primeros y los dos últimos importa: los tres primeros
+      <b>entregan archivos</b> y se enteran de tu IP por el hecho de que se los pediste. Google y
+      Microsoft son los únicos a los que este sitio les <b>envía</b> algo.</p>
+    <p>El mapa funciona igual si sus recursos no cargan: el listado de oficinas sigue siendo
       accesible.</p>
+
+    <h3>Transferencia internacional</h3>
+    <p>Google LLC y Microsoft Corporation tienen sede en los Estados Unidos, así que los datos de la
+      sección 2 se procesan <b>fuera de la Argentina</b>. Ambas actúan como encargadas del
+      tratamiento por cuenta de ADB, bajo sus propias condiciones contractuales, y no están
+      autorizadas a usar esos datos para fines propios. Los derechos de la sección 6 se ejercen ante
+      ADB, que es quien responde por ellos.</p>
 
     <h2>6. Tus derechos</h2>
     <p>Podés solicitar el acceso, la rectificación, la actualización o la supresión de tus datos

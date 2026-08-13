@@ -94,15 +94,48 @@
     },
 
     // -------------------------------------------------------------------- measurement
-    // THE PLACEHOLDER BELOW IS THE TRUTH, NOT AN UNFINISHED EDIT. This site has been published
-    // since 2026-07-20 with no measurement of any kind: no container, no analytics, no events.
-    // The gate fails on this line on purpose — §26 makes instrumentation a launch condition
-    // precisely because measurement cannot be reconstructed backwards, and a site that quietly
-    // reported `null` here would look like a site that decided it did not need any.
+    // DECIDED 2026-08-13 by Juan Torresel. From 2026-07-20 until that date this site was published
+    // with no measurement of any kind, and those three and a half weeks have no data and never
+    // will — measurement is the one artifact in this standard that cannot be reconstructed
+    // backwards. What this closes is that the gap stops growing, not the gap.
     //
-    // The three weeks already published are gone and no decision recovers them. What is still
-    // open is only whether measurement starts now — open definition #1.
-    tagContainerId: "GTM-XXXXXXX",
+    // A CONTAINER, WHICH IS WHAT THIS FIELD WAS ALWAYS FOR. Everything is dispatched from it:
+    // Google Analytics 4 and Microsoft Clarity have no snippet of their own in the markup.
+    //
+    // THE COST, STATED RATHER THAN DISCOVERED LATER: a container is a surface this repository's
+    // gate cannot see. A tag added in the Tag Manager UI reaches every visitor with no commit, no
+    // diff, no review and no gate run — the one thing on this domain that executes without passing
+    // through a pull request. Whoever holds container access holds publish rights here. That is
+    // debt D10, and it is the price of the convenience rather than an argument against it.
+    tagContainerId: "GTM-M67M4S9B",
+
+    // -------------------------------------------------------------------- analytics
+    // THE EVENT CONTRACT. §26 asks that it be written BEFORE the code that emits it.
+    //
+    // WHAT IS DIFFERENT FROM EVERY OTHER BLOCK IN THIS FILE: the contract is not enforced here.
+    // These identifiers describe what the container was configured to fire on 2026-08-13; the
+    // container can be changed tomorrow by somebody who never opens this repository, and this
+    // block would not know. It is a record of intent, not a source of truth. Verify against the
+    // Tag Manager UI before trusting it.
+    analytics: {
+      vendor: "Google Tag Manager",
+      // Fired from the container. Neither appears in the markup.
+      measurementId: "G-BCLCT06GR7",      // Google Analytics 4
+      sessionRecordingId: "y1pc2ezdsk",   // Microsoft Clarity
+      // NO explicit event of this site's own. Autocapture — GA4 enhanced measurement — covers page
+      // views, scroll and outbound clicks, which is the whole of what a brochure site does. A
+      // taxonomy invented up front is the one nobody ends up maintaining.
+      explicitEvents: [],
+      // SESSION RECORDING IS ON. Clarity replays the screen and builds heatmaps. This is a reversal
+      // of the decision taken earlier the same day and it is deliberate — see `consent` below,
+      // and privacy.html §2, which had to be rewritten before the tag was allowed to load.
+      sessionRecording: true,
+      // WHAT THIS SITE CANNOT MEASURE, stated rather than left implied: every conversion ends in
+      // WhatsApp, off this domain. The site observes THE DEPARTURE and nothing after it. That is
+      // why a WhatsApp click is an INTENT and never a primary conversion, and why nobody can tell
+      // from here whether that enquiry was ever answered.
+      conversionsAreObservable: false,
+    },
 
     // -------------------------------------------------------------------- consent
     // §26 requires the jurisdiction, the owner, the date and — the load-bearing half — THE
@@ -119,12 +152,36 @@
     consent: {
       mode: "notice-only",
       jurisdiction: "Argentina",
-      decidedBy: "TBD — a person, not a team",
-      decidedOn: "TBD — YYYY-MM-DD",
+      decidedBy: "Juan Torresel",
+      decidedOn: "2026-08-13",
+      // WHAT WAS DECIDED, precisely: Google Analytics 4 and Microsoft Clarity through a tag
+      // container, WITH session recording and heatmaps, WITH first-party cookies, and WITHOUT a
+      // banner. The policy states what is collected and who receives it; no prior choice is offered.
+      //
+      // THIS REVERSES A DECISION TAKEN THE SAME DAY, and the reversal is the record rather than an
+      // embarrassment. The earlier decision was analytics without session recording, on the reasoning
+      // that privacy.html could not carry a recorded session. The answer was not to keep the tag out
+      // but to make the document true first: §2 was rewritten to declare the recording, the heatmaps
+      // and the cookies BEFORE the container was allowed to load. That ordering is the whole of it.
+      //
+      // WHAT CHANGED MATERIALLY, and it is more than the earlier decision contemplated: this site
+      // now sets FIRST-PARTY COOKIES, which it never did before, and a third party REPLAYS THE
+      // SCREEN of a visitor to a licensed insurance broker. Both are larger than product analytics.
+      //
+      // WHAT THIS LINE IS NOT: a legal opinion. Whether notice-without-consent is adequate for
+      // cookies and session recording under Ley 25.326 belongs to the person named above, not to
+      // the gate and not to whoever wrote the code. It is RECORDED, not validated, and the case for
+      // confirming it with counsel is stronger than it was this morning: the controller is
+      // SSN-licensed, the policy names the AAIP as supervisory body, and session recording is the
+      // processing most likely to be read as requiring a choice rather than a notice.
+      //
+      // ARCHITECTURAL LIMITATION, unchanged and now expensive: this site CANNOT produce auditable
+      // proof of consent. The day a choice is offered, it needs an external receiver.
       revisitWhen:
-        "the site introduces any tracking or advertising tag, a conversion control begins " +
-        "collecting health or other special-category data through a form rather than through " +
-        "messaging, or ADB advertises into a jurisdiction requiring prior consent",
+        "any advertising, remarketing or audience-sharing tag is added to the container — " +
+        "Google Signals counts — a conversion control begins collecting health or other " +
+        "special-category data through a form rather than through messaging, Clarity masking is " +
+        "loosened below its default, or ADB advertises into a jurisdiction requiring prior consent",
       // Shipped 2026-08-12, closing fix-now F1. §26 requires a privacy statement in every case,
       // regardless of what was decided about tracking, and it was required here twice over
       // because the messaging templates above solicit personal data. It is linked from the
@@ -148,14 +205,27 @@
     // -------------------------------------------------------------------- third parties
     // Every origin this page is ALLOWED to contact on first render, before any interaction.
     //
-    // DELIBERATELY EMPTY. The page fetches the map library from a public CDN on first render and
-    // then fetches map tiles from a second origin, so both reach a third party with the visitor's
-    // address before any choice is offered. Listing them here would record a decision nobody has
-    // taken and would turn a finding into a silence — the one move the adoption skill names as
-    // the way a gate starts lying. The finding stays visible and is carried in the baseline until
-    // the owner decides between self-hosting the library and a click-to-load placeholder.
-    // Debt #4.
-    allowedOriginsOnFirstRender: [],
+    // ONE ENTRY, AND THE ABSENCE OF THE OTHER TWO IS DELIBERATE.
+    //
+    // googletagmanager.com is here because on 2026-08-13 somebody decided it should be: it serves
+    // the container, the decision has a name and a date, and the privacy statement declares it.
+    // That is what check-assets asks for — "add it to the allowlist if that is a deliberate
+    // decision".
+    //
+    // unpkg.com and basemaps.cartocdn.com are NOT here, and that is not an oversight. Nobody ever
+    // decided the map library should come from a third-party CDN; it just ended up that way.
+    // Adding them so the gate reads clean would turn a finding into a silence, which is the move
+    // that starts a gate lying. They stay visible and in the baseline until the owner chooses
+    // between self-hosting the library and a click-to-load placeholder. Debt D4 — the measurement
+    // decision does NOT close it.
+    //
+    // WHAT THIS LIST CANNOT SEE, and it is now most of the surface: google-analytics.com and
+    // clarity.ms. The container injects them with createElement at runtime, and check-assets only
+    // reads markup attributes. Only the noscript iframe below is visible to it. So this allowlist
+    // covers ONE of the three Google/Microsoft origins this page actually contacts, and
+    // privacy.html §5 is the only artifact that records all of them. Reported upstream as issue
+    // #65 — filed the same day, about exactly this hole.
+    allowedOriginsOnFirstRender: ["https://www.googletagmanager.com"],
 
     // -------------------------------------------------------------------- assets
     // No build means no content-addressed filenames, so cache invalidation is manual. Nothing is
@@ -214,9 +284,13 @@
       requestLogs: {
         where: "absent",
         why:
-          "The host exposes no access logs to us, and there is no client-side telemetry either " +
-          "(open definition #1). So there is no traffic record of any kind — which is a stronger " +
-          "statement than 'we have no analytics' and is the one worth writing down.",
+          "The host still exposes no access logs to us, and that has not changed. WHAT CHANGED " +
+          "ON 2026-08-13: it is no longer true that there is no traffic record of any kind. " +
+          "There is client-side telemetry — a tag container, open definition #1, closed — so the " +
+          "record exists, lives at a third party rather than in a log we can read, and contains " +
+          "only what the browser managed to send. A visitor with a blocker never appears. The " +
+          "row stays 'absent' because it describes SERVER LOGS, which genuinely do not exist; " +
+          "what was lost is the stronger sentence that used to accompany it.",
       },
       notFoundHandling: {
         where: "published document",

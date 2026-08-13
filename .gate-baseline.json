@@ -3,7 +3,7 @@
   "//how": "Keyed by check and file. Run `node scripts/ratchet.mjs --update` after fixing something, in the same commit as the fix.",
   "recorded": {
     "check-config|index.html": 14,
-    "check-config|config.js": 4,
+    "check-config|config.js": 1,
     "check-markup|index.html": 2,
     "check-markup|(repository)": 1,
     "check-assets|horacio.png": 2,

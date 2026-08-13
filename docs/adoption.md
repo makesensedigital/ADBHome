@@ -14,8 +14,11 @@ green by exemption. It is a measurement, plus the assignment of every finding to
 > **Adopted does not mean zero violations.** That definition guarantees no repository is ever
 > adopted. Adopted means every violation is in exactly one bucket and the ratchet holds. This
 > repository had thirty-seven findings on adoption day and a ratchet. It was adopted then, and the
-> count is a record rather than a running total — two have since closed (F1, D9) and the ratcheted
-> 26 are unchanged, because neither was visible to the gate. **Its gate is red, and a green one on
+> count is a record rather than a running total — F1 and D9 closed on 2026-08-12 without the gate
+> seeing either, and on 2026-08-13 the ratcheted count moved for the first time: **26 to 23**, when
+> the measurement decision answered the tag-container placeholder and two of the three unanswered
+> values in `config.js`. The baseline was lowered in the same commit, which is the only direction
+> it may move. **Its gate is red, and a green one on
 > day one would have been the thing to distrust.**
 
 ---
@@ -162,8 +165,8 @@ that holds while it is open**. An entry there means permitted-and-registered, no
 
 | # | Finding | The choice |
 |---|---|---|
-| O1 | **No measurement of any kind, since launch** | Whether to instrument now, and with what. |
-| O2 | Consent has no owner and no date | Who decides, and when. |
+| O1 | *(closed 2026-08-13)* **No measurement of any kind, since launch** | Decided: a Google Tag Manager container firing GA4 and Microsoft Clarity. The three and a half weeks already published stay empty. |
+| O2 | *(closed 2026-08-13)* Consent has no owner and no date | Decided: notice-only, no banner, with session recording and first-party cookies — the privacy statement rewritten in the same change, before the container loaded. |
 | O3 | No canonical public mailbox, and the office addresses are on a different domain from the site | Which mailbox is canonical. |
 | O4 | Nobody is named as the person who answers an enquiry | Who. |
 | O5 | Publication is straight from the branch | Whether to move the origin to the pipeline — a repository setting only the owner can change. |
@@ -199,7 +202,7 @@ fixtures.
 theoretical, and it cannot be fixed after the fact — a change of host is the only remedy and it is
 cheaper before the URLs exist than after.
 
-**O1 is the one that cannot be recovered.** Measurement is the single artifact in this standard that
+**O1 is the one that cannot be recovered, and closing it on 2026-08-13 did not recover it.** Measurement is the single artifact in this standard that
 cannot be reconstructed backwards. The three weeks already published have no events, and no decision
 taken now creates them. The entry records the **gap in the history**, not a plan to fill it, because
 there is nothing to fill it with.

@@ -3,6 +3,33 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- ============================ MEASUREMENT — Google Tag Manager ============================
+     The container fires Google Analytics 4 and Microsoft Clarity; neither has a snippet of its
+     own here, both are dispatched from it. EVERY IDENTIFIER LIVES IN config.js, under `analytics`
+     — naming them again here would be a second copy and three more gate findings, for nothing.
+     Declared in privacy.html §2 and §5. Decided 2026-08-13 by Juan Torresel.
+
+     THIS CONTAINER IS A SURFACE THE GATE CANNOT SEE, and that is the cost of the decision rather
+     than an argument against it. A tag added in the Tag Manager UI reaches every visitor of this
+     site with no commit, no diff, no review and no gate run. Everything else that executes here
+     arrives through a pull request; this does not. Whoever holds container access holds publish
+     rights over this domain. Debt D10.
+
+     THE CONTAINER ID IS IN FOUR PLACES — config.js and the three documents — because the markup
+     still does not read from the module (debt D2). Four copies, and check-config reports three of
+     them, which is correct and is the finding rather than a defect in the check.
+
+     WHY THE noscript IS AT THE START OF THE CONTENT AND NOT AFTER <body>: this document has no
+     <body> tag. The markup is hand-written and goes straight from the head into the page, so the
+     tag Google's instructions anchor to does not exist. The parser opens the element implicitly
+     at the first content node, which is where the fragment below sits. -->
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-M67M4S9B');</script>
+<!-- End Google Tag Manager -->
 <title>Página no encontrada — ADB | Broker de Seguros</title>
 <meta name="description" content="La página que buscabas no existe. Volvé al sitio de ADB | Broker de Seguros.">
 <!-- noindex: a not-found document is a response, not a page anybody should reach from a search
@@ -52,6 +79,11 @@
   .actions a:hover, .actions a:focus { text-decoration: underline; }
 </style>
 </head>
+
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-M67M4S9B"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
 
 <a class="skip-link" href="#contenido">Saltar al contenido</a>
 
